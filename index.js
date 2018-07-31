@@ -12,7 +12,7 @@ app.set('port', (process.env.PORT || 8000));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/module2Path', module2);
+// app.use('/module2Path', module2);
 
 
 app.get('/', function(req, res){
