@@ -1,0 +1,53 @@
+
+CREATE PROCEDURE  PROC_COMPANY_BRANCH
+ (
+  
+ @Operation VARCHAR(20)=NULL ,
+ @Company_Id INT=NULL,
+ @Branch_Id INT=NULL,
+ @Branch_Name VARCHAR(50)= NULL,
+ @Branch_Address VARCHAR(150)=NULL,
+ @Branch_Address2 VARCHAR(250)=NULL,
+ @Branch_PhoneNo INT=NULL,
+ @Branch_Person_Name varchar(250)=NULL,
+ @Branch_Email varchar(50)=NULL
+  
+)
+ AS
+ SET NOCOUNT ON 
+  BEGIN
+  	IF @Operation='INSERT'
+	BEGIN
+	DECLARE @Auto VARCHAR(20) 
+	SET @Auto=(SELECT ISNULL(MAX(Branch_Id),0)+1 FROM Tbl_Company_Branch)
+	 
+	INSERT INTO  Tbl_Company_Branch(Branch_Id,Company_Id,Branch_Name,Branch_Address,Branch_Address2,Branch_PhoneNo, Branch_Person_Name, Branch_Email) 
+	VALUES
+	(@Auto,@Company_Id,@Branch_Name,@Branch_Address,@Branch_Address2,@Branch_PhoneNo,@Branch_Person_Name,@Branch_Email
+	)
+ 
+	END
+	
+	IF @Operation='UPDATE'
+	BEGIN
+	 
+	UPDATE  Tbl_Company_Branch SET Branch_Name=@Branch_Name,Branch_Address=@Branch_Address,Branch_Address2=@Branch_Address2,
+	Branch_PhoneNo=@Branch_PhoneNo,Branch_Person_Name=@Branch_Person_Name,Branch_Email=@Branch_Email WHERE Company_Id=@Company_Id
+	AND Branch_Id=@Branch_Id
+	 
+ 
+	END
+
+	 
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT Branch_Id,Company_Id,Branch_Name,Branch_Address,Branch_Address2,Branch_PhoneNo, Branch_Person_Name, Branch_Email FROM Tbl_Company_Branch
+   END
+    IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Branch_Id,Company_Id,Branch_Name,Branch_Address,Branch_Address2,Branch_PhoneNo, Branch_Person_Name, Branch_Email FROM Tbl_Company_Branch
+   WHERE Company_Id=@Company_Id	AND Branch_Id=@Branch_Id
+   END
+   
+    
+END

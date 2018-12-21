@@ -1,0 +1,42 @@
+
+CREATE PROCEDURE  PROC_COMPANY_DOCUMENT
+ (
+  
+ @Operation VARCHAR(20)=NULL ,
+ @Company_Id INT=NULL,
+ @Company_File_Name VARCHAR(150)= NULL,
+ @File_Data varbinary(MAX)= NULL 
+  )
+
+ 
+ AS
+ 
+  BEGIN
+  	IF @Operation='INSERT'
+	BEGIN
+	INSERT INTO  Tbl_Company_Documents(Company_Id,Company_File_Name,File_Data) 
+	VALUES (@Company_Id,@Company_File_Name,@File_Data)
+	
+ 
+	END
+	
+	IF @Operation='DELETE'
+	BEGIN
+	 
+	DELETE   Tbl_Company_Documents WHERE Company_Id=@Company_Id 
+	 
+ 
+	END
+
+	 
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT Company_File_Name,File_Data FROM Tbl_Company_Documents
+   END
+    IF @Operation='SELECTBYID'
+   BEGIN
+    SELECT Company_File_Name,File_Data FROM Tbl_Company_Documents  WHERE Company_Id=@Company_Id	 
+   END
+   
+    
+END

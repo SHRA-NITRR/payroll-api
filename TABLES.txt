@@ -1,0 +1,66 @@
+CREATE TABLE [dbo].[Tbl_Company](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Company_Id] [int] NOT NULL,
+	[Company_Name] [varchar](50) NULL,
+	[Company_Person_Name] [varchar](100) NULL,
+	[Company_Address] [varchar](250) NULL,
+	[Company_Address2] [varchar](250) NULL,
+	[Company_PhoneNo] int NULL,
+	[Company_Email] varchar(50) NULL,
+	[Company_Website] [varchar](50) NULL,
+	[Company_CINNo] [varchar](50) NULL,
+	[Company_GSTNo]  [varchar](50) NOT NULL,
+		
+	[Comapny_IsPF] bit NULL,
+	[Company_PFNo] [varchar](50) NULL,
+	[Company_DBAFile_Code] [varchar](50) NULL,
+	[Company_PF_Extn] [varchar](50) NULL,
+	[Comapny_IsPFVol] bit NULL,
+	[Comapny_IsPFMultigrp] bit NULL,
+	
+	[Comapny_IsESI] bit NULL,
+	[Company_ESI_No] [varchar](50) NULL,
+	[Company_ESI_LocalOfc] [varchar](50) NULL,
+	[Indv_Calculate_Emp_ESI] bit NULL,
+	[Limit_ESI_Gross] bit NULL,
+	[Is_ESI_Multiple_Group] bit NULL,
+	
+	[Comapny_IsTDS] bit NULL,
+	[Comapny_TanNo] varchar(50) NULL,
+	Company_Type Varchar(50) NULL,
+	[Comapny_IsBonus] bit NULL,
+	[Comapny_IsITR] bit NULL,
+	[Comapny_IsPT] bit NULL,
+	[Comapny_IsSupSalary] bit NULL,
+	[Comapny_IsGratuity] bit NULL,
+	
+	[Created_On] [datetime] NULL,
+	[Created_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+ CONSTRAINT [PK_Company_Id] PRIMARY KEY  (RowId,Company_Id) 
+
+	)
+	
+
+
+CREATE TABLE [dbo].[Tbl_Company_Documents](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Company_Id] [int] NOT NULL,
+	[Company_File_Name] [varchar](150) NULL,
+	[File_Data] varbinary(Max)
+
+	)
+
+CREATE TABLE [dbo].[Tbl_Company_Branch](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Company_Id] [int] NOT NULL,
+	[Branch_Id] [int] NOT NULL,
+	[Branch_Name] [varchar](150) NULL,
+	[Branch_Address] [varchar](150) NULL,
+	[Branch_Address2] [varchar](150) NULL,
+	[Branch_PhoneNo] int NULL,
+	[Branch_Person_Name] [varchar](250) NULL,
+	[Branch_Email] varchar(50) NULL
+
+	)

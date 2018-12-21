@@ -1,0 +1,100 @@
+
+CREATE PROCEDURE  PROC_COMPANY_DETAILS
+ (
+  
+ @Operation VARCHAR(20)=NULL ,
+ @Company_Id INT=NULL,
+ @Company_Name VARCHAR(50)= NULL,
+ @Company_Person_Name VARCHAR(100)=NULL,
+ @Company_Address VARCHAR(250)=NULL,
+ @Company_Address2 VARCHAR(250)=NULL,
+ @Company_PhoneNo INT=NULL,
+ @Company_Website varchar(50)=NULL,
+ @Company_Email varchar(50)=NULL,
+ @Company_CINNo VARCHAR(50)=NULL,
+ @Company_GSTNo VARCHAR(50)=NULL,
+ @Comapny_IsPF bit= NULL,
+ @Company_PFNo VARCHAR(50)=NULL,
+ @Company_DBAFile_Code VARCHAR(50)=NULL,
+ @Company_PF_Extn VARCHAR(50)=NULL,
+ @Comapny_IsPFVol bit =NULL,
+ @Comapny_IsPFMultigrp bit= NULL,
+ @Comapny_IsESI  bit= NULL,
+ @Company_ESI_No VARCHAR(50)=NULL,
+ @Company_ESI_LocalOfc VARCHAR(50)=NULL,
+ @Indv_Calculate_Emp_ESI bit= NULL,
+ @Limit_ESI_Gross bit= NULL,
+ @Is_ESI_Multiple_Group bit= NULL,
+ @Comapny_IsTDS bit= NULL,
+ @Comapny_TanNo VARCHAR(50)=NULL,
+ @Company_Type VARCHAR(50)=NULL,
+ @Comapny_IsBonus bit= NULL,
+ @Comapny_IsITR bit= NULL,
+ @Comapny_IsPT bit= NULL,
+ @Comapny_IsSupSalary bit= NULL,
+ @Comapny_IsGratuity bit= NULL,
+ @Created_By				INT=NULL,
+ @OUT_CODE			varchar(30)=null OUTPUT
+ 
+)
+ AS
+ SET NOCOUNT ON 
+  BEGIN
+  
+  
+	IF @Operation='INSERT'
+	BEGIN
+	DECLARE @Auto VARCHAR(20) 
+	SET @Auto=(SELECT ISNULL(MAX(Company_Id),0)+1 FROM Tbl_Company)
+	SET @OUT_CODE=@Auto
+	INSERT INTO  Tbl_Company(Company_Id,Company_Name,Company_Person_Name,Company_Address,Company_Address2,Company_PhoneNo,Company_Email,
+	 Company_Website, Company_CINNo, Company_GSTNo, Comapny_IsPF,Company_PFNo,Company_DBAFile_Code,Company_PF_Extn, 
+	Comapny_IsPFVol, Comapny_IsPFMultigrp, Comapny_IsESI,Company_ESI_No,Company_ESI_LocalOfc,Indv_Calculate_Emp_ESI,
+	Limit_ESI_Gross,Is_ESI_Multiple_Group,Comapny_IsTDS, Comapny_TanNo,Company_Type,Comapny_IsBonus,Comapny_IsITR,Comapny_IsPT,
+	Comapny_IsSupSalary,Comapny_IsGratuity,Created_By,Created_On) 
+	VALUES
+	(@Auto,@Company_Name,@Company_Person_Name,@Company_Address,@Company_Address2,@Company_PhoneNo,@Company_Email,
+	@Company_Website,@Company_CINNo,@Company_GSTNo,@Comapny_IsPF,@Company_PFNo,@Company_DBAFile_Code,@Company_PF_Extn,
+	@Comapny_IsPFVol,@Comapny_IsPFMultigrp,@Comapny_IsESI,@Company_ESI_No,@Company_ESI_LocalOfc,@Indv_Calculate_Emp_ESI,
+	@Limit_ESI_Gross,@Is_ESI_Multiple_Group,@Comapny_IsTDS,@Comapny_TanNo,@Company_Type,@Comapny_IsBonus,@Comapny_IsITR,
+	@Comapny_IsPT,@Comapny_IsSupSalary,@Comapny_IsGratuity,@Created_By,GETDATE())
+ 
+	END
+	
+	IF @Operation='UPDATE'
+	BEGIN
+	 
+	UPDATE  Tbl_Company SET Company_Name=@Company_Name,Company_Person_Name=@Company_Person_Name,
+	Company_Address=@Company_Address,Company_Address2=@Company_Address2,Company_PhoneNo=@Company_PhoneNo,Company_Email=@Company_Email,
+	 Company_Website=@Company_Website, Company_CINNo=@Company_CINNo, Company_GSTNo=@Company_GSTNo, Comapny_IsPF=@Comapny_IsPF,
+	 Company_PFNo=@Company_PFNo,Company_DBAFile_Code=@Company_DBAFile_Code,Company_PF_Extn=@Company_PF_Extn, 
+	Comapny_IsPFVol=@Comapny_IsPFVol, Comapny_IsPFMultigrp=@Comapny_IsPFMultigrp, Comapny_IsESI=@Comapny_IsESI,
+	Company_ESI_No=@Company_ESI_No,Company_ESI_LocalOfc=@Company_ESI_LocalOfc,Indv_Calculate_Emp_ESI=@Indv_Calculate_Emp_ESI,
+	Limit_ESI_Gross=@Limit_ESI_Gross,Is_ESI_Multiple_Group=@Is_ESI_Multiple_Group,Comapny_IsTDS=@Comapny_IsTDS,
+	 Comapny_TanNo=@Comapny_TanNo,Company_Type=@Company_Type,Comapny_IsBonus=@Comapny_IsBonus,Comapny_IsITR=@Comapny_IsITR,
+	 Comapny_IsPT=@Comapny_IsPT,Comapny_IsSupSalary=@Comapny_IsSupSalary,Comapny_IsGratuity=@Comapny_IsGratuity,Modified_By=@Created_By,
+	 Modified_On=GETDATE() WHERE Company_Id=@Company_Id
+	 
+ 
+	END
+
+	 
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT Company_Id,Company_Name,Company_Person_Name,Company_Address,Company_Address2,Company_PhoneNo,Company_Email,
+	 Company_Website, Company_CINNo, Company_GSTNo, Comapny_IsPF,Company_PFNo,Company_DBAFile_Code,Company_PF_Extn, 
+	Comapny_IsPFVol, Comapny_IsPFMultigrp, Comapny_IsESI,Company_ESI_No,Company_ESI_LocalOfc,Indv_Calculate_Emp_ESI,
+	Limit_ESI_Gross,Is_ESI_Multiple_Group,Comapny_IsTDS, Comapny_TanNo,Company_Type,Comapny_IsBonus,Comapny_IsITR,Comapny_IsPT,
+	Comapny_IsSupSalary,Comapny_IsGratuity FROM Tbl_Company
+   END
+    IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Company_Id,Company_Name,Company_Person_Name,Company_Address,Company_Address2,Company_PhoneNo,Company_Email,
+	 Company_Website, Company_CINNo, Company_GSTNo, Comapny_IsPF,Company_PFNo,Company_DBAFile_Code,Company_PF_Extn, 
+	Comapny_IsPFVol, Comapny_IsPFMultigrp, Comapny_IsESI,Company_ESI_No,Company_ESI_LocalOfc,Indv_Calculate_Emp_ESI,
+	Limit_ESI_Gross,Is_ESI_Multiple_Group,Comapny_IsTDS, Comapny_TanNo,Company_Type,Comapny_IsBonus,Comapny_IsITR,Comapny_IsPT,
+	Comapny_IsSupSalary,Comapny_IsGratuity FROM Tbl_Company WHERE Company_Id=@Company_Id
+   END
+   
+    
+END
