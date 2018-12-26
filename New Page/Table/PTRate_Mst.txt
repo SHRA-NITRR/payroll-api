@@ -1,0 +1,20 @@
+CREATE TABLE [dbo].[PTRate_Mst](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[PTRate_Id] [int] NOT NULL,
+	[PTGroup_Id] [int] NOT NULL,
+	[Effective_From] [date] NULL,
+	[Minimum_Amount] [decimal](18, 2) NULL,
+	[Maximum_Amount] [decimal](18, 2) NULL,
+	[PT_Rate] [decimal](18, 2) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_PTrate_Mst] PRIMARY KEY CLUSTERED 
+(
+	[PTRate_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO

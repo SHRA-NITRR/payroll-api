@@ -1,0 +1,61 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+CREATE PROCEDURE [dbo].[Proc_PTGROUP_MST]
+ (
+ 
+ @PTGroup_Id INT=null, 
+ @State_Id INT=null, 
+ @Certificate_No VARCHAR(50)=NULL,
+ @PTO_No VARCHAR(50)=NULL,
+ @PT_Address VARCHAR(200)=NULL,
+ @Return_Period  VARCHAR(1)=NULL,
+  
+ @Created_By INT=NULL,
+ @Operation VARCHAR(20)=NULL
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  
+ 
+  IF @Operation='INSERT'
+   BEGIN
+     
+	SET @PTGroup_Id=(SELECT ISNULL(MAX(PTGroup_Id),0)+1 FROM PTGroup_Mst)
+	
+	INSERT INTO PTGroup_Mst(PTGroup_Id,State_Id,Certificate_No,PTO_No,PT_Address,Return_Period,Created_By,Created_On)
+    VALUES
+     (@PTGroup_Id,@State_Id,@Certificate_No,@PTO_No,@PT_Address,@Return_Period,@Created_By,GETDATE())
+    END
+   
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE PTGroup_Mst SET State_Id=@State_Id,Certificate_No=@Certificate_No,PTO_No=@PTO_No,
+   PT_Address=@PT_Address,Return_Period=@Return_Period,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE PTGroup_Id=@PTGroup_Id
+   END
+   
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT  PTGroup_Id,State_Id,Certificate_No,PTO_No,PT_Address,Return_Period FROM PTGroup_Mst where Is_Deleted=0
+   END
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT  PTGroup_Id,State_Id,Certificate_No,PTO_No,PT_Address,Return_Period FROM PTGroup_Mst where PTGroup_Id=@PTGroup_Id AND Is_Deleted=0
+   END
+   
+  IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE PTGroup_Mst SET Is_Deleted = 1 WHERE PTGroup_Id=@PTGroup_Id
+   END
+    
+   
+ 

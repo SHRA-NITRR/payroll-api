@@ -1,0 +1,63 @@
+ALTER PROCEDURE [dbo].[PROC_DesignationMaster]
+ (
+ @RowId INT=NULL,
+ @Desig_Id INT=NULL,
+ @Desig_Name VARCHAR(50)=NULL,
+ @Desig_Sht_Name VARCHAR(20)=NULL,
+ @Created_By INT=NULL,
+ @Modified_By INT=NULL,
+ @Operation VARCHAR(20)=NULL
+ 
+)
+ AS
+  
+	 
+  IF @Operation='INSERT'
+   BEGIN
+     DECLARE @AutoId INT 
+	SET @AutoId=
+	(SELECT MAX(Desig_Id)+1 FROM dbo.Designation_Mst)
+	
+	SET @AutoId=ISNULL(@AutoId,'1')
+   
+	IF NOT EXISTS(SELECT Desig_Name FROM dbo.Designation_Mst WHERE Desig_Name=@Desig_Name and Is_Deleted=0)
+	BEGIN
+      INSERT INTO dbo.Designation_Mst
+    (Desig_Id,Desig_Name,Desig_Sht_Name,Created_By)
+    
+     VALUES
+     (@AutoId,@Desig_Name,@Desig_Sht_Name,@Created_By)
+     END
+   END
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE dbo.Designation_Mst
+   SET 
+   Desig_Id=@Desig_Id,Desig_Name=@Desig_Name,Desig_Sht_Name=@Desig_Sht_Name,Modified_By=@Modified_By
+   WHERE Desig_Id=@Desig_Id
+   
+   
+   END
+   
+   IF @Operation = 'DELETE'
+   
+   BEGIN
+   
+    UPDATE dbo.Designation_Mst
+   SET 
+   Is_Deleted = 1
+   WHERE Desig_Id=@Desig_Id
+   
+   END
+   IF @Operation='SELECT'
+
+   BEGIN
+   
+   SELECT  Desig_Id,Desig_Name,Desig_Sht_Name,Created_On,Created_By,
+   Modified_On,Modified_By FROM dbo.Designation_Mst where Is_Deleted=0
+  
+   END
+  

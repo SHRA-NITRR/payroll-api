@@ -1,0 +1,24 @@
+
+CREATE TABLE [dbo].[PTGroup_Mst](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[PTGroup_Id] [int] NOT NULL,
+	[State_Id] [int] NULL,
+	[Certificate_No] [varchar](50) NULL,
+	[PTO_No] [varchar](50) NULL,
+	[PT_Address] [varchar](200) NULL,
+	[Return_Period] [varchar](1) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_PTGRP_Mst] PRIMARY KEY CLUSTERED 
+(
+	[PTGroup_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO

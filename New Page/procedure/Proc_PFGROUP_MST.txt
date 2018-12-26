@@ -1,0 +1,56 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+CREATE PROCEDURE [dbo].[Proc_PFGROUP_MST]
+ (
+ @RowId INT=NULL,
+ @PFGroup_Id INT=null, 
+ @PF_No VARCHAR(50)=NULL,
+ @DBA_File_Code VARCHAR(50)=NULL,
+ @File_Extension VARCHAR(50)=NULL,
+ @Address VARCHAR(50)=NULL,
+ @Created_By INT=NULL,
+ @Operation VARCHAR(20)=NULL
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+     
+	SET @PFGroup_Id=(SELECT ISNULL(MAX(PFGroup_Id),0)+1 FROM PFGroup_Mst)
+	INSERT INTO PFGroup_Mst(PFGroup_Id,PF_No,DBA_File_Code,File_Extension,Address,Created_By,Created_On)
+    VALUES
+     (@PFGroup_Id,@PF_No,@DBA_File_Code,@File_Extension,@Address,@Created_By,GETDATE())
+    END
+   
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE PFGroup_Mst SET PF_No=@PF_No,DBA_File_Code=@DBA_File_Code,File_Extension=@File_Extension,Address=@Address,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE PFGroup_Id=@PFGroup_Id
+   END
+   
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT  PFGroup_Id,PF_No,DBA_File_Code,File_Extension,Address FROM PFGroup_Mst where Is_Deleted=0
+   END
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT  PFGroup_Id,PF_No,DBA_File_Code,File_Extension,Address FROM PFGroup_Mst where PFGroup_Id=@PFGroup_Id AND Is_Deleted=0
+   END
+   
+  IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE PFGroup_Mst SET Is_Deleted = 1 WHERE PFGroup_Id=@PFGroup_Id
+   END
+    
+   
+ 

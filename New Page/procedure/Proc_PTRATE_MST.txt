@@ -1,0 +1,60 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+CREATE PROCEDURE [dbo].[Proc_PTRATE_MST]
+ (
+ 
+ @PTRate_Id INT=Null, 
+ @PTGroup_Id INT=null, 
+ @Effective_From DATE=null, 
+ @Minimum_Amount decimal(18, 2)=NULL,
+ @Maximum_Amount decimal(18, 2)=NULL,
+ @PT_Rate  decimal(18, 2)=NULL,
+ @Created_By INT=NULL,
+ @Operation VARCHAR(20)=NULL
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+   
+ 
+  IF @Operation='INSERT'
+   BEGIN
+     
+	SET @PTRate_Id=(SELECT ISNULL(MAX(PTRate_Id),0)+1 FROM PTRate_Mst)
+	
+	INSERT INTO PTRate_Mst(PTRate_Id,PTGroup_Id,Effective_From,Minimum_Amount,Maximum_Amount,PT_Rate,Created_By,Created_On)
+    VALUES
+     (@PTRate_Id,@PTGroup_Id,@Effective_From,@Minimum_Amount,@Maximum_Amount,@PT_Rate,@Created_By,GETDATE())
+    END
+   
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE PTRate_Mst SET PTGroup_Id=@PTGroup_Id,Effective_From=@Effective_From,Minimum_Amount=@Minimum_Amount,
+   Maximum_Amount=@Maximum_Amount,PT_Rate=@PT_Rate,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE PTRate_Id=@PTRate_Id
+   END
+   
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT  PTRate_Id,PTGroup_Id,Effective_From,Minimum_Amount,Maximum_Amount,PT_Rate FROM PTRate_Mst where Is_Deleted=0
+   END
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT  PTRate_Id,PTGroup_Id,Effective_From,Minimum_Amount,Maximum_Amount,PT_Rate FROM PTRate_Mst where PTRate_Id=@PTRate_Id AND Is_Deleted=0
+   END
+   
+  IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE PTRate_Mst SET Is_Deleted = 1 WHERE PTRate_Id=@PTRate_Id
+   END
+    
+   
+ 

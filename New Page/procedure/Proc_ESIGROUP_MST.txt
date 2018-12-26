@@ -1,0 +1,62 @@
+ 
+ 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+CREATE PROCEDURE [dbo].[Proc_ESIGROUP_MST]
+ (
+ @RowId INT=NULL,
+ @ESIGroup_Id INT=null, 
+ @ESI_No VARCHAR(50)=NULL,
+ @ESI_Local_Office VARCHAR(50)=NULL,
+ @Address VARCHAR(50)=NULL,
+ @Is_Limit_ESI_Gross bit=NULL,
+ @Is_Individual_Calc bit=null,
+ @Created_By INT=NULL,
+ @Operation VARCHAR(20)=NULL
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+ 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+     
+	SET @ESIGroup_Id=(SELECT ISNULL(MAX(ESIGroup_Id),0)+1 FROM ESIGroup_Mst)
+	
+	INSERT INTO ESIGroup_Mst(ESIGroup_Id,ESI_No,ESI_Local_Office,Address,Is_Limit_ESI_Gross,Is_Individual_Calc,Created_By,Created_On)
+    VALUES
+     (@ESIGroup_Id,@ESI_No,@ESI_Local_Office,@Address,@Is_Limit_ESI_Gross,@Is_Individual_Calc,@Created_By,GETDATE())
+    END
+   
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE ESIGroup_Mst SET ESI_No=@ESI_No,ESI_Local_Office=@ESI_Local_Office,Address=@Address,
+   Is_Limit_ESI_Gross=@Is_Limit_ESI_Gross,Is_Individual_Calc=@Is_Individual_Calc,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE ESIGroup_Id=@ESIGroup_Id
+   END
+   
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT  ESIGroup_Id,ESI_No,ESI_Local_Office,Address,Is_Limit_ESI_Gross,Is_Individual_Calc FROM ESIGroup_Mst where Is_Deleted=0
+   END
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT  ESIGroup_Id,ESI_No,ESI_Local_Office,Address,Is_Limit_ESI_Gross,Is_Individual_Calc FROM ESIGroup_Mst where ESIGroup_Id=@ESIGroup_Id AND Is_Deleted=0
+   END
+   
+  IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE ESIGroup_Mst SET Is_Deleted = 1 WHERE ESIGroup_Id=@ESIGroup_Id
+   END
+    
+   
+ 
