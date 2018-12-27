@@ -22,9 +22,15 @@ var config = {
 
 var companyroute = require('./routes/company.js');
 var branchroute = require('./routes/branch.js');
+var esigrouproute = require('./routes/esigroup.js');
+var pfgroupoute = require('./routes/pfgroup.js');
+var ptgroupoute = require('./routes/ptgroup.js');
 
 companyroute.configure(app,assert,config);
 branchroute.configure(app, assert,config);
+esigrouproute.configure(app,assert,config);
+pfgroupoute.configure(app, assert,config);
+ptgroupoute.configure(app, assert,config);
 
 //LOCAL
 //var url = "mongodb://localhost:27017/gst_app";
@@ -159,29 +165,30 @@ app.post('/viewallcity', function (req, res) {
 
 
 
-   app.post('/addptgroup', function (req, res) {
-      //console.log(req);
-         sql.connect(config, function () {
-            var request = new sql.Request();
-           
-            var data_added = true;
-            request.input('Operation', 'INSERT');
-            request.input('ID', req.body.id);
-            request.input('Company_Person_Name', req.body.Company_Person_Name)
-            
-            request.execute('Proc_City', function (err, recordsets, returnValue, affected) {
-               if (err) {
-                  console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
-               }
-               else {
-                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
-                  res.send(recordsets);
-                  sql.close();         
-         }
-         });
-         });
-      });
 
+
+
+
+   //@ESIGroup_Id INT=null, 
+   //@ESI_No VARCHAR(50)=NULL,
+   //@ESI_Local_Office VARCHAR(50)=NULL,
+   //@Address VARCHAR(50)=NULL,
+   //@Is_Limit_ESI_Gross bit=NULL,
+   //@Is_Individual_Calc bit=null,
+   //@Created_By INT=NULL,
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+   

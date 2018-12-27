@@ -1,3 +1,9 @@
+var Connection = require('express').Connection;
+var Request = require('express').Request;
+var sql = require('mssql');
+
+
+
 module.exports = {
     configure: function (app,assert,dbb) {
 
