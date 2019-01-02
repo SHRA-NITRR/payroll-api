@@ -339,7 +339,7 @@ module.exports = {
    //console.log(req);
       sql.connect(config, function () {
          var request = new sql.Request();
-        
+      
          var data_added = true;
          request.input('Operation', 'SEARCH');
          //request.input('ID', req.body.id);

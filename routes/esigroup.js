@@ -103,9 +103,32 @@ app.post('/viewallesigroup', function (req, res) {
  });
 
 
+//API FOR SEARCH ESIGROUP DETAILS
 
-
-
+app.post('/search_esi_details', function (req, res) {
+   //console.log(req);
+      sql.connect(config, function () {
+         var request = new sql.Request();
+      
+         var data_added = true;
+         request.input('Operation', 'SEARCH');
+         //request.input('ID', req.body.id);
+              request.input('OUT_CODE', req.body.rowid)
+         request.execute('Proc_ESIGROUP_MST', function (err, rec) {
+            if (err) {
+               console.log(err);
+               res.json({ status: false })
+               //data_added= false;
+            }
+            else {
+               //res.end(JSON.stringify(recordsets)); // Result in JSON format
+               //res.json({ status: true });
+               res.send(rec.recordsets);
+               sql.close();         
+      }
+      });
+      });
+   });
 
 
         }
