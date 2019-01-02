@@ -1,0 +1,17 @@
+CREATE TABLE [dbo].[RetirementSett_Mst](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[RetSett_Id] [int] NOT NULL,
+	[Effective_From] [date] NULL,
+	[RetSett_Age] [int] NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Retirement_Mst] PRIMARY KEY CLUSTERED 
+(
+	[RetSett_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO

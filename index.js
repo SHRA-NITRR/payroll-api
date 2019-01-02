@@ -163,21 +163,6 @@ app.post('/viewallcity', function (req, res) {
    });
 
 
-
-
-
-
-
-
-   //@ESIGroup_Id INT=null, 
-   //@ESI_No VARCHAR(50)=NULL,
-   //@ESI_Local_Office VARCHAR(50)=NULL,
-   //@Address VARCHAR(50)=NULL,
-   //@Is_Limit_ESI_Gross bit=NULL,
-   //@Is_Individual_Calc bit=null,
-   //@Created_By INT=NULL,
-
-
    
 
 

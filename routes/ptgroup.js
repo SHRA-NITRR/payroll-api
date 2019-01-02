@@ -52,6 +52,9 @@ module.exports = {
           request.input('PT_Address', req.body.PT_Address);
           request.input('Return_Period', req.body.Return_Period);
           request.input('Created_By', parseInt(req.body.Created_By));
+           // request.input('Modified_By', parseInt(req.body.Modified_By));
+          // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
+          // request.input('Modified_On',req.body.Modified_On);
           
           request.execute('Proc_PTGROUP_MST', function (err, recordsets, returnValue, affected) {
              if (err) {

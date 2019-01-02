@@ -1,0 +1,29 @@
+
+
+CREATE TABLE [dbo].[Bank_Master](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Bank_Id] [int] NOT NULL,
+	[Bank_Name] [varchar](50) NULL,
+	[Bank_Sht_Name] [varchar](20) NULL,
+	[BankAccNo] [varchar](20) NULL,
+	[Address] [varchar](max) NULL,
+	[Branch_Name] [varchar](50) NULL,
+	[IFSC_Code] [varchar](50) NULL,
+	[Pin_No] [int] NULL,
+	[Phone_No] [int] NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Bank_Master] PRIMARY KEY CLUSTERED 
+(
+	[Bank_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+

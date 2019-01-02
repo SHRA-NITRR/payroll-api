@@ -35,46 +35,7 @@ module.exports = {
 
 
 
- //API FOR ADD PF GROUP
- app.post('/addpfgroup', function (req, res) {
-    //console.log(req);
-       sql.connect(config, function () {
-          var request = new sql.Request();
-         
-          var data_added = true;
-          request.input('Operation', 'INSERT');
-
-          //@PFGroup_Id,@PF_No,@DBA_File_Code,@File_Extension,@Address,@Created_By
-
-
-          request.input('PFGroup_Id', parseInt(req.body.PFGroup_Id));
-          request.input('PF_No', req.body.PF_No);
-          request.input('DBA_File_Code', req.body.DBA_File_Code);
-          request.input('File_Extension', req.body.File_Extension);
-          request.input('Address', req.body.Address);
-         
-          request.input('Created_By', parseInt(req.body.Created_By));
-
-          // request.input('Modified_By', parseInt(req.body.Modified_By));
-          // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-          // request.input('Modified_On',req.body.Modified_On);
-          
-          request.execute('Proc_PFGROUP_MST', function (err, recordsets, returnValue, affected) {
-             if (err) {
-                console.log(err);
-                res.json({ status: false })
-                //data_added= false;
-             }
-             else {
-                //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                //res.json({ status: true });
-                //res.send(recordsets);
-                res.json({ status: true,result:recordsets });
-                sql.close();         
-       }
-       });
-       });
-    });
+ 
 
   //API FOR ADD ESI
   app.post('/addesigroup', function (req, res) {
@@ -83,6 +44,7 @@ module.exports = {
           var request = new sql.Request();
          
           var data_added = true;
+
           request.input('Operation', 'INSERT');
 
           request.input('ESIGroup_Id', parseInt(req.body.ESIGroup_Id));

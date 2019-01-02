@@ -7,15 +7,6 @@ var sql = require('mssql');
 module.exports = {
     configure: function (app,assert,dbb) {
 
-
-
-
-
-
-
-
-
-
         var executeQuery = function (res, query) {
             sql.connect(config, function (err) {
                if (err) {

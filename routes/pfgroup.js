@@ -3,7 +3,6 @@ var Request = require('express').Request;
 var sql = require('mssql');
 
 
-
 module.exports = {
     configure: function (app,assert,config) {
 
@@ -33,8 +32,6 @@ module.exports = {
          }
          
 
-
-
  //API FOR ADD PF GROUP
  app.post('/addpfgroup', function (req, res) {
     //console.log(req);
@@ -46,8 +43,7 @@ module.exports = {
 
           //@PFGroup_Id,@PF_No,@DBA_File_Code,@File_Extension,@Address,@Created_By
 
-
-          request.input('PFGroup_Id', parseInt(req.body.PFGroup_Id));
+          //request.input('PFGroup_Id', parseInt(req.body.PFGroup_Id));
           request.input('PF_No', req.body.PF_No);
           request.input('DBA_File_Code', req.body.DBA_File_Code);
           request.input('File_Extension', req.body.File_Extension);
@@ -102,18 +98,6 @@ app.post('/viewpfgroup', function (req, res) {
     });
     });
  });
-
-
-
-
-
-
-
-
-
-
-
-
 
         }
     }
