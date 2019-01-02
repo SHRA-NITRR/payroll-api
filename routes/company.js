@@ -304,6 +304,62 @@ module.exports = {
 
 
 
+ //API FOR VIEW COMPANY DETAILS
+
+ app.post('/view_company_details', function (req, res) {
+   //console.log(req);
+      sql.connect(config, function () {
+         var request = new sql.Request();
+        
+         var data_added = true;
+         request.input('Operation', 'SELECT');
+         //request.input('ID', req.body.id);
+              //request.input('Company_Person_Name', req.body.Company_Person_Name)
+         request.execute('PROC_COMPANY_DETAILS', function (err, recordsets, returnValue, affected) {
+            if (err) {
+               console.log(err);
+               res.json({ status: false })
+               //data_added= false;
+            }
+            else {
+               //res.end(JSON.stringify(recordsets)); // Result in JSON format
+               //res.json({ status: true });
+               res.send(recordsets);
+               sql.close();         
+      }
+      });
+      });
+   });
+
+
+
+   //API FOR SEARCH COMPANY DETAILS
+
+ app.post('/search_company_details', function (req, res) {
+   //console.log(req);
+      sql.connect(config, function () {
+         var request = new sql.Request();
+        
+         var data_added = true;
+         request.input('Operation', 'SEARCH');
+         //request.input('ID', req.body.id);
+              request.input('OUT_CODE', req.body.rowid)
+         request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
+            if (err) {
+               console.log(err);
+               res.json({ status: false })
+               //data_added= false;
+            }
+            else {
+               //res.end(JSON.stringify(recordsets)); // Result in JSON format
+               //res.json({ status: true });
+               res.send(rec.recordsets);
+               sql.close();         
+      }
+      });
+      });
+   });
+
 
 
 
