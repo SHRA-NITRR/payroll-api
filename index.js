@@ -13,9 +13,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//DATABASE CONNECTION SET UP
+
 var config = {
-   user: 'sa', // update me
-   password: '12345', // update me
+   user: 'sa',
+   password: '12345',
    server: 'localhost',
    database: 'VYPAK'
 }
@@ -25,12 +27,15 @@ var branchroute = require('./routes/branch.js');
 var esigrouproute = require('./routes/esigroup.js');
 var pfgroupoute = require('./routes/pfgroup.js');
 var ptgroupoute = require('./routes/ptgroup.js');
+var bankroute = require('./routes/bankmaster.js');
 
-companyroute.configure(app,assert,config);
-branchroute.configure(app, assert,config);
-esigrouproute.configure(app,assert,config);
-pfgroupoute.configure(app, assert,config);
-ptgroupoute.configure(app, assert,config);
+
+companyroute.configure(app, assert, config);
+branchroute.configure(app, assert, config);
+esigrouproute.configure(app, assert, config);
+pfgroupoute.configure(app, assert, config);
+ptgroupoute.configure(app, assert, config);
+bankroute.configure(app, assert, config);
 
 //LOCAL
 //var url = "mongodb://localhost:27017/gst_app";
@@ -74,15 +79,13 @@ var executeQuery = function (res, query) {
 //API FOR VIEW ALL COUNTRY
 
 app.post('/viewallcountry', function (req, res) {
-//console.log(req);
+   //console.log(req);
    sql.connect(config, function () {
       var request = new sql.Request();
-     
+
       var data_added = true;
       request.input('Operation', 'SELECT');
-      //request.input('Company_Name', req.body.Company_Name);
 
-           //request.input('Company_Person_Name', req.body.Company_Person_Name)
       request.execute('Proc_COUNTRY', function (err, recordsets, returnValue, affected) {
          if (err) {
             console.log(err);
@@ -90,16 +93,12 @@ app.post('/viewallcountry', function (req, res) {
             //data_added= false;
          }
          else {
-            //res.end(JSON.stringify(recordsets)); // Result in JSON format
-            //res.json({ status: true });
-            res.send(recordsets);
-            sql.close();        
-   }
-   });
 
-      //FOR BRANCH DATA INSERT
-      //console.log(req.body.branch[0]);
-      //req.body.branch = JSON.parse(req.body.branch);
+            res.send(recordsets);
+            sql.close();
+         }
+      });
+
    });
 });
 
@@ -109,62 +108,58 @@ app.post('/viewallcountry', function (req, res) {
 
 app.post('/viewallstate', function (req, res) {
    //console.log(req);
-      sql.connect(config, function () {
-         var request = new sql.Request();
-        
-         var data_added = true;
-         request.input('Operation', 'SELECTBYID');
-         request.input('ID', req.body.id);
-   
-              //request.input('Company_Person_Name', req.body.Company_Person_Name)
-         request.execute('Proc_State', function (err, recordsets, returnValue, affected) {
-            if (err) {
-               console.log(err);
-               res.json({ status: false })
-               //data_added= false;
-            }
-            else {
-               //res.end(JSON.stringify(recordsets)); // Result in JSON format
-               //res.json({ status: true });
-               res.send(recordsets);
-               sql.close();        
-      }
-      });   
+   sql.connect(config, function () {
+      var request = new sql.Request();
+
+      var data_added = true;
+      request.input('Operation', 'SELECTBYID');
+      request.input('ID', req.body.id);
+
+      //request.input('Company_Person_Name', req.body.Company_Person_Name)
+      request.execute('Proc_State', function (err, recordsets, returnValue, affected) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false })
+            //data_added= false;
+         }
+         else {
+            //res.end(JSON.stringify(recordsets)); // Result in JSON format
+            //res.json({ status: true });
+            res.send(recordsets);
+            sql.close();
+         }
       });
    });
+});
 
 
 
-   //API FOR VIEW ALL STATE
+//API FOR VIEW ALL STATE
 
 app.post('/viewallcity', function (req, res) {
    //console.log(req);
-      sql.connect(config, function () {
-         var request = new sql.Request();
-        
-         var data_added = true;
-         request.input('Operation', 'SELECTBYID');
-         request.input('ID', req.body.id);
-              //request.input('Company_Person_Name', req.body.Company_Person_Name)
-         request.execute('Proc_City', function (err, recordsets, returnValue, affected) {
-            if (err) {
-               console.log(err);
-               res.json({ status: false })
-               //data_added= false;
-            }
-            else {
-               //res.end(JSON.stringify(recordsets)); // Result in JSON format
-               //res.json({ status: true });
-               res.send(recordsets);
-               sql.close();         
-      }
-      });
+   sql.connect(config, function () {
+      var request = new sql.Request();
+
+      var data_added = true;
+      request.input('Operation', 'SELECTBYID');
+      request.input('ID', req.body.id);
+      //request.input('Company_Person_Name', req.body.Company_Person_Name)
+      request.execute('Proc_City', function (err, recordsets, returnValue, affected) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false })
+            //data_added= false;
+         }
+         else {
+            //res.end(JSON.stringify(recordsets)); // Result in JSON format
+            //res.json({ status: true });
+            res.send(recordsets);
+            sql.close();
+         }
       });
    });
-
-
-   
-
+});
 
 
 
@@ -176,4 +171,7 @@ app.post('/viewallcity', function (req, res) {
 
 
 
-   
+
+
+
+
