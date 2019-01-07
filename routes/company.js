@@ -92,7 +92,7 @@ module.exports = {
             request.input('Created_By', parseInt(req.body.Created_By));
 
 
-            request.execute('PROC_COMPANY_DETAILS', function (err, recordsets, returnValue, affected) {
+            request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
                if (err) {
                   console.log(err);
                   // res.json({ status: false })

@@ -28,6 +28,14 @@ var esigrouproute = require('./routes/esigroup.js');
 var pfgroupoute = require('./routes/pfgroup.js');
 var ptgroupoute = require('./routes/ptgroup.js');
 var bankroute = require('./routes/bankmaster.js');
+var pfsettingroute = require('./routes/pfsetting.js');
+var retirementroute = require('./routes/retirement.js');
+var salarystructureroute = require('./routes/salarystructure.js');
+var graderoute = require('./routes/grade.js');
+var holidayroute = require('./routes/holiday.js');
+var leaveroute = require('./routes/leave.js');
+var siteroute = require('./routes/site.js');
+var workroute = require('./routes/workorder.js');
 
 
 companyroute.configure(app, assert, config);
@@ -36,9 +44,15 @@ esigrouproute.configure(app, assert, config);
 pfgroupoute.configure(app, assert, config);
 ptgroupoute.configure(app, assert, config);
 bankroute.configure(app, assert, config);
+pfsettingroute.configure(app, assert, config);
+retirementroute.configure(app, assert, config);
+salarystructureroute.configure(app, assert, config);
+graderoute.configure(app, assert, config);
+holidayroute.configure(app, assert, config);
+leaveroute.configure(app, assert, config);
+siteroute.configure(app, assert, config);
+workroute.configure(app, assert, config);
 
-//LOCAL
-//var url = "mongodb://localhost:27017/gst_app";
 
 //WELCOME API
 app.get('/', function (req, res) {
@@ -75,6 +89,8 @@ var executeQuery = function (res, query) {
       }
    });
 }
+
+
 
 //API FOR VIEW ALL COUNTRY
 
@@ -113,7 +129,7 @@ app.post('/viewallstate', function (req, res) {
 
       var data_added = true;
       request.input('Operation', 'SELECTBYID');
-      request.input('ID', req.body.id);
+      request.input('ID', req.body.id);//COUNTRY ID
 
       //request.input('Company_Person_Name', req.body.Company_Person_Name)
       request.execute('Proc_State', function (err, recordsets, returnValue, affected) {
@@ -134,7 +150,7 @@ app.post('/viewallstate', function (req, res) {
 
 
 
-//API FOR VIEW ALL STATE
+//API FOR VIEW ALL CITY
 
 app.post('/viewallcity', function (req, res) {
    //console.log(req);
@@ -143,7 +159,7 @@ app.post('/viewallcity', function (req, res) {
 
       var data_added = true;
       request.input('Operation', 'SELECTBYID');
-      request.input('ID', req.body.id);
+      request.input('ID', req.body.id);//STATE ID
       //request.input('Company_Person_Name', req.body.Company_Person_Name)
       request.execute('Proc_City', function (err, recordsets, returnValue, affected) {
          if (err) {

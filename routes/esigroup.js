@@ -59,7 +59,7 @@ module.exports = {
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             // request.input('Modified_On',req.body.Modified_On);
 
-            request.execute('Proc_ESIGROUP_MST', function (err, recordsets, returnValue, affected) {
+            request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
@@ -68,7 +68,7 @@ module.exports = {
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
                   //res.json({ status: true });
-                  res.json({ status: true, result: recordsets });
+                  res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
             });
@@ -94,8 +94,8 @@ module.exports = {
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
-                  res.send(rec.recordsets);
+                  res.json({ status: true, result: rec.recordsets[0] });
+                  //res.send(rec.recordsets);
                   sql.close();
                }
             });
@@ -122,7 +122,7 @@ module.exports = {
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  res.json({ status: true,result:rec.recordsets });
+                  res.json({ status: true, result: rec.recordsets[0] });
                   //res.send(rec.recordsets);
                   sql.close();
                }

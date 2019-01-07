@@ -1,0 +1,22 @@
+
+
+CREATE TABLE Site_Master(
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Site_Id] [int] NOT NULL,
+	[Site_Name] [varchar](50) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Site_Master] PRIMARY KEY CLUSTERED 
+(
+	[Site_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+

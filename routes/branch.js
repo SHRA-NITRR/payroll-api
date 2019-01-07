@@ -65,7 +65,7 @@ module.exports = {
 
             request2.input('Branch_ESI_Group', doc.Branch_ESI_Group);
 
-            request2.execute('PROC_COMPANY_BRANCH', function (errr, recordsets, returnValue, affected) {
+            request2.execute('PROC_COMPANY_BRANCH', function (errr, rec) {
                if (errr) {
                   console.log(errr);
                   //res.json({ status: false });
@@ -73,7 +73,7 @@ module.exports = {
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  res.json({ status: true });
+                  res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
             })
@@ -87,6 +87,40 @@ module.exports = {
 
 
       });
+
+
+
+
+      //API FOR VIEW ALL BANKS DETAILS
+
+      app.post('/viewbranchdetails', function (req, res) {
+         //console.log(req);
+         sql.connect(config, function () {
+            var request = new sql.Request();
+
+            var data_added = true;
+            request.input('Operation', 'SELECT');
+            //request.input('ID', req.body.id);
+            //request.input('Company_Person_Name', req.body.Company_Person_Name)
+            request.execute('PROC_COMPANY_BRANCH', function (err, rec) {
+               if (err) {
+                  console.log(err);
+                  res.json({ status: false })
+                  //data_added= false;
+               }
+               else {
+                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
+                  //res.json({ status: true });
+                  res.json({ status: true, result: rec.recordsets[0] });
+                  sql.close();
+               }
+            });
+         });
+      });
+
+
+
+
 
    }
 }

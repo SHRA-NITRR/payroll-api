@@ -35,8 +35,8 @@ module.exports = {
 
 
 
-      //API FOR ADD BANK DETAILS
-      app.post('/addbankdetails', function (req, res) {
+      //API FOR ADD PF SETTING DETAILS
+      app.post('/addpfsettingdetails', function (req, res) {
          //console.log(req);
          sql.connect(config, function () {
             var request = new sql.Request();
@@ -44,22 +44,15 @@ module.exports = {
             var data_added = true;
 
             request.input('Operation', 'INSERT');
-
-            request.input('Bank_Name', req.body.Bank_Name);
-            request.input('Bank_Sht_Name', req.body.Bank_Sht_Name);
-            request.input('BankAccNo', req.body.BankAccNo);
-            request.input('Address', req.body.Address);
-            request.input('Branch_Name', req.body.Branch_Name);
-            request.input('IFSC_Code', req.body.IFSC_Code);
-            request.input('Pin_No', parseInt(req.body.Pin_No));
-            request.input('Phone_No', req.body.Phone_No);
+            request.input('Effective_From', req.body.Effective_From);
+            request.input('PFSett_Age', parseInt(req.body.PFSett_Age));
             request.input('Created_By', parseInt(req.body.Created_By));
 
             // request.input('Modified_By', parseInt(req.body.Modified_By));
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             // request.input('Modified_On',req.body.Modified_On);
 
-            request.execute('Proc_BANK_MST', function (err, rec) {
+            request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
@@ -68,6 +61,7 @@ module.exports = {
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
                   //res.json({ status: true });
+
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
@@ -75,9 +69,9 @@ module.exports = {
          });
       });
 
-      //API FOR VIEW ALL BANKS DETAILS
+      //API FOR VIEW ALL PF SETTING DETAILS
 
-      app.post('/viewallbankdetails', function (req, res) {
+      app.post('/viewpfsettingdetails', function (req, res) {
          //console.log(req);
          sql.connect(config, function () {
             var request = new sql.Request();
@@ -86,7 +80,7 @@ module.exports = {
             request.input('Operation', 'SELECT');
             //request.input('ID', req.body.id);
             //request.input('Company_Person_Name', req.body.Company_Person_Name)
-            request.execute('Proc_BANK_MST', function (err, rec) {
+            request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
@@ -103,9 +97,9 @@ module.exports = {
       });
 
 
-      //API FOR SEARCH BANK DETAILS BY BANK ID
+      //API FOR SEARCH PF SETTING DETAILS BY PF ID
 
-      app.post('/search_bank_details', function (req, res) {
+      app.post('/search_pfsettingdetails', function (req, res) {
          //console.log(req);
          sql.connect(config, function () {
             var request = new sql.Request();
@@ -114,7 +108,7 @@ module.exports = {
             request.input('Operation', 'SEARCH');
             //request.input('ID', req.body.id);
             request.input('OUT_CODE', parseInt(req.body.bankid));
-            request.execute('Proc_BANK_MST', function (err, rec) {
+            request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
@@ -129,6 +123,16 @@ module.exports = {
             });
          });
       });
+
+
+
+
+
+
+
+
+
+
 
    }
 }

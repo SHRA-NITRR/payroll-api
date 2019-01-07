@@ -56,7 +56,7 @@ module.exports = {
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             // request.input('Modified_On',req.body.Modified_On);
 
-            request.execute('Proc_PTGROUP_MST', function (err, recordsets, returnValue, affected) {
+            request.execute('Proc_PTGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
@@ -65,7 +65,8 @@ module.exports = {
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
                   //res.json({ status: true });
-                  res.json({ status: true, result: recordsets });
+                  rollback;
+                  res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
             });
@@ -83,7 +84,7 @@ module.exports = {
             request.input('Operation', 'SELECT');
             //request.input('ID', req.body.id);
             //request.input('Company_Person_Name', req.body.Company_Person_Name)
-            request.execute('Proc_PTGROUP_MST', function (err, recordsets, returnValue, affected) {
+            request.execute('Proc_PTGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
@@ -92,11 +93,40 @@ module.exports = {
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
                   //res.json({ status: true });
-                  res.send(recordsets);
+                  res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
             });
          });
       });
+
+
+      //API FOR SEARCH PTGROUP DETAILS
+
+      app.post('/search_pt_details', function (req, res) {
+         //console.log(req);
+         sql.connect(config, function () {
+            var request = new sql.Request();
+
+            var data_added = true;
+            request.input('Operation', 'SEARCH');
+            //request.input('ID', req.body.id);
+            request.input('OUT_CODE', parseInt(req.body.ptgroupid));
+            request.execute('Proc_PTGROUP_MST', function (err, rec) {
+               if (err) {
+                  console.log(err);
+                  res.json({ status: false })
+                  //data_added= false;
+               }
+               else {
+                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
+                  res.json({ status: true, result: rec.recordsets[0] });
+                  //res.send(rec.recordsets);
+                  sql.close();
+               }
+            });
+         });
+      });
+
    }
 }
