@@ -6,7 +6,6 @@ var sql = require('mssql');
 module.exports = {
     configure: function (app, assert, config) {
 
-
         var executeQuery = function (res, query) {
             sql.connect(config, function (err) {
                 if (err) {
@@ -31,11 +30,7 @@ module.exports = {
             });
         }
 
-
-
-
-
-        //API FOR ADD GRADE DETAILS
+//API FOR ADD GRADE DETAILS
         app.post('/addgradedetails', function (req, res) {
             //console.log(req);
             sql.connect(config, function () {
@@ -61,7 +56,6 @@ module.exports = {
                     else {
                         //res.end(JSON.stringify(recordsets)); // Result in JSON format
                         //res.json({ status: true });
-
                         res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
@@ -69,13 +63,12 @@ module.exports = {
             });
         });
 
-        //API FOR VIEW ALL GRADE DETAILS
+//API FOR VIEW ALL GRADE DETAILS
 
         app.post('/viewgradedetails', function (req, res) {
             //console.log(req);
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
@@ -97,7 +90,8 @@ module.exports = {
         });
 
 
-        //API FOR SEARCH GRADE DETAILS BY ID
+
+//API FOR SEARCH GRADE DETAILS BY ID
 
         app.post('/search_gradedetails', function (req, res) {
             //console.log(req);
@@ -123,6 +117,5 @@ module.exports = {
                 });
             });
         });
-
     }
 }

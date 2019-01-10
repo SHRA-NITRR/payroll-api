@@ -6,7 +6,6 @@ var sql = require('mssql');
 module.exports = {
    configure: function (app, assert, config) {
 
-
       var executeQuery = function (res, query) {
          sql.connect(config, function (err) {
             if (err) {
@@ -32,12 +31,9 @@ module.exports = {
       }
 
 
-
-
-
       //API FOR ADD BANK DETAILS
       app.post('/addbankdetails', function (req, res) {
-         //console.log(req);
+         //console.log(req);4
          sql.connect(config, function () {
             var request = new sql.Request();
 

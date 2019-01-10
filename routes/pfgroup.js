@@ -87,6 +87,48 @@ module.exports = {
          });
       });
 
+
+      //API FOR UPDATE PF GROUP
+      app.post('/updatepfgroup', function (req, res) {
+         //console.log(req);
+         sql.connect(config, function () {
+            var request = new sql.Request();
+            var request2 = new sql.Request();
+
+            var data_added = true;
+            request.input('Operation', 'UPDATE');
+            //request.input('PFGroup_Id', parseInt(req.body.PFGroup_Id));
+            request.input('PF_No', req.body.PF_No);
+            request.input('DBA_File_Code', req.body.DBA_File_Code);
+            request.input('File_Extension', req.body.File_Extension);
+            request.input('Address', req.body.Address);
+            request.input('Created_By', parseInt(req.body.Created_By));
+
+            // request.input('Modified_By', parseInt(req.body.Modified_By));
+            // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
+            // request.input('Modified_On',req.body.Modified_On);
+
+            request.execute('Proc_PFGROUP_MST', function (err, rec) {
+               if (err) {
+                  console.log(err);
+                  res.json({ status: false })
+                  //data_added= false;
+
+               }
+               else {
+                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
+                  res.json({ status: true });
+                  //res.send(recordsets);
+                  sql.close();
+               }
+            });
+         });
+      });
+
+
+
+
+
       //API FOR VIEW ESI GROUP
 
       app.post('/viewpfgroup', function (req, res) {
@@ -141,6 +183,64 @@ module.exports = {
             });
          });
       });
+
+
+
+      //API FOR VIEW SINGLE PF DETAILS
+
+      app.post('/view_single_pf_details', function (req, res) {
+
+         sql.connect(config, function () {
+            var request = new sql.Request();
+            var data_added = true;
+
+            request.input('Operation', 'SELECTBYID');
+            request.input('PFGroup_Id', req.body.id);// PF GROUP ID
+
+            request.execute('Proc_PFGROUP_MST', function (err, rec) {
+               if (err) {
+                  console.log(err);
+                  res.json({ status: false })
+               }
+               else {
+                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
+                  res.json({ status: true, result: rec.recordset[0] });
+                  sql.close();
+               }
+            });
+         });
+      });
+      //API FOR DELETE PF DETAILS
+
+      app.post('/delete_pf_details', function (req, res) {
+         //console.log(req);
+         sql.connect(config, function () {
+            var request = new sql.Request();
+
+            var data_added = true;
+            request.input('Operation', 'DELETE');
+            request.input('PFGroup_Id', req.body.id);//PFGROUP GROUP ID
+
+            request.execute('Proc_PFGROUP_MST', function (err, rec) {
+               if (err) {
+                  console.log(err);
+                  res.json({ status: false })
+                  //data_added= false;
+               }
+               else {
+                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
+                  res.json({ status: true });
+                  //res.send(recordsets);
+                  sql.close();
+               }
+            });
+         });
+      });
+
+
+
+
+
 
    }
 }
