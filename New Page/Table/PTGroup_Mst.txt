@@ -2,6 +2,7 @@
 CREATE TABLE [dbo].[PTGroup_Mst](
 	[RowId] [int] IDENTITY(1,1) NOT NULL,
 	[PTGroup_Id] [int] NOT NULL,
+[PTGroup_Name] [varchar] (50) NULL,
 	[State_Id] [int] NULL,
 	[Certificate_No] [varchar](50) NULL,
 	[PTO_No] [varchar](50) NULL,

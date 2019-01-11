@@ -53,7 +53,7 @@ module.exports = {
 
             // request.input('Modified_By', parseInt(req.body.Modified_By));
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-            // request.input('Modified_On',req.body.Modified_On);
+            request.input('PFGroup_Name',req.body.PFGroup_Name);
 
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
@@ -64,22 +64,10 @@ module.exports = {
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
+                  res.json({ status: true });
                   //res.send(recordsets);
-                  sql.close();
-                  sql.connect(config, function () {
-                     var request2 = new sql.Request();
-                     request2.input('ok', 'false');
-
-                     request2.execute('Proc_PFGROUP_MST', function (err, rec) {
-                        if (err) {
-                           console.log(err);
-                           res.json({ status: "jfbfddi" })
-                           //data_added= false;
-
-                        }
-                     });
-                  })
+                 
+                 
                   //res.json({ status: true, result:rec.recordsets[0]});
                   sql.close();
                }
@@ -97,14 +85,15 @@ module.exports = {
 
             var data_added = true;
             request.input('Operation', 'UPDATE');
-            //request.input('PFGroup_Id', parseInt(req.body.PFGroup_Id));
+            request.input('PFGroup_Id', parseInt(req.body.PFGroup_Id));
             request.input('PF_No', req.body.PF_No);
             request.input('DBA_File_Code', req.body.DBA_File_Code);
             request.input('File_Extension', req.body.File_Extension);
             request.input('Address', req.body.Address);
             request.input('Created_By', parseInt(req.body.Created_By));
+            request.input('PFGroup_Name',req.body.PFGroup_Name);
 
-            // request.input('Modified_By', parseInt(req.body.Modified_By));
+          //request.input('Modified_By', parseInt(req.body.Modified_By));
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             // request.input('Modified_On',req.body.Modified_On);
 

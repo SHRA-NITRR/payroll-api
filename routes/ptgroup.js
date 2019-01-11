@@ -60,11 +60,8 @@ module.exports = {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
-
                }
-               else {
-
-               
+               else {       
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }

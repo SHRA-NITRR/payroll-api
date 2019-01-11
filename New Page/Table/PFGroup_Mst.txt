@@ -2,6 +2,7 @@
 CREATE TABLE [dbo].[PFGroup_Mst](
 	[RowId] [int] IDENTITY(1,1) NOT NULL,
 	[PFGroup_Id] [int] NOT NULL,
+[PFGroup_Name] [varchar] (50) NULL,
 	[PF_No] [varchar](50) NULL,
 	[DBA_File_Code] [varchar](50) NULL,
 	[File_Extension] [varchar](50) NULL,

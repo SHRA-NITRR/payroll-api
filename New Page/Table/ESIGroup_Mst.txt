@@ -1,6 +1,7 @@
 CREATE TABLE [dbo].[ESIGroup_Mst](
 	[RowId] [int] IDENTITY(1,1) NOT NULL,
 	[ESIGroup_Id] [int] NOT NULL,
+[ESIGroup_Name] [varchar] (50) NULL,
 	[ESI_No] [varchar](50) NULL,
 	[ESI_Local_Office] [varchar](50) NULL,
 	[Address] [varchar](200) NULL,

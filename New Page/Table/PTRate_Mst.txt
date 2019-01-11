@@ -1,6 +1,7 @@
 CREATE TABLE [dbo].[PTRate_Mst](
 	[RowId] [int] IDENTITY(1,1) NOT NULL,
 	[PTRate_Id] [int] NOT NULL,
+[PTRate_Name] [varchar] (50) NULL,
 	[PTGroup_Id] [int] NOT NULL,
 	[Effective_From] [date] NULL,
 	[Minimum_Amount] [decimal](18, 2) NULL,
