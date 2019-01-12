@@ -82,7 +82,7 @@ module.exports = {
                     else {
                         //res.end(JSON.stringify(recordsets)); // Result in JSON format
                         //res.json({ status: true });
-                        res.json({ status: true, result: rec.recordsets[0] });
+                        res.json({ status: true, result: rec.ID });
                         sql.close();
                     }
                 });

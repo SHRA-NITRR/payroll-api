@@ -48,6 +48,7 @@ module.exports = {
             request.input('State_Id', parseInt(req.body.State_Id));
             request.input('Certificate_No', req.body.Certificate_No);
             request.input('PTO_No', req.body.PTO_No);
+            request.input('PTGroup_Name', req.body.PTGroup_Name);
 
             request.input('PT_Address', req.body.PT_Address);
             request.input('Return_Period', req.body.Return_Period);

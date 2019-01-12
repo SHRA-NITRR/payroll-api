@@ -129,10 +129,11 @@ app.post('/viewallstate', function (req, res) {
 
       var data_added = true;
       request.input('Operation', 'SELECTBYID');
-      request.input('ID', req.body.id);//COUNTRY ID
+      //request.input('ID', req.body.id);//COUNTRY ID
+      request.input('ID',101);//COUNTRY ID
 
       //request.input('Company_Person_Name', req.body.Company_Person_Name)
-      request.execute('Proc_State', function (err, recordsets, returnValue, affected) {
+      request.execute('Proc_State', function (err, rec) {
          if (err) {
             console.log(err);
             res.json({ status: false })
@@ -141,7 +142,7 @@ app.post('/viewallstate', function (req, res) {
          else {
             //res.end(JSON.stringify(recordsets)); // Result in JSON format
             //res.json({ status: true });
-            res.send(recordsets);
+            res.json({ status: true, result: rec.recordsets[0] });
             sql.close();
          }
       });
