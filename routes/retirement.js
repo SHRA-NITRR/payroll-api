@@ -6,7 +6,6 @@ var sql = require('mssql');
 module.exports = {
     configure: function (app, assert, config) {
 
-
         var executeQuery = function (res, query) {
             sql.connect(config, function (err) {
                 if (err) {
@@ -30,10 +29,6 @@ module.exports = {
                 }
             });
         }
-
-
-
-
 
         //API FOR ADD RETIREMENT SETTING DETAILS
         app.post('/addretiresettingdetails', function (req, res) {
@@ -69,6 +64,37 @@ module.exports = {
             });
         });
 
+
+  //API FOR UPDATE RETIREMENT SETTING DETAILS
+  app.post('/updateretiresettingdetails', function (req, res) {
+    //console.log(req);
+    sql.connect(config, function () {
+        var request = new sql.Request();
+
+        var data_added = true;
+
+        request.input('Operation', 'UPDATE');
+        request.input('Effective_From', req.body.Effective_From);
+        request.input('RetSett_Age', parseInt(req.body.RetSett_Age));
+        request.input('Created_By', parseInt(req.body.Created_By));
+
+        // request.input('Modified_By', parseInt(req.body.Modified_By));
+        // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
+        // request.input('Modified_On',req.body.Modified_On);
+
+        request.execute('Proc_RETIREMRNT_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false })
+            }
+            else {
+                res.json({ status: true, result: rec.recordsets[0] });
+                sql.close();
+            }
+        });
+    });
+});
+
         //API FOR VIEW ALL RETIREMENT SETTING DETAILS
 
         app.post('/viewretirementsettingdetails', function (req, res) {
@@ -95,6 +121,28 @@ module.exports = {
                 });
             });
         });
+ //API FOR VIEW SINGLE RETIREMENT SETTING DETAILS
+
+ app.post('/viewsingleretirsettdetails', function (req, res) {
+    //console.log(req);
+    sql.connect(config, function () {
+        var request = new sql.Request();
+
+        var data_added = true;
+        request.input('Operation', 'SELECTBYID');
+        request.input('RetSett_Id', req.body.id);
+        request.execute('Proc_RETIREMRNT_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false })  
+            }
+            else {
+                res.json({ status: true, result: rec.recordsets[0] });
+                sql.close();
+            }
+        });
+    });
+});
 
 
         //API FOR SEARCH RETIREMENT SETTING DETAILS BY PF ID
@@ -125,6 +173,33 @@ module.exports = {
         });
 
 
+
+//API FOR DELETE RETIREMENT SETTING DETAILS
+
+app.post('/delete_retiresett_details', function (req, res) {
+    //console.log(req);
+    sql.connect(config, function () {
+       var request = new sql.Request();
+
+       var data_added = true;
+       request.input('Operation', 'DELETE');
+       request.input('RetSett_Id', req.body.id);//RETIREMENT SETTING ID GROUP ID
+
+       request.execute('Proc_RETIREMRNT_MST', function (err, rec) {
+          if (err) {
+             console.log(err);
+             res.json({ status: false })
+             //data_added= false;
+          }
+          else {
+             //res.end(JSON.stringify(recordsets)); // Result in JSON format
+             res.json({ status: true });
+             //res.send(recordsets);
+             sql.close();
+          }
+       });
+    });
+ });
 
 
 

@@ -67,6 +67,7 @@ app.listen(app.get('port'), function () {
 
 
 var executeQuery = function (res, query) {
+   sql.close();
    sql.connect(config, function (err) {
       if (err) {
          console.log("Error while connecting database :- " + err);
@@ -105,7 +106,8 @@ app.post('/viewallcountry', function (req, res) {
       request.execute('Proc_COUNTRY', function (err, recordsets, returnValue, affected) {
          if (err) {
             console.log(err);
-            res.json({ status: false })
+            res.json({ status: false });
+            sql.close();
             //data_added= false;
          }
          else {
@@ -122,8 +124,8 @@ app.post('/viewallcountry', function (req, res) {
 
 //API FOR VIEW ALL STATE
 
-app.post('/viewallstate', function (req, res) {
-   //console.log(req);
+app.get('/viewallstate', function (req, res) {
+   sql.close();
    sql.connect(config, function () {
       var request = new sql.Request();
 
@@ -131,17 +133,14 @@ app.post('/viewallstate', function (req, res) {
       request.input('Operation', 'SELECTBYID');
       //request.input('ID', req.body.id);//COUNTRY ID
       request.input('ID',101);//COUNTRY ID
-
-      //request.input('Company_Person_Name', req.body.Company_Person_Name)
       request.execute('Proc_State', function (err, rec) {
          if (err) {
-            console.log(err);
-            res.json({ status: false })
+            //console.log(err);
+            res.json({ status: false });
             //data_added= false;
+            sql.close();
          }
          else {
-            //res.end(JSON.stringify(recordsets)); // Result in JSON format
-            //res.json({ status: true });
             res.json({ status: true, result: rec.recordsets[0] });
             sql.close();
          }
@@ -162,16 +161,17 @@ app.post('/viewallcity', function (req, res) {
       request.input('Operation', 'SELECTBYID');
       request.input('ID', req.body.id);//STATE ID
       //request.input('Company_Person_Name', req.body.Company_Person_Name)
-      request.execute('Proc_City', function (err, recordsets, returnValue, affected) {
+      request.execute('Proc_City', function (err, rec) {
          if (err) {
             console.log(err);
             res.json({ status: false })
             //data_added= false;
+            sql.close();
          }
          else {
-            //res.end(JSON.stringify(recordsets)); // Result in JSON format
-            //res.json({ status: true });
-            res.send(recordsets);
+            
+            res.json({ status: true, result: rec.recordsets[0] });
+           
             sql.close();
          }
       });

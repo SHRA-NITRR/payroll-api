@@ -6,7 +6,7 @@ var sql = require('mssql');
 module.exports = {
    configure: function (app, assert, config) {
 
-
+      sql.close();
       var executeQuery = function (res, query) {
          sql.connect(config, function (err) {
             if (err) {
@@ -35,6 +35,7 @@ module.exports = {
       //API FOR ADD PF GROUP
       app.post('/addpfgroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
             var request2 = new sql.Request();
@@ -58,7 +59,8 @@ module.exports = {
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                   //data_added= false;
 
                }
@@ -79,6 +81,7 @@ module.exports = {
       //API FOR UPDATE PF GROUP
       app.post('/updatepfgroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
             var request2 = new sql.Request();
@@ -100,7 +103,8 @@ module.exports = {
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                   //data_added= false;
 
                }
@@ -122,6 +126,7 @@ module.exports = {
 
       app.post('/viewpfgroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -132,7 +137,8 @@ module.exports = {
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                   //data_added= false;
                }
                else {
@@ -150,6 +156,8 @@ module.exports = {
 
       app.post('/search_pf_details', function (req, res) {
          //console.log(req);
+         
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -160,7 +168,8 @@ module.exports = {
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                   //data_added= false;
                }
                else {
@@ -178,7 +187,7 @@ module.exports = {
       //API FOR VIEW SINGLE PF DETAILS
 
       app.post('/view_single_pf_details', function (req, res) {
-
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
             var data_added = true;
@@ -189,7 +198,8 @@ module.exports = {
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -203,6 +213,7 @@ module.exports = {
 
       app.post('/delete_pf_details', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -213,7 +224,8 @@ module.exports = {
             request.execute('Proc_PFGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                   //data_added= false;
                }
                else {

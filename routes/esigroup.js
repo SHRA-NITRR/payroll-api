@@ -9,6 +9,7 @@ module.exports = {
 
 
       var executeQuery = function (res, query) {
+         sql.close();
          sql.connect(config, function (err) {
             if (err) {
                console.log("Error while connecting database :- " + err);
@@ -36,6 +37,7 @@ module.exports = {
       //API FOR ADD ESI
       app.post('/addesigroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -51,19 +53,17 @@ module.exports = {
             request.input('Is_Individual_Calc', req.body.Is_Individual_Calc.toLowerCase() == 'true' ? true : false);
             request.input('Created_By', parseInt(req.body.Created_By));
 
-            // request.input('Modified_By', parseInt(req.body.Modified_By));
+            request.input('ESIGroup_Name', req.body.ESIGroup_Name);
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             // request.input('Modified_On',req.body.Modified_On);
 
             request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
-                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
@@ -75,6 +75,7 @@ module.exports = {
       //API FOR UPDATE ESI DETAILS
       app.post('/updateesigroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -89,7 +90,7 @@ module.exports = {
             request.input('Is_Limit_ESI_Gross', req.body.Is_Limit_ESI_Gross.toLowerCase() == 'true' ? true : false);
             request.input('Is_Individual_Calc', req.body.Is_Individual_Calc.toLowerCase() == 'true' ? true : false);
             request.input('Created_By', parseInt(req.body.Created_By));
-
+            request.input('ESIGroup_Name', req.body.ESIGroup_Name);
             //request.input('Modified_By', parseInt(req.body.Modified_By));
             //request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             //request.input('Modified_On',req.body.Modified_On);
@@ -97,12 +98,10 @@ module.exports = {
             request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
-                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
@@ -111,22 +110,24 @@ module.exports = {
       });
 
 
+
       //API FOR VIEW ESI GROUP
 
       app.post('/viewallesigroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
             var data_added = true;
             request.input('Operation', 'SELECT');
             //request.input('ID', req.body.id);
-            //request.input('Company_Person_Name', req.body.Company_Person_Name)
             request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
                   //data_added= false;
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -143,6 +144,7 @@ module.exports = {
 
       app.post('/search_esi_details', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -153,7 +155,8 @@ module.exports = {
             request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                   //data_added= false;
                }
                else {
@@ -168,7 +171,7 @@ module.exports = {
       //API FOR VIEW SINGLE  ESI DETAILS
 
       app.post('/view_single_esi_details', function (req, res) {
-
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
             var data_added = true;
@@ -179,7 +182,8 @@ module.exports = {
             request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -193,6 +197,7 @@ module.exports = {
 
       app.post('/delete_esi_details', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -200,11 +205,12 @@ module.exports = {
             request.input('Operation', 'DELETE');
             request.input('ESIGroup_Id', req.body.id);//ESI GROUP ID
 
-            request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
+            request.execute('Proc_ESIGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
                   //data_added= false;
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -215,8 +221,6 @@ module.exports = {
             });
          });
       });
-
-
 
    }
 }

@@ -6,7 +6,7 @@ var sql = require('mssql');
 module.exports = {
    configure: function (app, assert, config) {
 
-
+      sql.close();
       var executeQuery = function (res, query) {
          sql.connect(config, function (err) {
             if (err) {
@@ -32,12 +32,9 @@ module.exports = {
       }
 
 
-
-
-
       //API FOR ADD PF SETTING DETAILS
       app.post('/addpfsettingdetails', function (req, res) {
-         //console.log(req);
+        sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -55,13 +52,9 @@ module.exports = {
             request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
-               }
+                  res.json({ status: false });
+                  sql.close();               }
                else {
-                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
-
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
@@ -69,26 +62,57 @@ module.exports = {
          });
       });
 
+
+ //API FOR UPDATE PF SETTING DETAILS
+ app.post('/updatepfsettingdetails', function (req, res) {
+   //console.log(req);
+   sql.close();
+   sql.connect(config, function () {
+      var request = new sql.Request();
+
+      var data_added = true;
+
+      request.input('Operation', 'UPDATE');
+      request.input('Effective_From', req.body.Effective_From);
+      request.input('PFSett_Age', parseInt(req.body.PFSett_Age));
+      request.input('Created_By', parseInt(req.body.Created_By));
+
+      // request.input('Modified_By', parseInt(req.body.Modified_By));
+      // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
+      // request.input('Modified_On',req.body.Modified_On);
+
+      request.execute('Proc_PFsetting_MST', function (err, rec) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false });
+            sql.close();
+         }
+         else {
+            res.json({ status: true, result: rec.recordsets[0] });
+            sql.close();
+         }
+      });
+   });
+});
+
       //API FOR VIEW ALL PF SETTING DETAILS
 
       app.post('/viewpfsettingdetails', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
             var data_added = true;
             request.input('Operation', 'SELECT');
             //request.input('ID', req.body.id);
-            //request.input('Company_Person_Name', req.body.Company_Person_Name)
             request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
-                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                  //res.json({ status: true });
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
@@ -96,11 +120,34 @@ module.exports = {
          });
       });
 
+ //API FOR VIEW ALL PF SETTING DETAILS
 
+ app.post('/view_single_pfsettingdetails', function (req, res) {
+   sql.close();
+   sql.connect(config, function () {
+      var request = new sql.Request();
+
+      var data_added = true;
+      request.input('Operation', 'SELECTBYID');
+      request.input('PFSetting_Id', req.body.id);// PFSetting_Id
+     
+      request.execute('Proc_PFsetting_MST', function (err, rec) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false });
+            sql.close(); 
+         }
+         else {
+            res.json({ status: true, result: rec.recordsets[0] });
+            sql.close();
+         }
+      });
+   });
+});
       //API FOR SEARCH PF SETTING DETAILS BY PF ID
 
       app.post('/search_pfsettingdetails', function (req, res) {
-         //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -111,13 +158,11 @@ module.exports = {
             request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
-                  //res.end(JSON.stringify(recordsets)); // Result in JSON format
                   res.json({ status: true, result: rec.recordsets[0] });
-                  //res.send(rec.recordsets);
                   sql.close();
                }
             });
@@ -125,13 +170,30 @@ module.exports = {
       });
 
 
+ //API FOR DELETE PF SETTING DETAILS
 
+ app.post('/delete_pfsetting_details', function (req, res) {
+   //console.log(req);
+   sql.close();
+   sql.connect(config, function () {
+      var request = new sql.Request();
+      var data_added = true;
+      request.input('Operation', 'DELETE');
+      request.input('PFSetting_Id', req.body.id);//PF SETTING ID
 
-
-
-
-
-
+      request.execute('Proc_PFsetting_MST', function (err, rec) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false });
+            sql.close();
+         }
+         else {
+            res.json({ status: true });
+            sql.close();
+         }
+      });
+   });
+});
 
 
    }

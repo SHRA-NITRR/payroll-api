@@ -54,8 +54,39 @@ module.exports = {
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        //res.json({ status: true });
+                        res.json({ status: true, result: rec.recordsets[0] });
+                        sql.close();
+                    }
+                });
+            });
+        });
+
+
+        //API FOR UPDATE GRADE DETAILS
+        app.post('/updategradedetails', function (req, res) {
+            //console.log(req);
+            sql.connect(config, function () {
+                var request = new sql.Request();
+
+                var data_added = true;
+
+                request.input('Operation', 'UPDATE');
+                request.input('Grade_Id', parseInt(req.body.Grade_Id));
+                request.input('Grade_Name', req.body.Grade_Name);
+
+                request.input('Created_By', parseInt(req.body.Created_By));
+
+                // request.input('Modified_By', parseInt(req.body.Modified_By));
+                // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
+                // request.input('Modified_On',req.body.Modified_On);
+
+                request.execute('Proc_GRADE_MST', function (err, rec) {
+                    if (err) {
+                        console.log(err);
+                        res.json({ status: false })
+                        //data_added= false;
+                    }
+                    else {
                         res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
@@ -88,6 +119,33 @@ module.exports = {
                 });
             });
         });
+
+//API FOR VIEW ALL GRADE DETAILS
+
+app.post('/view_single_gradedetails', function (req, res) {
+    //console.log(req);
+    sql.connect(config, function () {
+        var request = new sql.Request();
+        var data_added = true;
+        request.input('Operation', 'SELECTID');
+        request.input('Grade_Id', parseInt(req.body.Grade_Id));
+        //request.input('ID', req.body.id);
+        //request.input('Company_Person_Name', req.body.Company_Person_Name)
+        request.execute('Proc_GRADE_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false })
+                //data_added= false;
+            }
+            else {
+                //res.end(JSON.stringify(recordsets)); // Result in JSON format
+                //res.json({ status: true });
+                res.json({ status: true, result: rec.ID });
+                sql.close();
+            }
+        });
+    });
+});
 
 
 

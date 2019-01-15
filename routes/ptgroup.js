@@ -9,6 +9,7 @@ module.exports = {
 
 
       var executeQuery = function (res, query) {
+         sql.close();
          sql.connect(config, function (err) {
             if (err) {
                console.log("Error while connecting database :- " + err);
@@ -37,6 +38,7 @@ module.exports = {
 
       //API FOR ADD PT GROUP
       app.post('/addptgroup', function (req, res) {
+         sql.close();
          //console.log(req);
          sql.connect(config, function () {
             var request = new sql.Request();
@@ -61,6 +63,7 @@ module.exports = {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
+                  sql.close();
                }
                else {       
                   res.json({ status: true, result: rec.recordsets[0] });
@@ -75,13 +78,14 @@ module.exports = {
       //API FOR UPDATE PT GROUP
       app.post('/updateptgroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
             var data_added = true;
             request.input('Operation', 'UPDATE');
 
-            // request.input('PTGroup_Id', parseInt(req.body.PTGroup_Id));
+            request.input('PTGroup_Id', parseInt(req.body.PTGroup_Id));
             request.input('State_Id', parseInt(req.body.State_Id));
             request.input('Certificate_No', req.body.Certificate_No);
             request.input('PTO_No', req.body.PTO_No);
@@ -89,7 +93,7 @@ module.exports = {
             request.input('PT_Address', req.body.PT_Address);
             request.input('Return_Period', req.body.Return_Period);
             request.input('Created_By', parseInt(req.body.Created_By));
-            // request.input('Modified_By', parseInt(req.body.Modified_By));
+            request.input('PTGroup_Name', req.body.PTGroup_Name);
             // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
             // request.input('Modified_On',req.body.Modified_On);
 
@@ -97,10 +101,11 @@ module.exports = {
                if (err) {
                   console.log(err);
                   res.json({ status: false })
+                  sql.close();
                }
                else {
 
-                  rollback;
+            
                   res.json({ status: true, result: rec.recordsets[0] });
                   sql.close();
                }
@@ -115,6 +120,7 @@ module.exports = {
 
       app.post('/viewallptgroup', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -127,6 +133,7 @@ module.exports = {
                   console.log(err);
                   res.json({ status: false })
                   //data_added= false;
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -143,6 +150,7 @@ module.exports = {
 
       app.post('/search_pt_details', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
 
@@ -155,6 +163,7 @@ module.exports = {
                   console.log(err);
                   res.json({ status: false })
                   //data_added= false;
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -171,7 +180,7 @@ module.exports = {
       //API FOR VIEW SINGLE  PT DETAILS
 
       app.post('/view_single_pt_details', function (req, res) {
-
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
             var data_added = true;
@@ -182,7 +191,8 @@ module.exports = {
             request.execute('Proc_PTGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
+                  res.json({ status: false });     
+                  sql.close();
                }
                else {
                   //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -196,31 +206,26 @@ module.exports = {
 
       app.post('/delete_pt_details', function (req, res) {
          //console.log(req);
+         sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();
-
             var data_added = true;
+            
             request.input('Operation', 'DELETE');
             request.input('PTGroup_Id', req.body.id);//PT GROUP ID
 
             request.execute('Proc_PTGROUP_MST', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-                  //data_added= false;
+                  res.json({ status: false });
+                  sql.close();
                }
                else {
-
                   res.json({ status: true });
-                  //res.send(recordsets);
                   sql.close();
                }
             });
          });
       });
-
-
-
-
    }
 }

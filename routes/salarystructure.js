@@ -8,6 +8,7 @@ module.exports = {
 
 
         var executeQuery = function (res, query) {
+            sql.close();
             sql.connect(config, function (err) {
                 if (err) {
                     console.log("Error while connecting database :- " + err);
@@ -31,13 +32,10 @@ module.exports = {
             });
         }
 
-
-
-
-
         //API FOR ADD SALARY STRUCTURE DETAILS
         app.post('/addsalarystructure', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -61,6 +59,7 @@ module.exports = {
                         console.log(err);
                         res.json({ status: false })
                         //data_added= false;
+                        sql.close();
                     }
                     else {
                         //res.end(JSON.stringify(recordsets)); // Result in JSON format
@@ -73,26 +72,60 @@ module.exports = {
             });
         });
 
-        //API FOR VIEW ALL RETIREMENT SETTING DETAILS
+
+//API FOR UPDATE SALARY STRUCTURE DETAILS
+app.post('/updatesalarystructure', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+        var request = new sql.Request();
+        var data_added = true;
+
+        request.input('Operation', 'UPDATE');
+        request.input('Salary_Str_Id', parseInt(req.body.Salary_Str_Id));
+        request.input('Salary_Str_Name', req.body.Salary_Str_Name);
+        request.input('Salary_Str_Reamrk', req.body.Salary_Str_Reamrk);
+        request.input('Is_On_Gross', req.body.Is_On_Gross.toLowerCase() == 'true' ? true : false);
+        request.input('Created_By', parseInt(req.body.Created_By));
+
+       
+        // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
+        // request.input('Modified_On',req.body.Modified_On);
+
+        request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false });
+                 sql.close();
+                //data_added= false;
+            }
+            else {
+                res.json({ status: true, result: rec.recordsets[0] });
+                sql.close();
+            }
+        });
+    });
+});
+
+        //API FOR VIEW ALL SALARY STRUCTURE DETAILS
 
         app.post('/viewsalarystructuredetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
                 var data_added = true;
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
-                //request.input('Company_Person_Name', req.body.Company_Person_Name)
                 request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        //res.json({ status: true });
                         res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
@@ -100,11 +133,37 @@ module.exports = {
             });
         });
 
+  //API FOR VIEW SINGLE SALARY STRUCTURE DETAILS
 
-        //API FOR SEARCH RETIREMENT SETTING DETAILS BY PF ID
+  app.post('/view_single_salary_structure_details', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+        var request = new sql.Request();
+
+        var data_added = true;
+        request.input('Operation', 'SELECTBYID');
+        request.input('Salary_Str_Id',req.body.id);//SALARY STRUCTURE ID
+
+        request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false });
+                sql.close();
+                //data_added= false;
+            }
+            else {
+                res.json({ status: true, result: rec.recordsets[0] });
+                sql.close();
+            }
+        });
+    });
+});
+        //API FOR SEARCH SALARY STRUCTURE DETAILS BY PF ID
 
         app.post('/search_salarystructuredetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -115,19 +174,44 @@ module.exports = {
                 request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
                         res.json({ status: true, result: rec.recordsets[0] });
-                        //res.send(rec.recordsets);
                         sql.close();
                     }
                 });
             });
         });
 
+//API FOR DELETE SALARY STRUCTURE DETAILS
+
+app.post('/delete_salarystructure_details', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+       var request = new sql.Request();
+
+       var data_added = true;
+       request.input('Operation', 'DELETE');
+       request.input('Salary_Str_Id', req.body.id);//SALARY STRUCTURE ID
+
+       request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
+          if (err) {
+             console.log(err);
+             res.json({ status: false });
+             sql.close();
+             //data_added= false;
+          }
+          else {
+             res.json({ status: true });
+             sql.close();
+          }
+       });
+    });
+ });
 
     }
 }
