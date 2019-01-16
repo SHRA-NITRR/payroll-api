@@ -5,7 +5,7 @@ var sql = require('mssql');
 
 module.exports = {
     configure: function (app, assert, config) {
-
+sql.close();
         var executeQuery = function (res, query) {
             sql.connect(config, function (err) {
                 if (err) {
@@ -33,6 +33,7 @@ module.exports = {
 //API FOR ADD GRADE DETAILS
         app.post('/addgradedetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -50,7 +51,8 @@ module.exports = {
                 request.execute('Proc_GRADE_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
@@ -65,6 +67,7 @@ module.exports = {
         //API FOR UPDATE GRADE DETAILS
         app.post('/updategradedetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -73,7 +76,6 @@ module.exports = {
                 request.input('Operation', 'UPDATE');
                 request.input('Grade_Id', parseInt(req.body.Grade_Id));
                 request.input('Grade_Name', req.body.Grade_Name);
-
                 request.input('Created_By', parseInt(req.body.Created_By));
 
                 // request.input('Modified_By', parseInt(req.body.Modified_By));
@@ -83,7 +85,8 @@ module.exports = {
                 request.execute('Proc_GRADE_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
@@ -98,49 +101,49 @@ module.exports = {
 
         app.post('/viewgradedetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
                 var data_added = true;
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
-                //request.input('Company_Person_Name', req.body.Company_Person_Name)
+                
                 request.execute('Proc_GRADE_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        //res.json({ status: true });
-                        res.json({ status: true, result: rec.ID });
+                        res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
                 });
             });
         });
 
-//API FOR VIEW ALL GRADE DETAILS
+//API FOR VIEW SINGLE GRADE DETAILS
 
 app.post('/view_single_gradedetails', function (req, res) {
     //console.log(req);
+    sql.close();
     sql.connect(config, function () {
         var request = new sql.Request();
         var data_added = true;
-        request.input('Operation', 'SELECTID');
-        request.input('Grade_Id', parseInt(req.body.Grade_Id));
+        request.input('Operation', 'SELECTBYID');
+        request.input('Grade_Id',req.body.id);//GRADE ID
         //request.input('ID', req.body.id);
         //request.input('Company_Person_Name', req.body.Company_Person_Name)
         request.execute('Proc_GRADE_MST', function (err, rec) {
             if (err) {
                 console.log(err);
-                res.json({ status: false })
+                res.json({ status: false });
                 //data_added= false;
+                sql.close();
             }
             else {
-                //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                //res.json({ status: true });
-                res.json({ status: true, result: rec.ID });
+                res.json({ status: true, result: rec.recordsets[0] });
                 sql.close();
             }
         });
@@ -153,6 +156,7 @@ app.post('/view_single_gradedetails', function (req, res) {
 
         app.post('/search_gradedetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -163,17 +167,45 @@ app.post('/view_single_gradedetails', function (req, res) {
                 request.execute('Proc_GRADE_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
                         res.json({ status: true, result: rec.recordsets[0] });
-                        //res.send(rec.recordsets);
                         sql.close();
                     }
                 });
             });
         });
+
+//API FOR DELETE GRADE DETAILS
+
+app.post('/delete_grade_details', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+       var request = new sql.Request();
+
+       var data_added = true;
+       request.input('Operation', 'DELETE');
+       request.input('Grade_Id', req.body.id);//GRADE ID
+
+       request.execute('Proc_GRADE_MST', function (err, rec) {
+          if (err) {
+             console.log(err);
+             res.json({ status: false });
+             sql.close();
+             //data_added= false;
+          }
+          else {
+             res.json({ status: true });
+             sql.close();
+          }
+       });
+    });
+ });
+
+
     }
 }

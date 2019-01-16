@@ -89,6 +89,7 @@ module.exports = {
       request.input('Pin_No', parseInt(req.body.Pin_No));
       request.input('Phone_No', req.body.Phone_No);
       request.input('Created_By', parseInt(req.body.Created_By));
+      request.input('Bank_Id', parseInt(req.body.id));//BANK ID
 
       // request.input('Modified_By', parseInt(req.body.Modified_By));
       // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
@@ -165,7 +166,7 @@ module.exports = {
             var data_added = true;
             request.input('Operation', 'SEARCH');
             //request.input('ID', req.body.id);
-            request.input('OUT_CODE', parseInt(req.body.bankid));
+            request.input('OUT_CODE', parseInt(req.body.id));
             request.execute('Proc_BANK_MST', function (err, rec) {
                if (err) {
                   console.log(err);

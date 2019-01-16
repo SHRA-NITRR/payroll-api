@@ -8,6 +8,7 @@ module.exports = {
 
 
         var executeQuery = function (res, query) {
+            sql.close();
             sql.connect(config, function (err) {
                 if (err) {
                     console.log("Error while connecting database :- " + err);
@@ -31,16 +32,12 @@ module.exports = {
             });
         }
 
-
-
-
-
         //API FOR ADD HOLIDAY DETAILS
         app.post('/addholidaydetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
 
                 request.input('Operation', 'INSERT');
@@ -48,29 +45,16 @@ module.exports = {
                 request.input('Description', req.body.Description);
                 request.input('Is_National_Holiday', req.body.Is_National_Holiday);
                 request.input('Is_Branch_Wise', req.body.Is_Branch_Wise);
-
                 request.input('Created_By', parseInt(req.body.Created_By));
-
-
-
-                //                 @Name VARCHAR (50)=NULL,
-                //  @Description VARCHAR (50)=NULL,
-                //  @Is_National_Holiday varchar (1)=NULL,
-                //  @Is_Branch_Wise varchar (1)=NULL,
-                // request.input('Modified_By', parseInt(req.body.Modified_By));
-                // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-                // request.input('Modified_On',req.body.Modified_On);
 
                 request.execute('Proc_HOLIDAY_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        //res.json({ status: true });
-
                         res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
@@ -78,10 +62,44 @@ module.exports = {
             });
         });
 
+ //API FOR UPDATE HOLIDAY DETAILS
+ app.post('/updateholidaydetails', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+        var request = new sql.Request();
+        var data_added = true;
+
+        request.input('Operation', 'UPDATE');
+        request.input('Name', req.body.Name);
+        request.input('Description', req.body.Description);
+        request.input('Is_National_Holiday', req.body.Is_National_Holiday);
+        request.input('Is_Branch_Wise', req.body.Is_Branch_Wise);
+        request.input('Created_By', parseInt(req.body.Created_By));
+        request.input('Holiday_Id', parseInt(req.body.id));// HOLIDAY ID
+
+        request.execute('Proc_HOLIDAY_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false });
+                sql.close();
+                //data_added= false;
+            }
+            else {
+                res.json({ status: true, result: rec.recordsets[0] });
+                sql.close();
+            }
+        });
+    });
+});
+
+
+
         //API FOR VIEW ALL RETIREMENT SETTING DETAILS
 
         app.post('/viewholidaydetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -92,12 +110,11 @@ module.exports = {
                 request.execute('Proc_HOLIDAY_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        //res.json({ status: true });
                         res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
@@ -105,11 +122,38 @@ module.exports = {
             });
         });
 
+ //API FOR VIEW SINGLE HOLIDAY DETAILS
+
+ app.post('/viewsingleholidaydetails', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+        var request = new sql.Request();
+
+        var data_added = true;
+        request.input('Operation', 'SELECTBYID');
+        request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
+        //request.input('ID', req.body.id);
+        request.execute('Proc_HOLIDAY_MST', function (err, rec) {
+            if (err) {
+                console.log(err);
+                res.json({ status: false });
+                sql.close();
+                //data_added= false;
+            }
+            else {
+                res.json({ status: true, result: rec.recordsets[0] });
+                sql.close();
+            }
+        });
+    });
+});
 
         //API FOR SEARCH RETIREMENT SETTING DETAILS BY PF ID
 
         app.post('/search_holidaydetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
@@ -120,17 +164,50 @@ module.exports = {
                 request.execute('Proc_HOLIDAY_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
                         res.json({ status: true, result: rec.recordsets[0] });
-                        //res.send(rec.recordsets);
                         sql.close();
                     }
                 });
             });
         });
+
+
+
+//API FOR DELETE HOLIDAY DETAILS
+
+app.post('/delete_holiday_details', function (req, res) {
+    //console.log(req);
+    sql.close();
+    sql.connect(config, function () {
+       var request = new sql.Request();
+
+       var data_added = true;
+       request.input('Operation', 'DELETE');
+       request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
+
+       request.execute('Proc_GRADE_MST', function (err, rec) {
+          if (err) {
+             console.log(err);
+             res.json({ status: false });
+             sql.close();
+             //data_added= false;
+          }
+          else {
+             res.json({ status: true });
+             sql.close();
+          }
+       });
+    });
+ });
+
+
+
+
+
     }
 }
