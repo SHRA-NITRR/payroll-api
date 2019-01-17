@@ -95,7 +95,7 @@ module.exports = {
 
 
 
-        //API FOR VIEW ALL RETIREMENT SETTING DETAILS
+        //API FOR VIEW ALL HOLIDAY DETAILS
 
         app.post('/viewholidaydetails', function (req, res) {
             //console.log(req);
@@ -160,7 +160,7 @@ module.exports = {
                 var data_added = true;
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
-                request.input('OUT_CODE', parseInt(req.body.id));
+                request.input('OUT_CODE', parseInt(req.body.id));// id
                 request.execute('Proc_HOLIDAY_MST', function (err, rec) {
                     if (err) {
                         console.log(err);

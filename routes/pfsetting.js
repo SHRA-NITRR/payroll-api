@@ -76,11 +76,8 @@ module.exports = {
       request.input('Effective_From', req.body.Effective_From);
       request.input('PFSett_Age', parseInt(req.body.PFSett_Age));
       request.input('Created_By', parseInt(req.body.Created_By));
-
-      // request.input('Modified_By', parseInt(req.body.Modified_By));
-      // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-      // request.input('Modified_On',req.body.Modified_On);
-
+      request.input('PFSetting_Id', parseInt(req.body.id));// PFSetting_Id
+      
       request.execute('Proc_PFsetting_MST', function (err, rec) {
          if (err) {
             console.log(err);
@@ -144,6 +141,7 @@ module.exports = {
       });
    });
 });
+
       //API FOR SEARCH PF SETTING DETAILS BY PF ID
 
       app.post('/search_pfsettingdetails', function (req, res) {
@@ -154,7 +152,7 @@ module.exports = {
             var data_added = true;
             request.input('Operation', 'SEARCH');
             //request.input('ID', req.body.id);
-            request.input('OUT_CODE', parseInt(req.body.bankid));
+            request.input('OUT_CODE', parseInt(req.body.id));// PF SETTING ID
             request.execute('Proc_PFsetting_MST', function (err, rec) {
                if (err) {
                   console.log(err);
