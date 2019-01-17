@@ -2,10 +2,8 @@ var Connection = require('express').Connection;
 var Request = require('express').Request;
 var sql = require('mssql');
 
-
 module.exports = {
     configure: function (app, assert, config) {
-
 
         var executeQuery = function (res, query) {
             sql.close();
@@ -39,7 +37,6 @@ module.exports = {
             sql.connect(config, function () {
                 var request = new sql.Request();
                 var data_added = true;
-
                 request.input('Operation', 'INSERT');
                 request.input('Name', req.body.Name);
                 request.input('Description', req.body.Description);
@@ -93,8 +90,6 @@ module.exports = {
     });
 });
 
-
-
         //API FOR VIEW ALL HOLIDAY DETAILS
 
         app.post('/viewholidaydetails', function (req, res) {
@@ -102,11 +97,9 @@ module.exports = {
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
-                //request.input('Company_Person_Name', req.body.Company_Person_Name)
                 request.execute('Proc_HOLIDAY_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
@@ -129,7 +122,6 @@ module.exports = {
     sql.close();
     sql.connect(config, function () {
         var request = new sql.Request();
-
         var data_added = true;
         request.input('Operation', 'SELECTBYID');
         request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
@@ -156,7 +148,6 @@ module.exports = {
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
@@ -185,7 +176,6 @@ app.post('/delete_holiday_details', function (req, res) {
     sql.close();
     sql.connect(config, function () {
        var request = new sql.Request();
-
        var data_added = true;
        request.input('Operation', 'DELETE');
        request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
@@ -204,10 +194,5 @@ app.post('/delete_holiday_details', function (req, res) {
        });
     });
  });
-
-
-
-
-
     }
 }

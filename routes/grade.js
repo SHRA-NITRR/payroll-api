@@ -36,17 +36,10 @@ sql.close();
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
-
                 request.input('Operation', 'INSERT');
                 request.input('Grade_Name', req.body.Grade_Name);
-
                 request.input('Created_By', parseInt(req.body.Created_By));
-
-                // request.input('Modified_By', parseInt(req.body.Modified_By));
-                // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-                // request.input('Modified_On',req.body.Modified_On);
 
                 request.execute('Proc_GRADE_MST', function (err, rec) {
                     if (err) {
@@ -70,17 +63,11 @@ sql.close();
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
-
                 request.input('Operation', 'UPDATE');
-                request.input('Grade_Id', parseInt(req.body.Grade_Id));
+                request.input('Grade_Id', parseInt(req.body.id));//GRADE ID
                 request.input('Grade_Name', req.body.Grade_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
-
-                // request.input('Modified_By', parseInt(req.body.Modified_By));
-                // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-                // request.input('Modified_On',req.body.Modified_On);
 
                 request.execute('Proc_GRADE_MST', function (err, rec) {
                     if (err) {
@@ -133,8 +120,7 @@ app.post('/view_single_gradedetails', function (req, res) {
         var data_added = true;
         request.input('Operation', 'SELECTBYID');
         request.input('Grade_Id',req.body.id);//GRADE ID
-        //request.input('ID', req.body.id);
-        //request.input('Company_Person_Name', req.body.Company_Person_Name)
+        
         request.execute('Proc_GRADE_MST', function (err, rec) {
             if (err) {
                 console.log(err);
@@ -150,8 +136,6 @@ app.post('/view_single_gradedetails', function (req, res) {
     });
 });
 
-
-
 //API FOR SEARCH GRADE DETAILS BY ID
 
         app.post('/search_gradedetails', function (req, res) {
@@ -159,7 +143,6 @@ app.post('/view_single_gradedetails', function (req, res) {
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
@@ -186,7 +169,6 @@ app.post('/delete_grade_details', function (req, res) {
     sql.close();
     sql.connect(config, function () {
        var request = new sql.Request();
-
        var data_added = true;
        request.input('Operation', 'DELETE');
        request.input('Grade_Id', req.body.id);//GRADE ID

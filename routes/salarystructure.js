@@ -44,15 +44,8 @@ module.exports = {
                 request.input('Operation', 'INSERT');
                 request.input('Salary_Str_Name', req.body.Salary_Str_Name);
                 request.input('Salary_Str_Reamrk', req.body.Salary_Str_Reamrk);
-
                 request.input('Is_On_Gross', req.body.Is_On_Gross.toLowerCase() == 'true' ? true : false);
                 request.input('Created_By', parseInt(req.body.Created_By));
-
-                // request.input('Modified_By', parseInt(req.body.Modified_By));
-                // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-                // request.input('Modified_On',req.body.Modified_On);
-
-
 
                 request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
                     if (err) {
@@ -62,9 +55,6 @@ module.exports = {
                         sql.close();
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        //res.json({ status: true });
-
                         res.json({ status: true, result: rec.recordsets[0] });
                         sql.close();
                     }
@@ -82,15 +72,11 @@ app.post('/updatesalarystructure', function (req, res) {
         var data_added = true;
 
         request.input('Operation', 'UPDATE');
-        request.input('Salary_Str_Id', parseInt(req.body.Salary_Str_Id));
+        request.input('Salary_Str_Id', parseInt(req.body.id));//SALARY STRUCTURE ID
         request.input('Salary_Str_Name', req.body.Salary_Str_Name);
         request.input('Salary_Str_Reamrk', req.body.Salary_Str_Reamrk);
         request.input('Is_On_Gross', req.body.Is_On_Gross.toLowerCase() == 'true' ? true : false);
         request.input('Created_By', parseInt(req.body.Created_By));
-
-       
-        // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
-        // request.input('Modified_On',req.body.Modified_On);
 
         request.execute('Proc_SALARYSTRUCTURE_MST', function (err, rec) {
             if (err) {
@@ -114,7 +100,6 @@ app.post('/updatesalarystructure', function (req, res) {
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
@@ -140,7 +125,6 @@ app.post('/updatesalarystructure', function (req, res) {
     sql.close();
     sql.connect(config, function () {
         var request = new sql.Request();
-
         var data_added = true;
         request.input('Operation', 'SELECTBYID');
         request.input('Salary_Str_Id',req.body.id);//SALARY STRUCTURE ID
@@ -159,6 +143,7 @@ app.post('/updatesalarystructure', function (req, res) {
         });
     });
 });
+
         //API FOR SEARCH SALARY STRUCTURE DETAILS BY PF ID
 
         app.post('/search_salarystructuredetails', function (req, res) {
@@ -166,7 +151,6 @@ app.post('/updatesalarystructure', function (req, res) {
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
-
                 var data_added = true;
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);

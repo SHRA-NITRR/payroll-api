@@ -77,6 +77,7 @@ module.exports = {
         request.input('Effective_From', req.body.Effective_From);
         request.input('RetSett_Age', parseInt(req.body.RetSett_Age));
         request.input('Created_By', parseInt(req.body.Created_By));
+        request.input('RetSett_Id', parseInt(req.body.id));//RETIREMENT SETTING ID
 
         // request.input('Modified_By', parseInt(req.body.Modified_By));
         // request.input('Is_Deleted', req.body.Is_Deleted.toLowerCase() == 'true' ? true : false);
@@ -109,7 +110,7 @@ module.exports = {
                 request.execute('Proc_RETIREMRNT_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
                         //data_added= false;
                     }
                     else {
@@ -149,23 +150,23 @@ module.exports = {
 
         app.post('/search_retiresettingdetails', function (req, res) {
             //console.log(req);
+            sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
 
                 var data_added = true;
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
-                request.input('OUT_CODE', parseInt(req.body.retid));
-                request.execute('Proc_PFsetting_MST', function (err, rec) {
+                request.input('OUT_CODE',req.body.id);
+                request.execute('Proc_RETIREMRNT_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
-                        res.json({ status: false })
+                        res.json({ status: false });
+                        sql.close();
                         //data_added= false;
                     }
                     else {
-                        //res.end(JSON.stringify(recordsets)); // Result in JSON format
-                        res.json({ status: true, result: rec.recordsets[0] });
-                        //res.send(rec.recordsets);
+                        res.json({ status: true, result: rec.recordsets[0]});
                         sql.close();
                     }
                 });

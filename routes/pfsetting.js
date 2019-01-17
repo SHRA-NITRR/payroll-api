@@ -176,8 +176,8 @@ module.exports = {
    sql.connect(config, function () {
       var request = new sql.Request();
       var data_added = true;
-      request.input('Operation', 'DELETE');
-      request.input('PFSetting_Id', req.body.id);//PF SETTING ID
+      request.input('Operation','DELETE');
+      request.input('PFSetting_Id',req.body.id);//PF SETTING ID
 
       request.execute('Proc_PFsetting_MST', function (err, rec) {
          if (err) {
