@@ -160,7 +160,9 @@ module.exports = {
                   sql.close();
                }
                else {
-                  res.json({ status: true, result: rec.recordsets[0] });
+                  // var a= rec.recordsets[0][1].Effective_From;
+                  // var b =a.toString()
+                  res.json({ status: true, result:rec.recordsets[0] });
                   sql.close();
                }
             });
