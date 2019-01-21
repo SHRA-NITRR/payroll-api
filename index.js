@@ -36,6 +36,7 @@ var holidayroute = require('./routes/holiday.js');
 var leaveroute = require('./routes/leave.js');
 var siteroute = require('./routes/site.js');
 var workroute = require('./routes/workorder.js');
+var pfesirateroute = require('./routes/pfesirate.js');
 
 
 companyroute.configure(app, assert, config);
@@ -52,6 +53,7 @@ holidayroute.configure(app, assert, config);
 leaveroute.configure(app, assert, config);
 siteroute.configure(app, assert, config);
 workroute.configure(app, assert, config);
+pfesirateroute.configure(app, assert, config);
 
 
 //WELCOME API
