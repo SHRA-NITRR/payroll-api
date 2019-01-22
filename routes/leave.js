@@ -98,7 +98,6 @@ module.exports = {
 });
 
         //API FOR VIEW LEAVE DETAILS
-
         app.post('/viewleavedetails', function (req, res) {
             //console.log(req);
             sql.close();

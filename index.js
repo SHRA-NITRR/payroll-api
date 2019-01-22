@@ -7,6 +7,8 @@ var nodemailer = require('nodemailer');
 var Connection = require('express').Connection;
 var Request = require('express').Request;
 var sql = require('mssql');
+var multer = require('multer');
+
 
 app.set('port', (process.env.PORT || 8008));
 app.use(cors());

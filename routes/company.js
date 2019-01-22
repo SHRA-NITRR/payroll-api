@@ -569,45 +569,61 @@ module.exports = {
             request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
                if (err) {
                   console.log(err);
-                  res.json({ status: false })
-
+                  res.json({ status: false });
                }
                else {
-
                   res.json({ status: true });
-
                   sql.close();
                }
             });
          });
       });
 
+      var multer = require('multer');
 
+      var Storage = multer.diskStorage({
+         destination: function(req, file, callback) {
+             callback(null, "./documents");
+         },
+         filename: function(req, file, callback) {
+            //  callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+             callback(null, file.originalname);
+         }
+      });
 
+     
+     var upload = multer({ storage: Storage });
+     //var upload = multer({ storage : storage }).array('userPhoto',2);
+    
+//API FOR DOCUMENTS ADD
+      app.post("/companydocuments",upload.array('Company_File_Name',10), function(req, res) {
+      sql.close();
+      console.log(req.file.Company_File_Name);
+      sql.connect(config, function () {
+          var request = new sql.Request();
+          var data_added = true;
+          request.input('Operation', 'INSERT');
+          request.input('Company_Id', parseInt(req.body.Company_Id));
 
+          req.file.originalname.forEach(function (doc, err) {
+          request.input('Company_File_Name',doc.originalname);
+          });// INPUT TYPE FILE
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          //request.input('File_Data',req.body.File_Data);
+          request.execute('PROC_COMPANY_DOCUMENT', function (err, rec) {
+              if (err) {
+                  console.log(err);
+                  res.json({ status: false });
+                  sql.close();
+              }
+              else {
+               res.json({ status: true, result: rec.recordsets[0] });
+                  sql.close();
+            }
+            });
+         });
+      })
    }
 }
+     
+      

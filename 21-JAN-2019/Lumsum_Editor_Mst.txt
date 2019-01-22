@@ -1,0 +1,33 @@
+ 
+
+CREATE TABLE [dbo].[Lumsum_Editor_Mst](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Lumsum_Editor_Id] [int] NOT NULL,
+	[Lumsum_Editor_Name] [varchar](50) NOT NULL,
+	[Lumsum_Editor_Type] [varchar](1) NOT NULL,
+	[Lumsum_Editor_Grade] [int]  NULL,
+	[Lumsum_Editor_Amount] decimal(18,2)  NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+	 
+ CONSTRAINT [PK_Lum_Mst] PRIMARY KEY CLUSTERED 
+(
+	[Lumsum_Editor_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Lumsum_Editor_Mst] ADD  CONSTRAINT [DF_Lumsum_Mst_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].[Lumsum_Editor_Mst] ADD  CONSTRAINT [DF_Lumsum_Mst_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+
+
