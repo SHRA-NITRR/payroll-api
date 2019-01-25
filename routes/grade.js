@@ -188,6 +188,5 @@ app.post('/delete_grade_details', function (req, res) {
     });
  });
 
-
     }
 }
