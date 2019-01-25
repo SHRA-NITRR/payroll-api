@@ -591,7 +591,6 @@ module.exports = {
          }
       });
 
-     
      var upload = multer({ storage: Storage });
      //var upload = multer({ storage : storage }).array('userPhoto',2);
     

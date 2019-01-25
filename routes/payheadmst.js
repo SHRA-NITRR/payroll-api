@@ -46,7 +46,8 @@ module.exports = {
             request.input('Use_For_NetPay',req.body.Use_For_NetPay);
             request.input('Contribute_by',req.body.Contribute_by);
             request.input('Created_By', parseInt(req.body.Created_By));
-            
+            request.input('payhead_inslip',req.body.payhead_inslip);
+
             request.execute('Proc_PayHead_Mst', function (err, rec) {
                if (err) {
                   console.log(err);
@@ -79,6 +80,7 @@ module.exports = {
             request.input('Contribute_by',req.body.Contribute_by);
             request.input('Created_By', parseInt(req.body.Created_By));
             request.input('PayHead_Id', parseInt(req.body.id));//PAYHEAD ID
+            request.input('payhead_inslip',req.body.payhead_inslip);
 
             request.execute('Proc_PayHead_Mst', function (err, rec) {
                if (err) {
