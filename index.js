@@ -43,7 +43,8 @@ var qualificationroute = require('./routes/qualification.js');
 var payheadroute = require('./routes/payheadmst.js');
 var lumpsumroute = require('./routes/lumpsummst.js');
 var employeeroute = require('./routes/employeemst.js');
-var departmentroute = require('./routes/departmentmst.js');
+var designationroute = require('./routes/designation.js');
+var departmentroute = require('./routes/department.js');
 
 
 companyroute.configure(app, assert, config);
@@ -65,6 +66,7 @@ qualificationroute.configure(app, assert, config);
 payheadroute.configure(app, assert, config);
 lumpsumroute.configure(app, assert, config);
 employeeroute.configure(app, assert, config);
+designationroute.configure(app, assert, config);
 departmentroute.configure(app, assert, config);
 
 

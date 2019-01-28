@@ -2,11 +2,11 @@ var Connection = require('express').Connection;
 var Request = require('express').Request;
 var sql = require('mssql');
 
+
 module.exports = {
     configure: function (app, assert, config) {
-
+sql.close();
         var executeQuery = function (res, query) {
-            sql.close();
             sql.connect(config, function (err) {
                 if (err) {
                     console.log("Error while connecting database :- " + err);
@@ -30,22 +30,19 @@ module.exports = {
             });
         }
 
-        //API FOR ADD HOLIDAY DETAILS
-        app.post('/addholidaydetails', function (req, res) {
+//API FOR ADD DESIGNATION DETAILS
+        app.post('/adddesignationdetails', function (req, res) {
             //console.log(req);
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
                 var data_added = true;
                 request.input('Operation', 'INSERT');
-                request.input('Name', req.body.Name);
-                request.input('Description', req.body.Description);
-                request.input('Is_National_Holiday', req.body.Is_National_Holiday);
-                request.input('Is_Branch_Wise', req.body.Is_Branch_Wise);
+                request.input('Desig_Name', req.body.Desig_Name);
+                request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
-                request.input('Date', req.body.date);
 
-                request.execute('Proc_HOLIDAY_MST', function (err, rec) {
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -60,42 +57,39 @@ module.exports = {
             });
         });
 
- //API FOR UPDATE HOLIDAY DETAILS
- app.post('/updateholidaydetails', function (req, res) {
-    //console.log(req);
-    sql.close();
-    sql.connect(config, function () {
-        var request = new sql.Request();
-        var data_added = true;
 
-        request.input('Operation', 'UPDATE');
-        request.input('Name', req.body.Name);
-        request.input('Description', req.body.Description);
-        request.input('Is_National_Holiday', req.body.Is_National_Holiday);
-        request.input('Is_Branch_Wise', req.body.Is_Branch_Wise);
-        request.input('Created_By', parseInt(req.body.Created_By));
-        request.input('Holiday_Id', parseInt(req.body.id));// HOLIDAY ID
-        request.input('Date', req.body.date);
+        //API FOR UPDATE DESIGNATION DETAILS
+        app.post('/updatedesignationdetails', function (req, res) {
+            //console.log(req);
+            sql.close();
+            sql.connect(config, function () {
+                var request = new sql.Request();
+                var data_added = true;
+                request.input('Operation', 'UPDATE');
+                request.input('Desig_Id', parseInt(req.body.id));//DESIGNATION ID
+                request.input('Desig_Name', req.body.Desig_Name);
+                request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
+                request.input('Created_By', parseInt(req.body.Created_By));
 
-
-        request.execute('Proc_HOLIDAY_MST', function (err, rec) {
-            if (err) {
-                console.log(err);
-                res.json({ status: false });
-                sql.close();
-                //data_added= false;
-            }
-            else {
-                res.json({ status: true, result: rec.recordsets[0] });
-                sql.close();
-            }
+                request.execute('PROC_DesignationMaster', function (err, rec) {
+                    if (err) {
+                        console.log(err);
+                        res.json({ status: false });
+                        sql.close();
+                        //data_added= false;
+                    }
+                    else {
+                        res.json({ status: true, result: rec.recordsets[0] });
+                        sql.close();
+                    }
+                });
+            });
         });
-    });
-});
 
-        //API FOR VIEW ALL HOLIDAY DETAILS
+//API FOR VIEW ALL DESIGNATION DETAILS
 
-        app.post('/viewholidaydetails', function (req, res) {
+        app.post('/viewdesignationdetails', function (req, res) {
+        
             //console.log(req);
             sql.close();
             sql.connect(config, function () {
@@ -103,7 +97,8 @@ module.exports = {
                 var data_added = true;
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
-                request.execute('Proc_HOLIDAY_MST', function (err, rec) {
+                
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -118,23 +113,23 @@ module.exports = {
             });
         });
 
- //API FOR VIEW SINGLE HOLIDAY DETAILS
+//API FOR VIEW SINGLE DESIGNATION DETAILS
 
- app.post('/viewsingleholidaydetails', function (req, res) {
+app.post('/view_single_designationdetails', function (req, res) {
     //console.log(req);
     sql.close();
     sql.connect(config, function () {
         var request = new sql.Request();
         var data_added = true;
         request.input('Operation', 'SELECTBYID');
-        request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
-        //request.input('ID', req.body.id);
-        request.execute('Proc_HOLIDAY_MST', function (err, rec) {
+        request.input('Desig_Id', req.body.id);//DESIGNATION ID
+        
+        request.execute('PROC_DesignationMaster', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false });
-                sql.close();
                 //data_added= false;
+                sql.close();
             }
             else {
                 res.json({ status: true, result: rec.recordsets[0] });
@@ -144,9 +139,9 @@ module.exports = {
     });
 });
 
-        //API FOR SEARCH RETIREMENT SETTING DETAILS BY PF ID
+//API FOR SEARCH DESIGNATION DETAILS BY ID
 
-        app.post('/search_holidaydetails', function (req, res) {
+        app.post('/search_designationdetails', function (req, res) {
             //console.log(req);
             sql.close();
             sql.connect(config, function () {
@@ -154,8 +149,8 @@ module.exports = {
                 var data_added = true;
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
-                request.input('OUT_CODE', parseInt(req.body.id));// id
-                request.execute('Proc_HOLIDAY_MST', function (err, rec) {
+                request.input('OUT_CODE', parseInt(req.body.id));
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -170,20 +165,18 @@ module.exports = {
             });
         });
 
+//API FOR DELETE DESIGNATION DETAILS
 
-
-//API FOR DELETE HOLIDAY DETAILS
-
-app.post('/delete_holiday_details', function (req, res) {
+app.post('/delete_designation_details', function (req, res) {
     //console.log(req);
     sql.close();
     sql.connect(config, function () {
        var request = new sql.Request();
        var data_added = true;
        request.input('Operation', 'DELETE');
-       request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
+       request.input('Desig_Id', req.body.id);//DESIGNATION ID
 
-       request.execute('Proc_GRADE_MST', function (err, rec) {
+       request.execute('PROC_DesignationMaster', function (err, rec) {
           if (err) {
              console.log(err);
              res.json({ status: false });
@@ -197,5 +190,6 @@ app.post('/delete_holiday_details', function (req, res) {
        });
     });
  });
+
     }
 }

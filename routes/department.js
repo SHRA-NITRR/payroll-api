@@ -38,11 +38,11 @@ sql.close();
                 var request = new sql.Request();
                 var data_added = true;
                 request.input('Operation', 'INSERT');
-                request.input('Desig_Name', req.body.Desig_Name);
-                request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
+                
+                request.input('Department_Name', req.body.Department_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
 
-                request.execute('PROC_DesignationMaster', function (err, rec) {
+                request.execute('Proc_DepartmentMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -66,12 +66,12 @@ sql.close();
                 var request = new sql.Request();
                 var data_added = true;
                 request.input('Operation', 'UPDATE');
-                request.input('Desig_Id', parseInt(req.body.id));//DEPARTMENT ID
-                request.input('Desig_Name', req.body.Desig_Name);
-                request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
+                request.input('Department_Id', parseInt(req.body.id));//DEPARTMENT ID
+                request.input('Department_Name', req.body.Department_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
+               
 
-                request.execute('PROC_DesignationMaster', function (err, rec) {
+                request.execute('Proc_DepartmentMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -98,7 +98,7 @@ sql.close();
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
                 
-                request.execute('PROC_DesignationMaster', function (err, rec) {
+                request.execute('Proc_DepartmentMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -122,9 +122,9 @@ app.post('/view_single_departmentdetails', function (req, res) {
         var request = new sql.Request();
         var data_added = true;
         request.input('Operation', 'SELECTBYID');
-        request.input('Desig_Id', req.body.id);//DESIGNATION ID
+        request.input('Department_Id', req.body.id);//DEPARTMENT ID
         
-        request.execute('PROC_DesignationMaster', function (err, rec) {
+        request.execute('Proc_DepartmentMaster', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false });
@@ -150,7 +150,7 @@ app.post('/view_single_departmentdetails', function (req, res) {
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
                 request.input('OUT_CODE', parseInt(req.body.id));
-                request.execute('PROC_DesignationMaster', function (err, rec) {
+                request.execute('Proc_DepartmentMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -174,9 +174,9 @@ app.post('/delete_department_details', function (req, res) {
        var request = new sql.Request();
        var data_added = true;
        request.input('Operation', 'DELETE');
-       request.input('Desig_Id', req.body.id);//DESIGNATION ID
+       request.input('Department_Id', req.body.id);//DEPARTMENT ID
 
-       request.execute('PROC_DesignationMaster', function (err, rec) {
+       request.execute('Proc_DepartmentMaster', function (err, rec) {
           if (err) {
              console.log(err);
              res.json({ status: false });
