@@ -121,6 +121,7 @@ module.exports = {
       //API FOR SEARCH PAYHEAD DETAILS
 
       app.post('/search_payheaddetails', function (req, res) {
+         console.log("lumpsum");
          sql.close();
          sql.connect(config, function () {
             var request = new sql.Request();

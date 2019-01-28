@@ -30,18 +30,19 @@ sql.close();
             });
         }
 
-//API FOR ADD GRADE DETAILS
-        app.post('/addgradedetails', function (req, res) {
+//API FOR ADD DEPARTMENT DETAILS
+        app.post('/adddepartmentdetails', function (req, res) {
             //console.log(req);
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
                 var data_added = true;
                 request.input('Operation', 'INSERT');
-                request.input('Grade_Name', req.body.Grade_Name);
+                request.input('Desig_Name', req.body.Desig_Name);
+                request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
 
-                request.execute('Proc_GRADE_MST', function (err, rec) {
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -57,19 +58,20 @@ sql.close();
         });
 
 
-        //API FOR UPDATE GRADE DETAILS
-        app.post('/updategradedetails', function (req, res) {
+        //API FOR UPDATE DEPARTMENT DETAILS
+        app.post('/updatedepartmentdetails', function (req, res) {
             //console.log(req);
             sql.close();
             sql.connect(config, function () {
                 var request = new sql.Request();
                 var data_added = true;
                 request.input('Operation', 'UPDATE');
-                request.input('Grade_Id', parseInt(req.body.id));//GRADE ID
-                request.input('Grade_Name', req.body.Grade_Name);
+                request.input('Desig_Id', parseInt(req.body.id));//DEPARTMENT ID
+                request.input('Desig_Name', req.body.Desig_Name);
+                request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
 
-                request.execute('Proc_GRADE_MST', function (err, rec) {
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -84,9 +86,9 @@ sql.close();
             });
         });
 
-//API FOR VIEW ALL GRADE DETAILS
+//API FOR VIEW ALL DEPARTMENT DETAILS
 
-        app.post('/viewgradedetails', function (req, res) {
+        app.post('/viewdepartmentdetails', function (req, res) {
         
             //console.log(req);
             sql.close();
@@ -96,7 +98,7 @@ sql.close();
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
                 
-                request.execute('Proc_GRADE_MST', function (err, rec) {
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -111,18 +113,18 @@ sql.close();
             });
         });
 
-//API FOR VIEW SINGLE GRADE DETAILS
+//API FOR VIEW SINGLE DEPARTMENT DETAILS
 
-app.post('/view_single_gradedetails', function (req, res) {
+app.post('/view_single_departmentdetails', function (req, res) {
     //console.log(req);
     sql.close();
     sql.connect(config, function () {
         var request = new sql.Request();
         var data_added = true;
         request.input('Operation', 'SELECTBYID');
-        request.input('Grade_Id',req.body.id);//GRADE ID
+        request.input('Desig_Id', req.body.id);//DESIGNATION ID
         
-        request.execute('Proc_GRADE_MST', function (err, rec) {
+        request.execute('PROC_DesignationMaster', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false });
@@ -137,9 +139,9 @@ app.post('/view_single_gradedetails', function (req, res) {
     });
 });
 
-//API FOR SEARCH GRADE DETAILS BY ID
+//API FOR SEARCH DEPARTMENT DETAILS BY ID
 
-        app.post('/search_gradedetails', function (req, res) {
+        app.post('/search_departmentdetails', function (req, res) {
             //console.log(req);
             sql.close();
             sql.connect(config, function () {
@@ -148,7 +150,7 @@ app.post('/view_single_gradedetails', function (req, res) {
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
                 request.input('OUT_CODE', parseInt(req.body.id));
-                request.execute('Proc_GRADE_MST', function (err, rec) {
+                request.execute('PROC_DesignationMaster', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -163,18 +165,18 @@ app.post('/view_single_gradedetails', function (req, res) {
             });
         });
 
-//API FOR DELETE GRADE DETAILS
+//API FOR DELETE DEPARTMENT DETAILS
 
-app.post('/delete_grade_details', function (req, res) {
+app.post('/delete_department_details', function (req, res) {
     //console.log(req);
     sql.close();
     sql.connect(config, function () {
        var request = new sql.Request();
        var data_added = true;
        request.input('Operation', 'DELETE');
-       request.input('Grade_Id', req.body.id);//GRADE ID
+       request.input('Desig_Id', req.body.id);//DESIGNATION ID
 
-       request.execute('Proc_GRADE_MST', function (err, rec) {
+       request.execute('PROC_DesignationMaster', function (err, rec) {
           if (err) {
              console.log(err);
              res.json({ status: false });

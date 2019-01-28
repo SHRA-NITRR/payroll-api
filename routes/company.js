@@ -390,9 +390,6 @@ module.exports = {
                               console.log(errr);
                               //res.json({ status: false });
                               data_added = false;
-
-
-
                            }
                            else {
                               //res.end(JSON.stringify(recordsets)); // Result in JSON format

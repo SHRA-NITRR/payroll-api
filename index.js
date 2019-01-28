@@ -42,6 +42,8 @@ var pfesirateroute = require('./routes/pfesirate.js');
 var qualificationroute = require('./routes/qualification.js');
 var payheadroute = require('./routes/payheadmst.js');
 var lumpsumroute = require('./routes/lumpsummst.js');
+var employeeroute = require('./routes/employeemst.js');
+var departmentroute = require('./routes/departmentmst.js');
 
 
 companyroute.configure(app, assert, config);
@@ -62,6 +64,8 @@ pfesirateroute.configure(app, assert, config);
 qualificationroute.configure(app, assert, config);
 payheadroute.configure(app, assert, config);
 lumpsumroute.configure(app, assert, config);
+employeeroute.configure(app, assert, config);
+departmentroute.configure(app, assert, config);
 
 
 //WELCOME API
