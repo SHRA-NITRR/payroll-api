@@ -183,7 +183,7 @@ app.post('/delete_holiday_details', function (req, res) {
        request.input('Operation', 'DELETE');
        request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
 
-       request.execute('Proc_GRADE_MST', function (err, rec) {
+       request.execute('Proc_HOLIDAY_MST', function (err, rec) {
           if (err) {
              console.log(err);
              res.json({ status: false });
