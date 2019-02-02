@@ -1,0 +1,85 @@
+CREATE TABLE Occupation_Master(
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Occupation_Id] [int] NOT NULL,
+	[Occupation_Name] [varchar](50) NOT NULL,
+	[Occupation_Short_Name] [varchar](20) NULL,
+	
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_occupation_Master] PRIMARY KEY CLUSTERED 
+(
+	[Occupation_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+---------------------------
+
+CREATE TABLE Division_Master(
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Division_Id] [int] NOT NULL,
+	[Division_Name] [varchar](50) NOT NULL,
+	[Division_Short_Name] [varchar](20) NULL,
+	
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Division_Master] PRIMARY KEY CLUSTERED 
+(
+	[Division_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+--------------------------
+
+
+
+CREATE TABLE Salary_Calendar_Master(
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Salary_Calendar_Id] [int] NOT NULL,
+	[Name] [varchar](max) NOT NULL,
+	[Short_Name] [varchar](10) NULL,
+	
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Salary_Calendar_Master] PRIMARY KEY CLUSTERED 
+(
+	[Salary_Calendar_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+-----------------------------------
+
+CREATE TABLE Attendance_Master(
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[Attendance_Id] [int] NOT NULL,
+	[Attendance_Name] [varchar](50) NOT NULL,
+	[Attendance_Salary_Type] [varchar](1) NOT NULL,
+	Attendance_OT_Type  Varchar(5) NOT Null,
+	Salary_Calendar_Type  varchar(10) NOT NULL,
+	Attendance_Reg_Type   Varchar(5) NOT NULL,
+	Is_Morethan_WorkDay   Varchar(1) Null,
+	Remarks  Varchar(Max) Null,
+	
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Attendance_Master] PRIMARY KEY CLUSTERED 
+(
+	[Attendance_Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+

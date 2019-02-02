@@ -1,20 +1,18 @@
-var Connection = require('express').Connection;
-var Request = require('express').Request;
-var sql = require('mssql');
 
+var sql = require('mssql');
 
 module.exports = {
     configure: function (app, assert, config, connection) {
-        //API FOR ADD DESIGNATION DETAILS
-        app.post('/adddesignationdetails', function (req, res) {
-            var request = new sql.Request(connection);
-            var data_added = true;
-            request.input('Operation', 'INSERT');
-            request.input('Desig_Name', req.body.Desig_Name);
-            request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
-            request.input('Created_By', parseInt(req.body.Created_By));
 
-            request.execute('PROC_DesignationMaster', function (err, rec) {
+        //API FOR ADD DIVISION DETAILS
+        app.post('/add_division_details', function (req, res) {
+            var request = new sql.Request(connection);
+            request.input('Operation', 'INSERT');
+            request.input('division_Name', req.body.division_Name);
+            request.input('Division_Short_Name', req.body.Division_Short_Name);
+
+            request.input('Created_By', parseInt(req.body.Created_By));
+            request.execute('Proc_Division_MST', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -25,16 +23,16 @@ module.exports = {
             });
         });
 
-        //API FOR UPDATE DESIGNATION DETAILS
-        app.post('/updatedesignationdetails', function (req, res) {
+        //API FOR UPDATE DIVISION  DETAILS
+        app.post('/update_division_details', function (req, res) {
             var request = new sql.Request(connection);
             request.input('Operation', 'UPDATE');
-            request.input('Desig_Id', parseInt(req.body.id));//DESIGNATION ID
-            request.input('Desig_Name', req.body.Desig_Name);
-            request.input('Desig_Sht_Name', req.body.Desig_Sht_Name);
+            request.input('division_Name', req.body.division_Name);
+            request.input('Division_Short_Name', req.body.Division_Short_Name);
             request.input('Created_By', parseInt(req.body.Created_By));
+            request.input('division_Id', parseInt(req.body.id));//DIVISION  ID
 
-            request.execute('PROC_DesignationMaster', function (err, rec) {
+            request.execute('Proc_Division_MST', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -45,13 +43,13 @@ module.exports = {
             });
         });
 
-        //API FOR VIEW ALL DESIGNATION DETAILS
+        //API FOR VIEW DIVISION  DETAILS
 
-        app.post('/viewdesignationdetails', function (req, res) {
+        app.post('/view_division_details', function (req, res) {
             var request = new sql.Request(connection);
-            var data_added = true;
             request.input('Operation', 'SELECT');
-            request.execute('PROC_DesignationMaster', function (err, rec) {
+
+            request.execute('Proc_Division_MST', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -62,13 +60,12 @@ module.exports = {
             });
         });
 
-        //API FOR VIEW SINGLE DESIGNATION DETAILS
-
-        app.post('/view_single_designationdetails', function (req, res) {
+        //API FOR VIEW SINGLE DIVISION  DETAILS
+        app.post('/view_single_division_details', function (req, res) {
             var request = new sql.Request(connection);
             request.input('Operation', 'SELECTBYID');
-            request.input('Desig_Id', req.body.id);//DESIGNATION ID
-            request.execute('PROC_DesignationMaster', function (err, rec) {
+            request.input('division_Id', parseInt(req.body.id));//DIVISION  ID
+            request.execute('Proc_Division_MST', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -79,15 +76,13 @@ module.exports = {
             });
         });
 
-        //API FOR SEARCH DESIGNATION DETAILS BY ID
+        //API FOR SEARCHDIVISION  DETAILS
 
-        app.post('/search_designationdetails', function (req, res) {
+        app.post('/search_division_details', function (req, res) {
             var request = new sql.Request(connection);
-            var data_added = true;
             request.input('Operation', 'SEARCH');
-            //request.input('ID', req.body.id);
             request.input('OUT_CODE', parseInt(req.body.id));
-            request.execute('PROC_DesignationMaster', function (err, rec) {
+            request.execute('Proc_Division_MST', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -98,18 +93,20 @@ module.exports = {
             });
         });
 
-        //API FOR DELETE DESIGNATION DETAILS
-        app.post('/delete_designation_details', function (req, res) {
+        //API FOR DELETE SINGLEDIVISION  DETAILS
+
+        app.post('/delete_division_details', function (req, res) {
+
             var request = new sql.Request(connection);
             request.input('Operation', 'DELETE');
-            request.input('Desig_Id', req.body.id);//DESIGNATION ID
-            request.execute('PROC_DesignationMaster', function (err, rec) {
+            request.input('division_Id', parseInt(req.body.id));//DIVISION  ID
+            request.execute('Proc_Division_MST', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
                 }
                 else {
-                    res.json({ status: true });
+                    res.json({ status: true, result: rec.recordsets[0] });
                 }
             });
         });

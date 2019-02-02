@@ -6,14 +6,15 @@ var sql = require('mssql');
 module.exports = {
     configure: function (app, assert, config,connection) {
 
-        //API FOR ADD WORK DETAILS
-        app.post('/addworkorderdetails', function (req, res) {
+        //API FOR ADD OCCUPATION DETAILS
+        app.post('/addoccupationdetails', function (req, res) {
             var request = new sql.Request(connection);
                 request.input('Operation', 'INSERT');
-                request.input('Work_Order_Name', req.body.Work_Order_Name);
+                request.input('Occupation_Name', req.body.Occupation_Name);
+                request.input('Occupation_Short_Name', req.body.Occupation_Short_Name);
                 request.input('Created_By', parseInt(req.body.Created_By));
 
-                request.execute('Proc_WorkOrder_Master', function (err, rec) {
+                request.execute('Proc_Occupation_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });   
@@ -24,15 +25,16 @@ module.exports = {
                 });
             });
 
- //API FOR UPDATE WORK DETAILS
- app.post('/updateworkorderdetails', function (req, res) {
+ //API FOR UPDATE OCCUPATION DETAILS
+ app.post('/updateoccupationdetails', function (req, res) {
     var request = new sql.Request(connection);
         request.input('Operation', 'UPDATE');
-        request.input('Work_Order_Name', req.body.Work_Order_Name);
+        request.input('Occupation_Name', req.body.Occupation_Name);
+        request.input('Occupation_Short_Name', req.body.Occupation_Short_Name);
         request.input('Created_By', parseInt(req.body.Created_By));
-        request.input('Work_Order_Id', parseInt(req.body.id));// WORKORDER ID
+        request.input('Occupation_Id', parseInt(req.body.id));// OCCUPATION ID
 
-        request.execute('Proc_WorkOrder_Master', function (err, rec) {
+        request.execute('Proc_Occupation_MST', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false }); 
@@ -43,13 +45,13 @@ module.exports = {
         });
     });
 
-        //API FOR VIEW WORK DETAILS
+        //API FOR VIEW OCCUPATION DETAILS
 
-        app.post('/viewworkorderdetails', function (req, res) {
+        app.post('/viewoccupationdetails', function (req, res) {
             var request = new sql.Request(connection);
                 request.input('Operation', 'SELECT');
 
-                request.execute('Proc_WorkOrder_Master', function (err, rec) {
+                request.execute('Proc_Occupation_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false }); 
@@ -60,13 +62,13 @@ module.exports = {
                 });
             });
 
-  //API FOR VIEW SINGLE WORK DETAILS
+  //API FOR VIEW SINGLE OCCUPATION DETAILS
 
-  app.post('/viewsingleworkorderdetails', function (req, res) {
+  app.post('/viewsingleoccupationdetails', function (req, res) {
     var request = new sql.Request(connection);
         request.input('Operation', 'SELECTBYID');
-        request.input('Work_Order_Id', parseInt(req.body.id));// WORKORDER ID
-        request.execute('Proc_WorkOrder_Master', function (err, rec) {
+        request.input('Occupation_Id', parseInt(req.body.id));// OCCUPATION ID
+        request.execute('Proc_Occupation_MST', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false });
@@ -78,13 +80,13 @@ module.exports = {
     });
 
 
-        //API FOR SEARCH WORK DETAILS BY ID
+        //API FOR SEARCH OCCUPATION DETAILS
 
-        app.post('/search_workorderdetails', function (req, res) {
+        app.post('/search_occupation_details', function (req, res) {
             var request = new sql.Request(connection);
                 request.input('Operation', 'SEARCH');
                 request.input('OUT_CODE', parseInt(req.body.id));
-                request.execute('Proc_WorkOrder_Master', function (err, rec) {
+                request.execute('Proc_Occupation_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
@@ -95,14 +97,14 @@ module.exports = {
                 });
             });
 
- //API FOR DELETE SINGLE WORK DETAILS
+ //API FOR DELETE SINGLE OCCUPATION DETAILS
 
- app.post('/deleteworkorderdetails', function (req, res) {
+ app.post('/delete_occupation_details', function (req, res) {
    
     var request = new sql.Request(connection);
         request.input('Operation','DELETE');
-        request.input('Work_Order_Id', parseInt(req.body.id));// WORKORDER ID
-        request.execute('Proc_WorkOrder_Master', function (err, rec) {
+        request.input('Occupation_Id', parseInt(req.body.id));// OCCUPATION ID
+        request.execute('Proc_Occupation_MST', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false });  

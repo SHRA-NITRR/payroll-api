@@ -3,40 +3,11 @@ var Request = require('express').Request;
 var sql = require('mssql');
 
 module.exports = {
-    configure: function (app, assert, config) {
-
-        var executeQuery = function (res, query) {
-            sql.close();
-            sql.connect(config, function (err) {
-                if (err) {
-                    console.log("Error while connecting database :- " + err);
-                    res.send(err);
-                }
-                else {
-                    // create Request object
-                    var request = new sql.Request();
-                    // query to the database
-                    request.query(query, function (err, res) {
-                        if (err) {
-                            console.log("Error while querying database :- " + err);
-                            //res.send(err);
-                        }
-                        else {
-                            //res.send(res);
-                            //res.json({status:true});
-                        }
-                    });
-                }
-            });
-        }
+    configure: function (app, assert, config,connection) {
 
         //API FOR ADD HOLIDAY DETAILS
         app.post('/addholidaydetails', function (req, res) {
-            //console.log(req);
-            sql.close();
-            sql.connect(config, function () {
-                var request = new sql.Request();
-                var data_added = true;
+            var request = new sql.Request(connection);
                 request.input('Operation', 'INSERT');
                 request.input('Name', req.body.Name);
                 request.input('Description', req.body.Description);
@@ -49,25 +20,17 @@ module.exports = {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
-                        sql.close();
-                        //data_added= false;
                     }
                     else {
-                        res.json({ status: true, result: rec.recordsets[0] });
-                        sql.close();
+                        res.json({ status: true, result: rec.recordsets[0] });  
                     }
                 });
             });
-        });
 
  //API FOR UPDATE HOLIDAY DETAILS
  app.post('/updateholidaydetails', function (req, res) {
-    //console.log(req);
-    sql.close();
     sql.connect(config, function () {
         var request = new sql.Request();
-        var data_added = true;
-
         request.input('Operation', 'UPDATE');
         request.input('Name', req.body.Name);
         request.input('Description', req.body.Description);
@@ -77,55 +40,37 @@ module.exports = {
         request.input('Holiday_Id', parseInt(req.body.id));// HOLIDAY ID
         request.input('Date', req.body.date);
 
-
         request.execute('Proc_HOLIDAY_MST', function (err, rec) {
             if (err) {
                 console.log(err);
                 res.json({ status: false });
-                sql.close();
-                //data_added= false;
             }
             else {
                 res.json({ status: true, result: rec.recordsets[0] });
-                sql.close();
             }
         });
     });
 });
 
         //API FOR VIEW ALL HOLIDAY DETAILS
-
         app.post('/viewholidaydetails', function (req, res) {
-            //console.log(req);
-            sql.close();
-            sql.connect(config, function () {
-                var request = new sql.Request();
-                var data_added = true;
+            var request = new sql.Request(connection);
                 request.input('Operation', 'SELECT');
                 //request.input('ID', req.body.id);
                 request.execute('Proc_HOLIDAY_MST', function (err, rec) {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
-                        sql.close();
-                        //data_added= false;
                     }
                     else {
-                        res.json({ status: true, result: rec.recordsets[0] });
-                        sql.close();
+                        res.json({ status: true, result: rec.recordsets[0] });  
                     }
                 });
             });
-        });
 
  //API FOR VIEW SINGLE HOLIDAY DETAILS
-
  app.post('/viewsingleholidaydetails', function (req, res) {
-    //console.log(req);
-    sql.close();
-    sql.connect(config, function () {
-        var request = new sql.Request();
-        var data_added = true;
+    var request = new sql.Request(connection);
         request.input('Operation', 'SELECTBYID');
         request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
         //request.input('ID', req.body.id);
@@ -133,25 +78,16 @@ module.exports = {
             if (err) {
                 console.log(err);
                 res.json({ status: false });
-                sql.close();
-                //data_added= false;
             }
             else {
-                res.json({ status: true, result: rec.recordsets[0] });
-                sql.close();
+                res.json({ status: true, result: rec.recordsets[0] });  
             }
         });
     });
-});
 
         //API FOR SEARCH RETIREMENT SETTING DETAILS BY PF ID
-
         app.post('/search_holidaydetails', function (req, res) {
-            //console.log(req);
-            sql.close();
-            sql.connect(config, function () {
-                var request = new sql.Request();
-                var data_added = true;
+            var request = new sql.Request(connection);
                 request.input('Operation', 'SEARCH');
                 //request.input('ID', req.body.id);
                 request.input('OUT_CODE', parseInt(req.body.id));// id
@@ -159,27 +95,17 @@ module.exports = {
                     if (err) {
                         console.log(err);
                         res.json({ status: false });
-                        sql.close();
-                        //data_added= false;
                     }
                     else {
-                        res.json({ status: true, result: rec.recordsets[0] });
-                        sql.close();
+                        res.json({ status: true, result: rec.recordsets[0] });  
                     }
                 });
             });
-        });
-
-
 
 //API FOR DELETE HOLIDAY DETAILS
 
 app.post('/delete_holiday_details', function (req, res) {
-    //console.log(req);
-    sql.close();
-    sql.connect(config, function () {
-       var request = new sql.Request();
-       var data_added = true;
+    var request = new sql.Request(connection);
        request.input('Operation', 'DELETE');
        request.input('Holiday_Id', parseInt(req.body.id));//HOLIDAY ID
 
@@ -187,15 +113,11 @@ app.post('/delete_holiday_details', function (req, res) {
           if (err) {
              console.log(err);
              res.json({ status: false });
-             sql.close();
-             //data_added= false;
           }
           else {
              res.json({ status: true });
-             sql.close();
           }
        });
     });
- });
     }
 }

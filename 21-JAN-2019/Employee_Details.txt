@@ -50,7 +50,7 @@ CREATE TABLE [dbo].[Employee_Details](
 	[Department_Id] [int] NULL,
 	[Desig_Id] [int] NULL,
 	[Emp_Cate_Id] [int] NULL,
-	[Employee_Image] [image] NULL,
+	[Employee_Image] [varchar](50) NULL,
 	[Date_of_Join] [date] NULL,
 	[Salary_Calc_From] [date] NULL,
 	[Is_Leaving] [bit] NULL,
