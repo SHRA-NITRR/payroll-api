@@ -11,7 +11,7 @@ module.exports = {
          var request = new sql.Request(connection);
             request.input('Operation', 'INSERT');
             request.input('PTGroup_Id', parseInt(req.body.PTGroup_Id));
-            request.input('Effective_From', req.body.Effective_From);
+            request.input('Effective_From', new Date(req.body.Effective_From));
             request.input('Minimum_Amount', parseFloat(req.body.Minimum_Amount));
             request.input('Maximum_Amount', parseFloat(req.body.Maximum_Amount));
             request.input('PT_Rate', parseFloat(req.body.PT_Rate));
@@ -33,7 +33,7 @@ module.exports = {
             request.input('Operation', 'UPDATE');
             request.input('PTRate_Id', parseInt(req.body.id));//PT RATE ID
             request.input('PTGroup_Id', parseInt(req.body.PTGroup_Id));
-            request.input('Effective_From', req.body.Effective_From);
+            request.input('Effective_From', new Date(req.body.Effective_From));
             request.input('Minimum_Amount', parseFloat(req.body.Minimum_Amount));
             request.input('Maximum_Amount', parseFloat(req.body.Maximum_Amount));
             request.input('PT_Rate', parseFloat(req.body.PT_Rate));
@@ -103,7 +103,7 @@ module.exports = {
       //API FOR DELETE PT RATE DETAILS
 
       app.post('/delete_ptrate_details', function (req, res) {
-            
+         var request = new sql.Request(connection);
             request.input('Operation', 'DELETE');
             request.input('PTRate_Id', req.body.id);//PT RATE ID
             request.execute('Proc_PTRATE_MST', function (err, rec) {

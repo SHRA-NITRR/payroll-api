@@ -3,16 +3,19 @@ var sql = require('mssql');
 
 module.exports = {
     configure: function (app, assert, config, connection) {
-
-        //API FOR ADD DIVISION DETAILS
-        app.post('/add_division_details', function (req, res) {
+        //API FOR ADD EMPLOYEE FAMILY DETAILS DETAILS
+        app.post('/addemployeefamdetails', function (req, res) {
             var request = new sql.Request(connection);
+
             request.input('Operation', 'INSERT');
-            request.input('Division_Name', req.body.Division_Name);
-            request.input('Division_Short_Name', req.body.Division_Short_Name);
-
+            request.input('Relative_Name', req.body.Relative_Name);
+            request.input('Gender', req.body.Gender);
+            request.input('Relation', req.body.Relation);
+            request.input('Remarks', req.body.Remarks);
+            request.input('Date_Of_Birth', new Date(req.body.Date_Of_Birth));// FORMAT (M-D-Y)
             request.input('Created_By', parseInt(req.body.Created_By));
-            request.execute('Proc_Division_MST', function (err, rec) {
+
+            request.execute('Proc_Employee_Family_Details', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -23,16 +26,20 @@ module.exports = {
             });
         });
 
-        //API FOR UPDATE DIVISION  DETAILS
-        app.post('/update_division_details', function (req, res) {
+        //API FOR UPDATE EMPLOYEE FAMILY DETAILS  DETAILS
+        app.post('/updateemployeefamdetails', function (req, res) {
             var request = new sql.Request(connection);
-            request.input('Operation','UPDATE');
-            request.input('Division_Name', req.body.Division_Name);
-            request.input('Division_Short_Name', req.body.Division_Short_Name);
+            request.input('Operation', 'UPDATE');
+            request.input('Relative_Name', req.body.Relative_Name);
+            request.input('Gender', req.body.Gender);
+            request.input('Relation', req.body.Relation);
+            request.input('Remarks', req.body.Remarks);
+            request.input('Date_Of_Birth', new Date(req.body.Date_Of_Birth));// FORMAT (M-D-Y)
             request.input('Created_By', parseInt(req.body.Created_By));
-            request.input('Division_Id', parseInt(req.body.id));//DIVISION  ID
+            request.input('EmployeeId', parseInt(req.body.EmployeeId));
 
-            request.execute('Proc_Division_MST', function (err, rec) {
+
+            request.execute('Proc_Employee_Family_Details', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -43,13 +50,13 @@ module.exports = {
             });
         });
 
-        //API FOR VIEW DIVISION  DETAILS
+        //API FOR VIEW ALL EMPLOYEE FAMILY DETAILS  DETAILS
 
-        app.post('/view_division_details', function (req, res) {
+        app.post('/viewempfamdetails', function (req, res) {
             var request = new sql.Request(connection);
+            var data_added = true;
             request.input('Operation', 'SELECT');
-
-            request.execute('Proc_Division_MST', function (err, rec) {
+            request.execute('Proc_Employee_Family_Details', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -60,12 +67,13 @@ module.exports = {
             });
         });
 
-        //API FOR VIEW SINGLE DIVISION  DETAILS
-        app.post('/view_single_division_details', function (req, res) {
+        //API FOR VIEW SINGLE EMPLOYEE FAMILY DETAILS  DETAILS
+
+        app.post('/view_single_empfamdetails', function (req, res) {
             var request = new sql.Request(connection);
             request.input('Operation', 'SELECTBYID');
-            request.input('Division_Id', parseInt(req.body.id));//DIVISION  ID
-            request.execute('Proc_Division_MST', function (err, rec) {
+            request.input('EmployeeId', req.body.EmployeeId);
+            request.execute('Proc_Employee_Family_Details', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -76,13 +84,15 @@ module.exports = {
             });
         });
 
-        //API FOR SEARCHDIVISION  DETAILS
+        //API FOR SEARCH EMPLOYEE FAMILY DETAILS DETAILS BY ID
 
-        app.post('/search_division_details', function (req, res) {
+        app.post('/search_designationdetails', function (req, res) {
             var request = new sql.Request(connection);
+            var data_added = true;
             request.input('Operation', 'SEARCH');
+            //request.input('ID', req.body.id);
             request.input('OUT_CODE', parseInt(req.body.id));
-            request.execute('Proc_Division_MST', function (err, rec) {
+            request.execute('Proc_Employee_Family_Details', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
@@ -93,20 +103,18 @@ module.exports = {
             });
         });
 
-        //API FOR DELETE SINGLEDIVISION  DETAILS
-
-        app.post('/delete_division_details', function (req, res) {
-
+        //API FOR DELETE EMPLOYEE FAMILY DETAILS DETAILS
+        app.post('/delete_empfam_details', function (req, res) {
             var request = new sql.Request(connection);
             request.input('Operation', 'DELETE');
-            request.input('Division_Id', parseInt(req.body.id));//DIVISION  ID
-            request.execute('Proc_Division_MST', function (err, rec) {
+            request.input('EmployeeId', req.body.EmployeeId);
+            request.execute('Proc_Employee_Family_Details', function (err, rec) {
                 if (err) {
                     console.log(err);
                     res.json({ status: false });
                 }
                 else {
-                    res.json({ status: true, result: rec.recordsets[0] });
+                    res.json({ status: true });
                 }
             });
         });
