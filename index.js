@@ -51,7 +51,9 @@ var attendanceroute = require('./routes/attendancemst.js');
 var divisionroute = require('./routes/divisionmst.js');
 var salarycalenderroute = require('./routes/salarycalender.js');
 var Employee_Family_Detailsroute = require('./routes/Employee_Family_Details.js');
-
+var empeducationdtlsroute = require('./routes/empeducationdtls.js');
+var emptrainingdtlroute = require('./routes/empltrainingdtl.js');
+var empdisciplinaryroute = require('./routes/empdisciplinarydtls.js');
 
 var connection = sql.connect(config, function (err) {
    if(err){
@@ -86,6 +88,9 @@ attendanceroute.configure(app, assert, config, connection);
 divisionroute.configure(app, assert, config, connection);
 salarycalenderroute.configure(app, assert, config, connection);
 Employee_Family_Detailsroute.configure(app, assert, config, connection);
+empeducationdtlsroute.configure(app, assert, config, connection);
+emptrainingdtlroute.configure(app, assert, config, connection);
+empdisciplinaryroute.configure(app, assert, config, connection);
 
 module.exports = connection;
 

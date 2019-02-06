@@ -9,10 +9,10 @@ CREATE TABLE [dbo].[Employee_Details](
 	[MothersName] [varchar](100) NULL,
 	[NomineeName] [varchar](47) NULL,
 	[Gender] [varchar](20) NULL,
-	[Occupation] [varchar](200) NULL,
-	[Division] [varchar](200) NULL,
-	[Grade] [varchar](100) NULL,
-	[Emp_Attendance] [varchar](50) NULL,
+	[Occupation] [varchar](200) NULL,// int
+	[Division] [varchar](200) NULL,//int
+	[Grade] [varchar](100) NULL,//int
+	[Emp_Attendance] [varchar](50) NULL,//int
 	[BloodGroup] [varchar](20) NULL,
 	[DateOfBirth] [datetime] NULL,
 	[Present_Res_No] [varchar](30) NULL,
@@ -79,6 +79,7 @@ CREATE TABLE [dbo].[Employee_Details](
 	[Modified_By] [int] NULL,
 	[Modified_On] [datetime] NULL,
 	[Is_Deleted] [bit] NULL,
+        [Salary_Str_Id] [int] NOT NULL,
  CONSTRAINT [PK_Employee_Details] PRIMARY KEY CLUSTERED 
 (
 	[RowId] ASC,
