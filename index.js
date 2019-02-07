@@ -54,6 +54,7 @@ var Employee_Family_Detailsroute = require('./routes/Employee_Family_Details.js'
 var empeducationdtlsroute = require('./routes/empeducationdtls.js');
 var emptrainingdtlroute = require('./routes/empltrainingdtl.js');
 var empdisciplinaryroute = require('./routes/empdisciplinarydtls.js');
+var empcurriculamroute = require('./routes/employeecurridtls.js');
 
 var connection = sql.connect(config, function (err) {
    if(err){
@@ -91,6 +92,7 @@ Employee_Family_Detailsroute.configure(app, assert, config, connection);
 empeducationdtlsroute.configure(app, assert, config, connection);
 emptrainingdtlroute.configure(app, assert, config, connection);
 empdisciplinaryroute.configure(app, assert, config, connection);
+empcurriculamroute.configure(app, assert, config, connection);
 
 module.exports = connection;
 

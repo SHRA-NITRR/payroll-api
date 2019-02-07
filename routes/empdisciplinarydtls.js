@@ -38,7 +38,6 @@ module.exports = {
             request.input('Created_By', parseInt(req.body.Created_By));
             request.input('EmployeeId', parseInt(req.body.EmployeeId));
 
-
             request.execute('Proc_Employee_Disciplinary_DTL', function (err, rec) {
                 if (err) {
                     console.log(err);
