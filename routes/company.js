@@ -15,12 +15,12 @@ module.exports = {
             //  callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
             callback(null, file.originalname);
             image.push(file.originalname);
-            //console.log(image);
+            console.log(image);
          }
       });
       var upload = multer({ storage: Storage });
 
-      app.post('/add_companybranchdetails', upload.array('Company_File_Name', 20), function (req, res) {
+      app.post('/add_companybranchdetails', upload.array('Company_File_Name', 30), function (req, res) {
          const transaction = new sql.Transaction();
          transaction.begin((err) => {
             if (err) {
@@ -99,21 +99,21 @@ module.exports = {
 
                         request2.input('Branch_Address2', doc.Branch_Address2);
 
-                        request2.input('Branch_PhoneNo', doc.Branch_PhoneNo);
+                        request2.input('Branch_PhoneNo', 1);
 
                         request2.input('Branch_Person_Name', doc.Branch_Person_Name);
 
                         request2.input('Branch_Email', doc.Branch_Email);
 
-                        request2.input('Branch_PF_Group', doc.Branch_PF_Group);
+                        request2.input('Branch_PF_Group', parseInt(doc.Branch_PF_Group));
 
-                        request2.input('Branch_PT_Group', doc.Branch_PT_Group);
+                        request2.input('Branch_PT_Group', parseInt(doc.Branch_PT_Group));
 
-                        request2.input('Branch_ESI_Group', doc.Branch_ESI_Group);
+                        request2.input('Branch_ESI_Group', parseInt(doc.Branch_ESI_Group));
 
                         request2.execute('PROC_COMPANY_BRANCH', function (errr, rec) {
                            if (errr) {
-                              // console.log(errr);
+                              console.log(errr);
                               data_added = false;
                               console.log(data_added);
                            }
@@ -125,17 +125,13 @@ module.exports = {
                      })
 
                      var request3 = new sql.Request(connection);
-                     //var request3 = new sql.Request(transaction);
-                     //image.forEach(function (doc, err) {
-
                      request3.input('Operation', 'INSERT');
                      request3.input('Company_Id', parseInt(req.body.Company_Id));
                      request3.input('Company_File_Name', image);
-                     // });
                      //request.input('File_Data',req.body.File_Data);
-                     request3.execute('PROC_COMPANY_DOCUMENT', function (err, rec) {
-                        if (err) {
-                           console.log(err);
+                     request3.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
+                        if (err2) {
+                           console.log(err2);
                            data_added = false;
                            console.log(data_added);
                         }
@@ -148,6 +144,7 @@ module.exports = {
                      setTimeout(function () {
                         if (data_added) {
                            transaction.commit((err) => {
+                              console.log(err);
                               if (err) {
                                  transaction.rollback((err) => {
                                     if (err) {
@@ -169,6 +166,7 @@ module.exports = {
                               }
                            });
                         }
+                        image = [];
                      }, 100);
                   }
                });
@@ -269,11 +267,11 @@ module.exports = {
 
                      request2.input('Branch_Email', doc.Branch_Email);
 
-                     request2.input('Branch_PF_Group', doc.Branch_PF_Group);
+                     request2.input('Branch_PF_Group', parseInt(doc.Branch_PF_Group));
 
-                     request2.input('Branch_PT_Group', doc.Branch_PT_Group);
+                     request2.input('Branch_PT_Group', parseInt(doc.Branch_PT_Group));
 
-                     request2.input('Branch_ESI_Group', doc.Branch_ESI_Group);
+                     request2.input('Branch_ESI_Group', parseInt(doc.Branch_ESI_Group));
                   });
 
                   request2.input('Company_Id', parseInt(req.body.Company_Id));
@@ -362,7 +360,6 @@ module.exports = {
                      res.json({ status: false });
                   }
                   else {
-                     rec.recordsets[0].push(rec2.recordsets[0])
                      request.input('Operation', 'SELECT');
                      request.execute('PROC_COMPANY_DOCUMENT', function (err, rec3) {
                         if (err) {
@@ -370,8 +367,7 @@ module.exports = {
                            res.json({ status: false });
                         }
                         else {
-                           rec.recordsets[0].push(rec3.recordsets[0])
-                           res.json({ status: true, result: rec.recordsets[0] });
+                           res.json({ status: true, Company_Details: rec.recordsets[0], Branch_Details: rec2.recordsets[0], Document_Details: rec3.recordsets[0] });
                         }
                      });
                   }
@@ -379,12 +375,6 @@ module.exports = {
             }
          });
       });
-
-
-
-
-
-
 
       //API FOR VIEW ALL COMPANY & BRANCH DETAILS
 
