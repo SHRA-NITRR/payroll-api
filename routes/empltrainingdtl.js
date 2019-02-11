@@ -54,7 +54,7 @@ module.exports = {
 
         app.post('/viewemptrainingdetails', function (req, res) {
             var request = new sql.Request(connection);
-            var data_added = true;
+            
             request.input('Operation', 'SELECT');
             request.execute('Proc_Employee_Training_DTL', function (err, rec) {
                 if (err) {

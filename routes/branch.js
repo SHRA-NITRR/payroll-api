@@ -1,8 +1,5 @@
-var Connection = require('express').Connection;
-var Request = require('express').Request;
+
 var sql = require('mssql');
-
-
 
 module.exports = {
    configure: function (app, assert, config, connection) {
@@ -10,8 +7,7 @@ module.exports = {
       app.post('/add_branchdetails', function (req, res) {
 
          req.body.branch.forEach(function (doc, err) {
-            //assert.equal(null, err);
-            userExists = true;
+            
             var request2 = new sql.Request(connection);
             request2.input('Operation', 'INSERT');
 
@@ -69,7 +65,7 @@ module.exports = {
        app.post('/viewsinglebranchdetails', function (req, res) {
          var request = new sql.Request(connection);
             request.input('Operation', 'SELECTBYID');
-            request.input('Company_Id', req.body.Company_Id);// COMPANYID 
+            request.input('Company_Id', req.body.id);// COMPANYID 
             request.input('Branch_Id', req.body.Branch_Id)// BRANCH ID
             request.execute('PROC_COMPANY_BRANCH', function (err, recc) {
                if (err) {
@@ -77,7 +73,7 @@ module.exports = {
                }
                else {
                   res.json({ status: true, result: recc.recordsets[0] });
-                  sql.close();
+                 
                }
             });
          });
@@ -86,7 +82,7 @@ module.exports = {
 app.post('/delete_branch_details', function (req, res) {
    var request = new sql.Request(connection);
       request.input('Operation', 'DELETEBYID');
-      request.input('OUT_CODE', req.body.id);//BRANCH ID
+      request.input('Branch_Id', req.body.id);//BRANCH ID
       //request.input('Company_Person_Name', req.body.Company_Person_Name)
       request.execute('PROC_COMPANY_BRANCH', function (err, recordsets, returnValue, affected) {
          if (err) {
