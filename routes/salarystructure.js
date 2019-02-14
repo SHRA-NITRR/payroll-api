@@ -4,7 +4,7 @@ var sql = require('mssql');
 
 
 module.exports = {
-    configure: function (app, assert, config) {
+    configure: function (app, assert, config,connection) {
 
         //API FOR ADD SALARY STRUCTURE DETAILS
         app.post('/addsalarystructure', function (req, res) {

@@ -40,9 +40,6 @@ module.exports = {
          });
       });
 
-
-
-
       //API FOR VIEW ALL BRANCH DETAILS
 
       app.post('/viewbranchdetails', function (req, res) {
