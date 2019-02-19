@@ -1540,5 +1540,24 @@ console.log(err);              res.json({ status: false });
       //    });
       // });
 
+
+ //API FOR SEARCH LEAVE DETAILS BY ID
+
+ app.post('/search_employeedetails', function (req, res) {
+   var request = new sql.Request(connection);
+       request.input('Operation', 'SEARCH');
+       //request.input('ID', req.body.id);
+       request.input('OUT_CODE', parseInt(req.body.id));
+       request.execute('Proc_Employee_Details', function (err, rec) {
+           if (err) {
+               console.log(err);
+               res.json({ status: false });
+           }
+           else {
+               res.json({ status: true, result: rec.recordsets[0] }); 
+           }
+       });
+   });
+
    }
 }
