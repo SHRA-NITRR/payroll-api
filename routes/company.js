@@ -20,7 +20,7 @@ module.exports = {
       });
       var upload = multer({ storage: Storage });
 
-      app.post('/add_companybranchdetails', upload.array('Company_File_Name', 30), function (req, res) {
+      app.post('/add_companybranchdetails', upload.single('Company_File_Name'), function (req, res) {
          const transaction = new sql.Transaction();
          transaction.begin((err) => {
             if (err) {
@@ -86,88 +86,89 @@ module.exports = {
                      data_added = false;
                   }
                   else {
-                     var request2 = new sql.Request(transaction);
-                     var branch2 = JSON.parse(req.body.branch);
+
+                    var branch2 = JSON.parse(req.body.branch);
+                     
+                     console.log(req.body);
+
+                     var count = 0;
                      branch2.forEach(function (doc, err) {
                         //assert.equal(null, err);
+                        request = new sql.Request(transaction);
+                        request.input('Operation', 'INSERT');
 
-                        request2.input('Operation', 'INSERT');
+                        request.input('Branch_Name', doc.Branch_Name);
 
-                        request2.input('Branch_Name', doc.Branch_Name);
+                        request.input('Branch_Address', doc.Branch_Address);
 
-                        request2.input('Branch_Address', doc.Branch_Address);
+                        request.input('Branch_Address2', doc.Branch_Address2);
 
-                        request2.input('Branch_Address2', doc.Branch_Address2);
+                        request.input('Branch_PhoneNo',parseInt(doc.Branch_PhoneNo));
 
-                        request2.input('Branch_PhoneNo', 1);
+                        request.input('Branch_Person_Name', doc.Branch_Person_Name);
 
-                        request2.input('Branch_Person_Name', doc.Branch_Person_Name);
+                        request.input('Branch_Email', doc.Branch_Email);
 
-                        request2.input('Branch_Email', doc.Branch_Email);
+                        request.input('Branch_PF_Group', parseInt(doc.Branch_PF_Group));
 
-                        request2.input('Branch_PF_Group', parseInt(doc.Branch_PF_Group));
+                        request.input('Branch_PT_Group', parseInt(doc.Branch_PT_Group));
 
-                        request2.input('Branch_PT_Group', parseInt(doc.Branch_PT_Group));
+                        request.input('Branch_ESI_Group', parseInt(doc.Branch_ESI_Group));
 
-                        request2.input('Branch_ESI_Group', parseInt(doc.Branch_ESI_Group));
-
-                        request2.execute('PROC_COMPANY_BRANCH', function (errr, rec) {
+                        request.execute('PROC_COMPANY_BRANCH', function (errr, rec) {
+                           count++;
                            if (errr) {
                               console.log(errr);
                               data_added = false;
                               console.log(data_added);
                            }
                            else {
-
-                           }
-                        });
-
-                     })
-
-                     var request3 = new sql.Request(connection);
-                     request3.input('Operation', 'INSERT');
-                     request3.input('Company_Id', parseInt(req.body.Company_Id));
-                     request3.input('Company_File_Name', image);
-                     //request.input('File_Data',req.body.File_Data);
-                     request3.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
-                        if (err2) {
-                           console.log(err2);
-                           data_added = false;
-                           console.log(data_added);
-                        }
-                        else {
-                           // res.json({ status: true, result: rec.recordsets[0] });
-                        }
-                     });
-
-                     // console.log(data_added);
-                     setTimeout(function () {
-                        if (data_added) {
-                           transaction.commit((err) => {
-                              console.log(err);
-                              if (err) {
-                                 transaction.rollback((err) => {
-                                    if (err) {
-                                       res.json({ status: false });
-                                    } else {
-                                       res.json({ status: false });
+                              if (count == branch2.length) {
+                                 request = new sql.Request(transaction);
+                                 request.input('Operation', 'INSERT');
+                                 request.input('Company_Id', parseInt(req.body.Company_Id));
+                                 request.input('Company_File_Name', image);
+                                 //request.input('File_Data',req.body.File_Data);
+                                 request.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
+                                    if (err2) {
+                                       console.log(err2);
+                                       data_added = false;
+                                       console.log(data_added);
+                                    }
+                                    else {
+                                       // res.json({ status: true, result: rec.recordsets[0] });
+                                       if (data_added) {
+                                          transaction.commit((err) => {
+                                             console.log(err);
+                                             if (err) {
+                                                transaction.rollback((err) => {
+                                                   if (err) {
+                                                      res.json({ status: false });
+                                                   } else {
+                                                      res.json({ status: false });
+                                                   }
+                                                });
+                                             } else {
+                                                res.json({ status: true });
+                                             }
+                                          });
+                                       } else {
+                                          transaction.rollback((err) => {
+                                             if (err) {
+                                                res.json({ status: false });
+                                             } else {
+                                                res.json({ status: false });
+                                             }
+                                          });
+                                       }
+                                       image = [];
                                     }
                                  });
-                              } else {
-                                 res.json({ status: true });
                               }
-                           });
-                        } else {
-                           transaction.rollback((err) => {
-                              if (err) {
-                                 res.json({ status: false });
-                              } else {
-                                 res.json({ status: false });
-                              }
-                           });
-                        }
-                        image = [];
-                     }, 100);
+                           }
+                        });
+                        
+                     })
                   }
                });
 
@@ -428,49 +429,49 @@ module.exports = {
 
 
 
- //API FOR DELETE COMPANY,BRANCH,DOCUMENTS DETAILS
+      //API FOR DELETE COMPANY,BRANCH,DOCUMENTS DETAILS
 
- app.post('/delete_allcompany_details', function (req, res) {
-   var request = new sql.Request(connection);
-   request.input('Operation', 'DELETE');
-   request.input('Company_Id', req.body.id);//COMPANY ID
-  
-   request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
-      if (err) {
-         console.log(err);
-         res.json({ status: false });
-      }
-      else {
+      app.post('/delete_allcompany_details', function (req, res) {
          var request = new sql.Request(connection);
-   request.input('Operation', 'DELETEBYID');
-   request.input('Branch_Id', req.body.id);//BRANCH ID
-console.log(req.body.id);
-   request.execute('PROC_COMPANY_BRANCH', function (err, rec) {
-      if (err) {
-         console.log(err);
-         res.json({ status: false });
-      }
-      else {
-         //res.json({ status: true });
-         var request = new sql.Request(connection);
-         request.input('Operation', 'DELETEBYID');
+         request.input('Operation', 'DELETE');
          request.input('Company_Id', req.body.id);//COMPANY ID
-         console.log(req.body.id);
-         request.execute('PROC_COMPANY_DOCUMENT', function (err, rec) {
-         if (err) {
-            console.log(err);
-            res.json({ status: false });
-         }
-         else {
-            res.json({ status: true });
-         }
-         });
 
-      }
-   });
-      }
-   });
-});
+         request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
+            if (err) {
+               console.log(err);
+               res.json({ status: false });
+            }
+            else {
+               var request = new sql.Request(connection);
+               request.input('Operation', 'DELETEBYID');
+               request.input('Branch_Id', req.body.id);//BRANCH ID
+               console.log(req.body.id);
+               request.execute('PROC_COMPANY_BRANCH', function (err, rec) {
+                  if (err) {
+                     console.log(err);
+                     res.json({ status: false });
+                  }
+                  else {
+                     //res.json({ status: true });
+                     var request = new sql.Request(connection);
+                     request.input('Operation', 'DELETEBYID');
+                     request.input('Company_Id', req.body.id);//COMPANY ID
+                     console.log(req.body.id);
+                     request.execute('PROC_COMPANY_DOCUMENT', function (err, rec) {
+                        if (err) {
+                           console.log(err);
+                           res.json({ status: false });
+                        }
+                        else {
+                           res.json({ status: true });
+                        }
+                     });
+
+                  }
+               });
+            }
+         });
+      });
 
 
       // //API FOR VIEW SINGLE COMPANY DETAILS
@@ -538,7 +539,7 @@ console.log(req.body.id);
          var request = new sql.Request(connection);
          request.input('Operation', 'DELETE');
          request.input('Company_Id', req.body.id);//COMPANY ID
-        
+
          request.execute('PROC_COMPANY_DETAILS', function (err, rec) {
             if (err) {
                console.log(err);
@@ -555,7 +556,7 @@ console.log(req.body.id);
          var request = new sql.Request(connection);
          request.input('Operation', 'DELETEBYID');
          request.input('Branch_Id', req.body.id);//BRANCH ID
-console.log(req.body.id);
+         console.log(req.body.id);
          request.execute('PROC_COMPANY_BRANCH', function (err, rec) {
             if (err) {
                console.log(err);
@@ -569,23 +570,23 @@ console.log(req.body.id);
       });
 
 
- //API FOR DELETE COMPANY DETAILS
+      //API FOR DELETE COMPANY DETAILS
 
- app.post('/delete_companydocuments_details', function (req, res) {
-   var request = new sql.Request(connection);
-   request.input('Operation', 'DELETEBYID');
-   request.input('Company_Id', req.body.id);//COMPANY ID
-   console.log(req.body.id);
-   request.execute('PROC_COMPANY_DOCUMENT', function (err, rec) {
-      if (err) {
-         console.log(err);
-         res.json({ status: false });
-      }
-      else {
-         res.json({ status: true });
-      }
-   });
-});
+      app.post('/delete_companydocuments_details', function (req, res) {
+         var request = new sql.Request(connection);
+         request.input('Operation', 'DELETEBYID');
+         request.input('Company_Id', req.body.id);//COMPANY ID
+         console.log(req.body.id);
+         request.execute('PROC_COMPANY_DOCUMENT', function (err, rec) {
+            if (err) {
+               console.log(err);
+               res.json({ status: false });
+            }
+            else {
+               res.json({ status: true });
+            }
+         });
+      });
 
 
 
@@ -606,6 +607,14 @@ console.log(req.body.id);
       });
 
       var upload = multer({ storage: Storage });
+
+
+
+      // TEST API FOR FILE UPLOADS
+      app.post('/add_file', upload.array('file',5), function (req, res) {
+
+res.json({status:true});
+      });
 
       // //API FOR DOCUMENTS ADD
       // app.post("/companydocuments", upload.array('Company_File_Name', 20), function (req, res) {
