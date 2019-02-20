@@ -463,8 +463,9 @@ console.log(err);              res.json({ status: false });
 
                                  request4.input('Operation', 'INSERT');
                                  request4.input('Training_Name', req.body.Training_Name3);
-                                 request4.input('From_Date', new Date(req.body.From_Date3));
-                                 request4.input('To_Date', new Date(req.body.To_Date3));
+                                 request4.input('From_Date', req.body.From_Date3);
+                                 console.log(req.body.From_Date3);
+                                 request4.input('To_Date',req.body.To_Date3);
                                  request4.input('Comments', req.body.Comments3);
                                  request4.input('Remarks', req.body.Remarks3);
                                  request4.input('Created_By', parseInt(req.body.Created_By));
@@ -481,7 +482,7 @@ console.log(err);              res.json({ status: false });
                                        request5.input('Operation', 'INSERT');
                                        request5.input('Memo', req.body.Memo);
                                        request5.input('Issue_By', req.body.Issue_By);
-                                       request5.input('Issue_Date', new Date(req.body.Issue_Date2));//M-D-Y
+                                       request5.input('Issue_Date',req.body.Issue_Date2);//M-D-Y
                                        console.log(req.body.Issue_Date2)
                                        //request5.input('Issue_Date',moment(req.body.Issue_Date).format("DD-MM-YYYY"));
                                        request5.input('Comments', req.body.Comments4);
@@ -500,8 +501,8 @@ console.log(err);              res.json({ status: false });
                                              request6.input('Operation', 'INSERT');
                                              request6.input('Activity_Name', req.body.Activity_Name);
                                              request6.input('Event_Name', req.body.Event_Name);
-                                             request6.input('From_Date',new Date(req.body.From_Date5));//M-D-Y
-                                             request6.input('To_Date',new Date(req.body.To_Date5));
+                                             request6.input('From_Date',req.body.From_Date5);//M-D-Y
+                                             request6.input('To_Date',req.body.To_Date5);
                                              console.log(req.body.From_Date5);
                                              request6.input('Award', req.body.Award);
                                              request6.input('Remarks', req.body.Remarks5);
