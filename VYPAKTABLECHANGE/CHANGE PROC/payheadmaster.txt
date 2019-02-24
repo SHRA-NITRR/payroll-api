@@ -1,0 +1,81 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_PayHead_Mst]    Script Date: 23/02/2019 12:30:12 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_PayHead_Mst]
+ (
+ 
+@PayHead_Id int=NULL,
+@PayHead_Name varchar(50)=NULL,
+@payhead_inslip varchar(20)=null ,
+@PayHead_Type varchar(1) =NULL,
+@PayHead_Category varchar(1)= NULL,
+@Use_For_Gratuity varchar(1)=NULL,
+@Use_For_NetPay varchar(1)=NULL,
+@Contribute_by varchar(1)=NULL,
+@Created_By int=NULL,
+@Created_On datetime=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null
+
+	
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Payhead_Code VARCHAR(20)
+	SET @PayHead_Id=(SELECT ISNULL(MAX(PayHead_Id),0)+1 FROM PayHead_Mst)
+	SET @Payhead_Code=(SELECT 'PAY'+CAST( ISNULL(MAX(PayHead_Id),0)+1 AS VARCHAR(20)) FROM PayHead_Mst)
+	INSERT INTO PayHead_Mst (PayHead_Id,PayHead_Code,PayHead_Name,PayHead_Inslip,PayHead_Type,PayHead_Category,Use_For_Gratuity,Use_For_NetPay,Contribute_by,Created_By)
+    VALUES
+     (@PayHead_Id,@Payhead_Code,@PayHead_Name,@payhead_inslip,@PayHead_Type,@PayHead_Category,@Use_For_Gratuity,@Use_For_NetPay,@Contribute_by,@Created_By)
+    END
+    
+    IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE PayHead_Mst SET PayHead_Name=@PayHead_Name,PayHead_Inslip=@payhead_inslip,PayHead_Type=@PayHead_Type,PayHead_Category=@PayHead_Category,Use_For_Gratuity=@Use_For_Gratuity,Use_For_NetPay=@Use_For_NetPay,Contribute_by=@Contribute_by,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE PayHead_Id=@PayHead_Id
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT PayHead_Id,PayHead_Code,PayHead_Name,PayHead_Type,PayHead_Category,Use_For_Gratuity,Use_For_NetPay,Contribute_by,Created_By,Created_On,payhead_inslip FROM PayHead_Mst WHERE Is_Deleted=0
+   END
+  
+  
+  IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT PayHead_Id,PayHead_Code,PayHead_Name,PayHead_Type,PayHead_Category,Use_For_Gratuity,Use_For_NetPay,Contribute_by,Created_By,Created_On,payhead_inslip FROM PayHead_Mst where PayHead_Id=@PayHead_Id AND Is_Deleted=0
+   END
+  
+  
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from PayHead_Mst where  Is_Deleted = 0 AND PayHead_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE PayHead_Mst SET Is_Deleted = 1 WHERE PayHead_Id=@PayHead_Id
+   END
+   
+    
+    
+   
+   
+   
+   
+   

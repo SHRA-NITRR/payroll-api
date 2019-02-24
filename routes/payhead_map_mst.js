@@ -19,6 +19,7 @@ module.exports = {
             request.input('Cutoff_Amount',parseFloat(req.body.Cutoff_Amount));
             request.input('Round_Off',req.body.Round_Off);
             request.input('formula',req.body.formula);
+            request.input('Formula_Value',req.body.Formula_Value);
 
             request.execute('Proc_PayHead_Map_Mst', function (err, rec) {
                if (err) {

@@ -1,0 +1,35 @@
+USE [VYPAK]
+GO
+
+drop table [HoliDay_Master]
+
+CREATE TABLE [dbo].[HoliDay_Master](
+	 
+	[Holiday_Id] [int] NOT NULL,
+	[Holiday_Code] varchar(20) NOT NULL,
+	[Date] [date] NULL,
+	[Name] [varchar](50) NULL,
+	[Description] [varchar](max) NULL,
+	[Is_National_Holiday] [varchar](1) NULL,
+	[Is_Branch_Wise] [varchar](1) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+	
+ CONSTRAINT [PK_HoliDay_Master] PRIMARY KEY CLUSTERED 
+(
+	[Holiday_Id],Holiday_Code ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[HoliDay_Master] ADD  CONSTRAINT [DF_HoliDay_Master_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+ALTER TABLE [dbo].[HoliDay_Master] ADD  CONSTRAINT [DF_HoliDay_Master_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+
+

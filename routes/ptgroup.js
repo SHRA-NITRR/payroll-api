@@ -90,6 +90,7 @@ module.exports = {
       //API FOR VIEW SINGLE  PT DETAILS
 
       app.post('/view_single_pt_details', function (req, res) {
+         var request = new sql.Request(connection);
 
             request.input('Operation', 'SELECTBYID');
             request.input('PTGroup_Id', req.body.id);// PT GROUP ID
@@ -108,6 +109,7 @@ module.exports = {
       //API FOR DELETE PT DETAILS
 
       app.post('/delete_pt_details', function (req, res) {
+         var request = new sql.Request(connection);
 
             request.input('Operation', 'DELETE');
             request.input('PTGroup_Id', req.body.id);//PT GROUP ID

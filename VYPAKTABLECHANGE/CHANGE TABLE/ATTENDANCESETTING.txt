@@ -1,0 +1,35 @@
+
+CREATE TABLE [dbo].[Attendance_Master](
+	 
+	[Attendance_Id] [int] NOT NULL,
+	[Attendance_Code] Varchar(20) NOT NULL,
+	[Attendance_Name] [varchar](50) NOT NULL,
+	[Attendance_Salary_Type] [varchar](1) NOT NULL,
+	[Attendance_OT_Type] [varchar](5) NOT NULL,
+	[Salary_Calendar_Type] [varchar](10) NOT NULL,
+	[Attendance_Reg_Type] [varchar](5) NOT NULL,
+	[Is_Morethan_WorkDay] [varchar](1) NULL,
+	[Remarks] [varchar](max) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Attendance_Master] PRIMARY KEY CLUSTERED 
+(
+	[Attendance_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].Attendance_Master ADD  CONSTRAINT [DF_Attendance_Master_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].Attendance_Master ADD  CONSTRAINT [DF_Attendance_Master_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+
+

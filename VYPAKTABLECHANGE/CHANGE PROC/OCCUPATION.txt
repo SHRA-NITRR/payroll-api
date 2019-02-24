@@ -1,0 +1,67 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Occupation_MST]    Script Date: 23/02/2019 12:50:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_Occupation_MST]
+ (
+ 
+ @Occupation_Id int=NULL,
+ @Occupation_Name varchar(50)=NULL,
+ @Occupation_Short_Name varchar(20)=NULL,
+@Created_By int=NULL,
+@Created_On datetime=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Occupation_Code VARCHAR(20)
+	SET @Occupation_Id=(SELECT ISNULL(MAX(Occupation_Id),0)+1 FROM Occupation_Master)
+	SET @Occupation_Code=(SELECT 'OCP'+CAST( ISNULL(MAX(Occupation_Id),0)+1 AS VARCHAR(20)) FROM Occupation_Master)
+	INSERT INTO Occupation_Master (Occupation_Id,Occupation_Code,Occupation_Name,Occupation_Short_Name,Created_By,Created_On,Is_Deleted)
+    VALUES
+     (@Occupation_Id,@Occupation_Code,@Occupation_Name,@Occupation_Short_Name,@Created_By,GETDATE(),0)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Occupation_Master SET Occupation_Name=@Occupation_Name,
+   Occupation_Short_Name=@Occupation_Short_Name,
+   Modified_By= @Created_By,
+    Modified_On = GETDATE()
+   WHERE Occupation_Id=@Occupation_Id
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Occupation_Id,Occupation_Code,Occupation_Name,Occupation_Short_Name,Created_By,Created_On FROM Occupation_Master WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Occupation_Id,Occupation_Code,Occupation_Name,Occupation_Short_Name,Created_By,Created_On FROM Occupation_Master WHERE Is_Deleted=0
+   AND Occupation_Id=@Occupation_Id
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Occupation_Master where Is_Deleted = 0 and Occupation_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Occupation_Master SET Is_Deleted = 1 WHERE Occupation_Id=@Occupation_Id
+   END

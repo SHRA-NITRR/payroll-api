@@ -1,0 +1,74 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Employee_Disciplinary_DTL]    Script Date: 23/02/2019 1:19:22 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Proc_Employee_Disciplinary_DTL]
+ (
+	
+@EmployeeId int= NULL,
+@Employeecode	varchar(50)=NULL,
+@Emp_Disciplinary_Id varchar (50)=null,
+@Memo	Varchar (150)=NULL,
+@Issue_By	varchar(150)=null,
+@Issue_Date	varchar(150)=null,
+@Comments	varchar(100)=null,
+@Remarks Varchar(Max)=null,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Auto VARCHAR(20) 
+	
+	--SET @EmployeeId=(SELECT ISNULL(MAX(EmployeeId),0)+0 FROM Employee_Details)
+	SET @Emp_Disciplinary_Id=(SELECT ISNULL(MAX(Employee_Dis_Id),0)+1 FROM Employee_Disciplinary_DTL)
+	SET @Issue_Date=(SELECT Convert(date,@Issue_Date, 103) AS Issue_Date)
+	
+	INSERT INTO Employee_Disciplinary_DTL (Employee_Dis_Id,EmployeeId,Employee_Code,Memo,Issue_By,Issue_Date,Comments,Remarks)
+    VALUES
+     (@Emp_Disciplinary_Id,@EmployeeId,@Employeecode,@Memo,@Issue_By,@Issue_Date,@Comments,@Remarks)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Employee_Disciplinary_DTL SET 
+   Memo=@Memo,
+   Issue_By=@Issue_By,
+   Issue_Date=@Issue_Date,
+   Comments=@Comments,
+   Remarks=@Remarks
+   
+   WHERE EmployeeId=@EmployeeId
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT * FROM Employee_Disciplinary_DTL WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT * FROM Employee_Disciplinary_DTL WHERE Is_Deleted=0
+   AND EmployeeId=@EmployeeId
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Employee_Disciplinary_DTL where Is_Deleted = 0 and EmployeeId between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Employee_Disciplinary_DTL SET Is_Deleted = 1 WHERE EmployeeId=@EmployeeId
+   END

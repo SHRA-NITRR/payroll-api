@@ -1,0 +1,46 @@
+ drop table [PF_ESI_Rate_Setting]
+
+
+CREATE TABLE [dbo].[PF_ESI_Rate_Setting](
+	 
+	[PF_ESI_Rate_Id] [int] NOT NULL,
+	[PF_ESI_Rate_Code] varchar(20) NOT NULL,
+	[Effective_From] [date] NULL,
+	[PF_Rate] [decimal](18, 2) NOT NULL,
+	[PF_Cut_Off] [decimal](18, 2) NOT NULL,
+	[Is_Aply_Spec_CutOff] [bit] NULL,
+	[PF_Spec_Cut_Off] [decimal](18, 2) NULL,
+	[PF_Employer_Pension] [decimal](18, 2) NOT NULL,
+	[EMPR_PF_Rate] [decimal](18, 2) NOT NULL,
+	[PF_Round_Off] [nvarchar](2) NULL,
+	[PF_Is_Rest_EMPR_Share] [bit] NULL,
+	[PF_Is_Rest_EMPL_TO_EMPR] [bit] NULL,
+	[ESI_EMPL_Rate] [decimal](18, 2) NOT NULL,
+	[ESI_EMPR_Rate] [decimal](18, 2) NOT NULL,
+	[ESI_Cut_Off] [decimal](18, 2) NOT NULL,
+	[ESI_Min_Wage] [decimal](18, 2) NOT NULL,
+	[ESI_Round_Off] [nvarchar](2) NULL,
+	[Acc_02] [decimal](18, 2) NOT NULL,
+	[Acc_21] [decimal](18, 2) NOT NULL,
+	[Acc_22] [decimal](18, 2) NOT NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_PF_ESI_Rate_Setting] PRIMARY KEY CLUSTERED 
+(
+	[PF_ESI_Rate_Id],[PF_ESI_Rate_Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+
+ALTER TABLE [dbo].PF_ESI_Rate_Setting ADD  CONSTRAINT [DF_PF_ESI_Rate_Setting_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].PF_ESI_Rate_Setting ADD  CONSTRAINT [DF_PF_ESI_Rate_Setting_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+

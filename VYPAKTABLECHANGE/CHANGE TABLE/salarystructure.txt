@@ -1,0 +1,32 @@
+ drop table Salary_Struct_Mst
+
+CREATE TABLE [dbo].[Salary_Struct_Mst](
+	 
+	[Salary_Str_Id] [int] NOT NULL,
+	[Salary_Str_Code] Varchar(20) NOT NULL,
+	[Salary_Str_Name] [varchar](50) NULL,
+	[Salary_Str_Reamrk] [varchar](200) NULL,
+	[Is_On_Gross] [bit] NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Salary_Struct_Mst] PRIMARY KEY CLUSTERED 
+(
+	[Salary_Str_Id],Salary_Str_Code ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Salary_Struct_Mst] ADD  CONSTRAINT [DF_Salary_Struct_Mst_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].[Salary_Struct_Mst] ADD  CONSTRAINT [DF_Salary_Struct_Mst_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+
+

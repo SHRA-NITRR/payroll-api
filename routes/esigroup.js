@@ -12,6 +12,7 @@ module.exports = {
             request.input('Operation', 'INSERT');
             request.input('ESIGroup_Id', parseInt(req.body.ESIGroup_Id));
             request.input('ESI_No', req.body.ESI_No);
+           
             request.input('ESI_Local_Office', req.body.ESI_Local_Office);
             request.input('Address', req.body.Address);
             request.input('Is_Limit_ESI_Gross', req.body.Is_Limit_ESI_Gross.toLowerCase() == 'true' ? true : false);

@@ -20,7 +20,9 @@ module.exports = {
       });
       var upload = multer({ storage: Storage });
 
-      app.post('/add_companybranchdetails', upload.single('Company_File_Name'), function (req, res) {
+      app.post('/add_companybranchdetails', upload.array('Company_File_Name',20), function (req, res) {
+         
+         console.log(req.body.branch);
          const transaction = new sql.Transaction();
          transaction.begin((err) => {
             if (err) {
@@ -127,7 +129,7 @@ module.exports = {
                                  request = new sql.Request(transaction);
                                  request.input('Operation', 'INSERT');
                                  request.input('Company_Id', parseInt(req.body.Company_Id));
-                                 request.input('Company_File_Name', image);
+                                 request.input('Company_File_Name',image);
                                  //request.input('File_Data',req.body.File_Data);
                                  request.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
                                     if (err2) {

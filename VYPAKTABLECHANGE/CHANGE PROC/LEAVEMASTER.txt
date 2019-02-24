@@ -1,0 +1,69 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_LEAVE_MST]    Script Date: 23/02/2019 12:19:13 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_LEAVE_MST]
+ (
+ @Leave_Id INT=null, 
+ @Leave_Name VARCHAR (50)=NULL,
+ @Leave_Short_Name VARCHAR (50)=NULL,
+ @Is_Affect_salary BIT=NULL,
+ @Is_Alloted BIT=NULL,
+@Created_By int=NULL,
+@Created_On datetime=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Leave_Code VARCHAR(20)
+	SET @Leave_Id=(SELECT ISNULL(MAX(Leave_Id),0)+1 FROM Leave_Master)
+	SET @Leave_Code=(SELECT 'LVE'+CAST( ISNULL(MAX(Leave_Id),0)+1 AS VARCHAR(20)) FROM Leave_Master)
+	INSERT INTO Leave_Master (Leave_Id,Leave_Code,Leave_Name,Leave_Short_Name,Is_Affect_salary,Is_Alloted,Created_By)
+    VALUES
+     (@Leave_Id,@Leave_Code,@Leave_Name,@Leave_Short_Name,@Is_Affect_salary,@Is_Alloted,@Created_By)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Leave_Master SET Leave_Name=@Leave_Name,Leave_Short_Name=@Leave_Short_Name,Is_Affect_salary=@Is_Affect_salary,Is_Alloted=@Is_Alloted,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE Leave_Id=@Leave_Id
+   END
+   
+  
+   
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Leave_Id,Leave_Code,Leave_Name,Leave_Short_Name,Is_Affect_salary,Is_Alloted,Created_By,Created_On FROM Leave_Master WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Leave_Id,Leave_Code,Leave_Name,Leave_Short_Name,Is_Affect_salary,Is_Alloted,Created_By,Created_On FROM Leave_Master WHERE Is_Deleted=0
+   AND Leave_Id=@Leave_Id
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Leave_Master where Is_Deleted = 0 and Leave_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Leave_Master SET Is_Deleted = 1 WHERE Leave_Id=@Leave_Id
+   END

@@ -1,0 +1,28 @@
+
+CREATE TABLE [dbo].[Employee_EXTRA_CURRICULAR_DTL](
+	[EmployeeId] int NOT NULL,
+	[Employee_Code] [varchar](50) NOT NULL,
+	[Employee_Curr_Id] [varchar](50) NOT NULL,
+	[Activity_Name] [varchar](150) NULL,
+	[Event_Name] [varchar](150) NULL,
+	[From_Date] [datetime] NULL,
+	[To_Date] [datetime] NULL,
+	[Award] [varchar](50) NULL,
+	[Remarks] [varchar](max) NULL,
+ 
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Employee_Curr_Id] PRIMARY KEY CLUSTERED 
+(
+[EmployeeId],[Employee_Code],
+	[Employee_Curr_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+ALTER TABLE [dbo].[Employee_EXTRA_CURRICULAR_DTL] ADD  CONSTRAINT [DF_Employee_EXTRA_CURRICULAR_DTL_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+

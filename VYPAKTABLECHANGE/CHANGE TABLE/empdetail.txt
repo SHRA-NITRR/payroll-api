@@ -1,0 +1,97 @@
+ drop table Employee_Details
+
+CREATE TABLE [dbo].[Employee_Details](
+	 
+	[EmployeeId] int NOT NULL,
+	[Employee_Code] [varchar](50) NOT NULL,
+	[Employee_Title] [varchar](10) NULL,
+	[Employee_Name] [varchar](85) NULL,
+	[FathersName] [varchar](100) NULL,
+	[MothersName] [varchar](100) NULL,
+	[NomineeName] [varchar](47) NULL,
+	[Gender] [varchar](20) NULL,
+	[Occupation] [varchar](200) NULL,
+	[Division] [varchar](200) NULL,
+	[Grade] [varchar](100) NULL,
+	[Emp_Attendance] [varchar](50) NULL,
+	[BloodGroup] [varchar](20) NULL,
+	[DateOfBirth] [datetime] NULL,
+	[Present_Res_No] [varchar](30) NULL,
+	[Present_Res_Name] [varchar](100) NULL,
+	[Present_Road] [varchar](100) NULL,
+	[Present_Area] [varchar](100) NULL,
+	[Present_City] [varchar](30) NULL,
+	[Present_State] [varchar](30) NULL,
+	[Present_Pincode] [varchar](6) NULL,
+	[Permanent_Res_No] [varchar](30) NULL,
+	[Permanent_Res_Name] [varchar](100) NULL,
+	[Permanent_Road] [varchar](100) NULL,
+	[Permanent_Area] [varchar](100) NULL,
+	[Permanent_City] [varchar](30) NULL,
+	[Permanent_State] [varchar](30) NULL,
+	[Permanent_Pincode] [varchar](6) NULL,
+	[Marital_Status] [varchar](10) NULL,
+	[Ward_Circle] [varchar](50) NULL,
+	[BankAcNo] [varchar](30) NULL,
+	[Bank_Name] [varchar](30) NULL,
+	[Branch_Name] [varchar](50) NULL,
+	[Email_ID] [varchar](50) NULL,
+	[Is_Default_EmailId] [bit] NULL,
+	[Alt_Email_ID] [varchar](50) NULL,
+	[Is_Default_Alt_EmailId] [bit] NULL,
+	[CC_Email_ID] [varchar](50) NULL,
+	[STD_Code] [varchar](15) NULL,
+	[PhoneNo] [varchar](15) NULL,
+	[Mobile] [varchar](15) NULL,
+	[PANno] [varchar](50) NULL,
+	[AAdhar_No] [varchar](50) NULL,
+	[UAN_No] [varchar](50) NULL,
+	[VoterId] [varchar](50) NULL,
+	[PassportNo] [varchar](50) NULL,
+	[Marriage_Date] [date] NULL,
+	[Department_Id] [int] NULL,
+	[Desig_Id] [int] NULL,
+	[Emp_Cate_Id] [int] NULL,
+	[Employee_Image] [varchar](50) NULL,
+	[Date_of_Join] [date] NULL,
+	[Salary_Calc_From] [date] NULL,
+	[Is_Leaving] [bit] NULL,
+	[Date_of_Leave] [date] NULL,
+	[Reason_Of_Leave] [varchar](250) NULL,
+	[Past_Service_inDay] [int] NULL,
+	[IsESI] [bit] NULL,
+	[ESI_No] [varchar](30) NULL,
+	[ESI_Dispensary] [varchar](50) NULL,
+	[IsPF] [bit] NULL,
+	[PF_No] [varchar](30) NULL,
+	[PF_Dept_File] [varchar](50) NULL,
+	[Is_Restrict_PF] [bit] NULL,
+	[Is_Zero_Pension] [bit] NULL,
+	[Is_Zero_PT] [bit] NULL,
+	[IsGRI] [bit] NULL,
+	[GRI_No] [varchar](30) NULL,
+	[IsInsurance] [bit] NULL,
+	[Insurance_No] [varchar](30) NULL,
+	[IsDisabled] [varchar](1) NULL,
+	[IsInternationalworker] [varchar](1) NULL,
+	[IsHigherEPF] [varchar](1) NULL,
+	[IsHigherEPS] [varchar](1) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Employee_Details] PRIMARY KEY CLUSTERED 
+(
+	 
+	[EmployeeId],Employee_Code ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
+ALTER TABLE [dbo].Employee_Details ADD  CONSTRAINT [DF_Employee_Details_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].Employee_Details ADD  CONSTRAINT [DF_Employee_Details_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO

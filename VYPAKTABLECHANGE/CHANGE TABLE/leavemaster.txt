@@ -1,0 +1,30 @@
+ DROP TABLE Leave_Master
+
+CREATE TABLE [dbo].[Leave_Master](
+	 
+	[Leave_Id] [int] NOT NULL,
+	[Leave_Code] Varchar(20) NOT NULL,
+	[Leave_Name] [varchar](50) NULL,
+	[Leave_Short_Name] [varchar](20) NULL,
+	[Is_Affect_salary] [bit] NULL,
+	[Is_Alloted] [bit] NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Leave_Master] PRIMARY KEY CLUSTERED 
+(
+	[Leave_Id],Leave_Code ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+ALTER TABLE [dbo].Leave_Master ADD  CONSTRAINT [DF_Leave_Master_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+ALTER TABLE [dbo].Leave_Master ADD  CONSTRAINT [DF_Leave_Master_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO

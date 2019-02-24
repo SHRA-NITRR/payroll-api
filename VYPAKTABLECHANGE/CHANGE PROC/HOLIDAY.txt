@@ -1,0 +1,68 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_HOLIDAY_MST]    Script Date: 23/02/2019 12:02:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_HOLIDAY_MST]
+ (
+	
+ 
+@Holiday_Id INT=null, 
+@Name VARCHAR (50)=NULL,
+@Description VARCHAR (50)=NULL,
+@Is_National_Holiday varchar (1)=NULL,
+@Is_Branch_Wise varchar (1)=NULL,
+@Created_By int=NULL,
+@Created_On datetime=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null,
+@Date date=NULL
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Holiday_Code VARCHAR(20)
+	SET @Holiday_Id=(SELECT ISNULL(MAX(Holiday_Id),0)+1 FROM HoliDay_Master)
+	SET @Holiday_Code=(SELECT 'HOL'+ CAST( ISNULL(MAX(Holiday_Id),0)+1 AS VARCHAR(20)) FROM HoliDay_Master)
+	INSERT INTO HoliDay_Master (Holiday_Id,Holiday_Code,Date,Name,Description,Is_National_Holiday,Is_Branch_Wise,Created_By)
+    VALUES
+     (@Holiday_Id,@Holiday_Code,@Date,@Name,@Description,@Is_National_Holiday,@Is_Branch_Wise,@Created_By)
+    END
+   
+BEGIN
+   
+   UPDATE HoliDay_Master SET Date=@Date,Name=@Name,Description=@Description,Is_National_Holiday=@Is_National_Holiday,Is_Branch_Wise=@Is_Branch_Wise,Created_By=@Created_By,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE Holiday_Id=@Holiday_Id
+   END   
+   
+   
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Holiday_Id,Holiday_Code,Date,Name,Description,Is_National_Holiday,Is_Branch_Wise,Created_By,Created_On FROM HoliDay_Master WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Holiday_Id,Holiday_Code,Date,Name,Description,Is_National_Holiday,Is_Branch_Wise,Created_By,Created_On FROM HoliDay_Master WHERE Is_Deleted=0 AND Holiday_Id=@Holiday_Id
+   END
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from HoliDay_Master WHERE Is_Deleted=0 AND Holiday_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+    IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE HoliDay_Master SET Is_Deleted = 1 WHERE Holiday_Id=@Holiday_Id
+   END

@@ -1,0 +1,87 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_DepartmentMaster]    Script Date: 23/02/2019 12:38:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Proc_DepartmentMaster]
+ (
+  
+ @Department_Id INT=null, 
+ @Department_Name VARCHAR(50)=NULL,
+ @Created_By INT=NULL,
+ @Modified_By INT=NULL,
+ @Operation VARCHAR(20)=NULL,
+ @Is_Deleted bit=NULL,
+ @OUT_CODE VARCHAR(30)=null
+ 
+)
+ AS
+ SET NOCOUNT ON 
+   
+	 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Department_Code VARCHAR(20)
+	SET @Department_Id=(SELECT ISNULL(MAX(Department_Id),0)+1 FROM dbo.Department_Mst)
+	
+	SET @Department_Code=(SELECT  'DEPT'+CAST(ISNULL(MAX(Department_Id),0)+1 AS VARCHAR(20)) FROM dbo.Department_Mst)
+   
+	IF NOT EXISTS(SELECT Department_Name FROM dbo.Department_Mst WHERE Department_Name=@Department_Name and Is_Deleted=0)
+	BEGIN
+      INSERT INTO dbo.Department_Mst
+    (Department_Id,Department_Code,Department_Name,Created_By)
+    
+     VALUES
+     (@Department_Id,@Department_Code,@Department_Name,@Created_By)
+     END
+   END
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE dbo.Department_Mst
+   SET 
+   Department_Name=@Department_Name,Modified_By= @Modified_By, Modified_On = GETDATE()
+   WHERE Department_Id=@Department_Id
+   
+   
+   END
+   IF @Operation='SELECT'
+
+   BEGIN
+   
+   SELECT  Department_Id,Department_Code,Department_Name,Created_On,Created_By,
+   Modified_On,Modified_By FROM dbo.Department_Mst where Is_Deleted=0
+  
+   END
+   
+   
+   IF @Operation='SELECTBYID'
+
+   BEGIN
+   
+   SELECT  Department_Id,Department_Code,Department_Name,Created_On,Created_By,
+   Modified_On,Modified_By FROM dbo.Department_Mst where Is_Deleted=0 AND Department_Id=@Department_Id
+  
+   END
+   
+   
+   
+    IF @Operation = 'DELETE'
+   
+   BEGIN
+   
+    UPDATE dbo.Department_Mst
+   SET 
+   Is_Deleted = 1
+   WHERE Department_Id=@Department_Id
+   
+   END
+  IF @Operation='SEARCH'
+   BEGIN
+  select * from dbo.Department_Mst where  Is_Deleted = 0 AND Department_Id between @OUT_CODE and @OUT_CODE+15
+   END
+ 

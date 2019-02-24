@@ -1,0 +1,78 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Attendance_MST]    Script Date: 23/02/2019 12:56:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+	
+ALTER PROCEDURE [dbo].[Proc_Attendance_MST]
+ (
+ 
+@Attendance_Id int =NULL,
+@Attendance_Name varchar(50)=NULL,
+@Attendance_Salary_Type varchar(1)=NULL,
+@Attendance_OT_Type  Varchar(5)=Null,
+@Salary_Calendar_Type  varchar(10)=NULL,
+@Attendance_Reg_Type   Varchar(5)=NULL,
+@Is_Morethan_WorkDay   Varchar(1)=Null,
+@Remarks  Varchar(Max)=Null,
+@Created_By int=NULL,
+@Created_On datetime=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Attendance_Code VARCHAR(20)
+	SET @Attendance_Id=(SELECT ISNULL(MAX(Attendance_Id),0)+1 FROM Attendance_Master)
+	SET @Attendance_Code=(SELECT 'ATE'+CAST( ISNULL(MAX(Attendance_Id),0)+1 AS VARCHAR(20)) FROM Attendance_Master)
+	INSERT INTO Attendance_Master (Attendance_Id,Attendance_Code,Attendance_Name,Attendance_Salary_Type,Attendance_OT_Type,Salary_Calendar_Type,Attendance_Reg_Type,Is_Morethan_WorkDay,Remarks,Created_By)
+    VALUES
+     (@Attendance_Id,@Attendance_Code,@Attendance_Name,@Attendance_Salary_Type,@Attendance_OT_Type,@Salary_Calendar_Type,@Attendance_Reg_Type,@Is_Morethan_WorkDay,@Remarks,@Created_By)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Attendance_Master SET Attendance_Name=@Attendance_Name,
+   Attendance_Salary_Type=@Attendance_Salary_Type,
+   Attendance_OT_Type=@Attendance_OT_Type,
+   Salary_Calendar_Type=@Salary_Calendar_Type,
+   Attendance_Reg_Type=@Attendance_Reg_Type,
+   Is_Morethan_WorkDay=@Is_Morethan_WorkDay,
+   Remarks=@Remarks,
+   Modified_By= @Created_By,
+    Modified_On = GETDATE()
+   WHERE Attendance_Id=@Attendance_Id
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Attendance_Id,Attendance_Code,Attendance_Name,Attendance_Salary_Type,Attendance_OT_Type,Salary_Calendar_Type,Attendance_Reg_Type,Is_Morethan_WorkDay,Remarks,Created_By,Created_On FROM Attendance_Master WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Attendance_Id,Attendance_Code,Attendance_Name,Attendance_Salary_Type,Attendance_OT_Type,Salary_Calendar_Type,Attendance_Reg_Type,Is_Morethan_WorkDay,Remarks,Created_By,Created_On FROM Attendance_Master WHERE Is_Deleted=0
+   AND Attendance_Id=@Attendance_Id
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Attendance_Master where Is_Deleted = 0 and Attendance_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Attendance_Master SET Is_Deleted = 1 WHERE Attendance_Id=@Attendance_Id
+   END

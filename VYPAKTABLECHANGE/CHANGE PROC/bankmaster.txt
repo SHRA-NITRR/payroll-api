@@ -1,0 +1,79 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_BANK_MST]    Script Date: 23/02/2019 11:37:48 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_BANK_MST]
+ (
+  
+ @Bank_Id INT=null, 
+ @Bank_Name VARCHAR(50)=NULL,
+ @Bank_Sht_Name VARCHAR(50)=NULL,
+ @BankAccNo VARCHAR(50)=NULL,
+ @Address VARCHAR(250)=NULL,
+ @Branch_Name varchar(50)=NULL,
+ @IFSC_Code varchar(50)=NULL,
+ @Pin_No int =NULL,
+@Phone_No varchar(50)= NULL,
+@Created_By int=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Bnak_Code VARCHAR(20)
+	SET @Bank_Id=(SELECT ISNULL(MAX(Bank_Id),0)+1 FROM Bank_Master)
+	SET @Bnak_Code=(SELECT 'BNK'+ CAST(ISNULL(MAX(Bank_Id),0)+1 AS VARCHAR(20)) FROM Bank_Master)
+	INSERT INTO Bank_Master (Bank_Id,Bank_Code,Bank_Name,Bank_Sht_Name,BankAccNo,Address,Branch_Name,IFSC_Code,Pin_No,Phone_No,Created_By)
+    VALUES
+     (@Bank_Id,@Bnak_Code,@Bank_Name,@Bank_Sht_Name,@BankAccNo,@Address,@Branch_Name,@IFSC_Code,@Pin_No,@Phone_No,@Created_By)
+    END
+   
+   IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Bank_Master SET Bank_Name=@Bank_Name,Bank_Sht_Name=@Bank_Sht_Name,BankAccNo=@BankAccNo,Address=@Address,Branch_Name=@Branch_Name,IFSC_Code=@IFSC_Code,Pin_No=@Pin_No,Phone_No=@Phone_No,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE Bank_Id=@Bank_Id
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Bank_Id,Bank_Code,Bank_Name,Bank_Sht_Name,BankAccNo,Address,Branch_Name,IFSC_Code,Pin_No,Phone_No,Created_By,Created_On FROM Bank_Master WHERE Is_Deleted=0
+   END
+  
+  
+  IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Bank_Id,Bank_Code,Bank_Name,Bank_Sht_Name,BankAccNo,Address,Branch_Name,IFSC_Code,Pin_No,Phone_No,Created_By,Created_On  FROM Bank_Master where Bank_Id=@Bank_Id AND Is_Deleted=0
+   END
+  
+  
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Bank_Master where  Is_Deleted = 0 AND Bank_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Bank_Master SET Is_Deleted = 1 WHERE Bank_Id=@Bank_Id
+   END
+   
+   
+   
+   
+   
+   
+   

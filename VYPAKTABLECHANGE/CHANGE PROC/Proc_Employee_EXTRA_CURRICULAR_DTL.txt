@@ -1,0 +1,87 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Employee_EXTRA_CURRICULAR_DTL]    Script Date: 23/02/2019 2:20:37 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_Employee_EXTRA_CURRICULAR_DTL]
+ (
+@EmployeeId int= NULL,
+@Employeecode	varchar(50)=NULL,
+@Employee_Curr_Id	varchar (50)=NULL,
+@Activity_Name	Varchar (150)=NULL,
+@Event_Name	varchar(150)=null,
+@From_Date	varchar (50)=null,
+@To_Date	varchar (50)=null,
+@Award	Varchar(50)=null,
+@Remarks	Varchar(Max)=null,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    
+    
+	SET @From_Date=(SELECT Convert(datetime,@From_Date, 103) AS From_Date)
+	SET @To_Date=(SELECT Convert(datetime,@To_Date, 103) AS Issue_Date)
+	SET @Employee_Curr_Id=(SELECT ISNULL(MAX(Employee_Curr_Id),0)+1 FROM Employee_EXTRA_CURRICULAR_DTL)
+	
+	INSERT INTO Employee_EXTRA_CURRICULAR_DTL (Employee_Curr_Id,EmployeeId,Employee_Code,Activity_Name,Event_Name,From_Date,To_Date,Award,Remarks)
+    VALUES
+     (@Employee_Curr_Id,@EmployeeId,@Employeecode,@Activity_Name,@Event_Name,@From_Date,@To_Date,@Award,@Remarks)
+    END
+   
+   IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Employee_EXTRA_CURRICULAR_DTL 
+   SET 
+   EmployeeId=@EmployeeId,
+   Activity_Name=@Activity_Name,
+   Event_Name=@Event_Name,
+   From_Date=@From_Date,
+   To_Date=@To_Date,
+   Award=@Award,
+   Remarks=@Remarks
+   
+  
+   WHERE EmployeeId=@EmployeeId
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Employee_Curr_Id,EmployeeId,Activity_Name,Event_Name,From_Date,To_Date,Award,Remarks FROM Employee_EXTRA_CURRICULAR_DTL WHERE Is_Deleted=0
+   END
+  
+  
+  IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Employee_Curr_Id,EmployeeId,Activity_Name,Event_Name,From_Date,To_Date,Award,Remarks FROM Employee_EXTRA_CURRICULAR_DTL where EmployeeId=@EmployeeId AND Is_Deleted=0
+   END
+  
+  
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Employee_EXTRA_CURRICULAR_DTL where  Is_Deleted = 0 AND Employee_Curr_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Employee_EXTRA_CURRICULAR_DTL SET Is_Deleted = 1 WHERE EmployeeId=@EmployeeId
+   END
+   
+   
+   
+   
+   
+   
+   

@@ -1,0 +1,34 @@
+
+CREATE TABLE [dbo].[ESIGroup_Mst](
+	[RowId] [int] IDENTITY(1,1) NOT NULL,
+	[ESIGroup_Id] [int] NOT NULL,
+	[ESIGroup_Code] varchar(20) NOT NULL,
+	ESIGroup_Name  VARCHAR(50),
+	[ESI_No] [varchar](50) NULL,
+	[ESI_Local_Office] [varchar](50) NULL,
+	[Address] [varchar](200) NULL,
+	[Is_Limit_ESI_Gross] [bit] NULL,
+	[Is_Individual_Calc] [bit] NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ 
+   CONSTRAINT [PK_ESIgrp_Mst] PRIMARY KEY CLUSTERED 
+(
+	ESIGroup_Id,ESIGroup_Code
+)
+
+ )
+
+ 
+ALTER TABLE [dbo].[ESIGroup_Mst] ADD  CONSTRAINT [DF_ESIGroup_Mst_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].[ESIGroup_Mst] ADD  CONSTRAINT [DF_ESIGroup_Mst_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+
+
+ 
+

@@ -1,0 +1,74 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_SITE_MST]    Script Date: 23/02/2019 12:22:29 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_SITE_MST]
+ (
+ 
+@Site_Id INT=null, 
+@Site_Name VARCHAR (50)=NULL,
+@Created_By int=NULL,
+@Created_On datetime=NULL,
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    
+	SET @Site_Id=(SELECT ISNULL(MAX(Site_Id),0)+1 FROM Site_Master)
+	
+	INSERT INTO Site_Master (Site_Id,Site_Name,Created_By)
+    VALUES
+     (@Site_Id,@Site_Name,@Created_By)
+    END
+    
+    IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Site_Master SET Site_Name=@Site_Name,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE Site_Id=@Site_Id
+   END 
+   
+   IF @Operation='SELECT'
+   BEGIN
+   UPDATE Site_Master SET Site_Name=@Site_Name,Modified_By=@Created_By,Modified_On = GETDATE()WHERE Site_Id=@Site_Id
+   END
+   
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Site_Id,Site_Name,Created_By,Created_On FROM Site_Master WHERE Is_Deleted=0
+   END
+   
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Site_Id,Site_Name,Created_By,Created_On FROM Site_Master WHERE Is_Deleted=0 AND Site_Id=@Site_Id
+   END
+   
+   
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Site_Master where Is_Deleted = 0 and Site_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Site_Master SET Is_Deleted = 1 WHERE Site_Id=@Site_Id
+   END
+   
+   
