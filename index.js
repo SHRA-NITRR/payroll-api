@@ -56,6 +56,8 @@ var emptrainingdtlroute = require('./routes/empltrainingdtl.js');
 var empdisciplinaryroute = require('./routes/empdisciplinarydtls.js');
 var empcurriculamroute = require('./routes/employeecurridtls.js');
 var payheadmaproute = require('./routes/payhead_map_mst.js');
+var payheadmapslabproute = require('./routes/payhead_map_slab_master.js');
+var empsalarystruroute = require('./routes/emp_salary_struc.js');
 
 
 var connection = sql.connect(config, function (err) {
@@ -98,6 +100,8 @@ emptrainingdtlroute.configure(app, assert, config, connection);
 empdisciplinaryroute.configure(app, assert, config, connection);
 empcurriculamroute.configure(app, assert, config, connection);
 payheadmaproute.configure(app, assert, config, connection);
+payheadmapslabproute.configure(app, assert, config, connection);
+empsalarystruroute.configure(app, assert, config, connection);
 
 module.exports = connection;
 

@@ -18,7 +18,7 @@ module.exports = {
             request.input('Pay_Calc_Rate',parseFloat(req.body.Pay_Calc_Rate));
             request.input('Cutoff_Amount',parseFloat(req.body.Cutoff_Amount));
             request.input('Round_Off',req.body.Round_Off);
-            request.input('formula',req.body.formula);
+            request.input('Formula_Name',req.body.Formula_Name);
             request.input('Formula_Value',req.body.Formula_Value);
 
             request.execute('Proc_PayHead_Map_Mst', function (err, rec) {
@@ -46,10 +46,10 @@ module.exports = {
             request.input('Pay_Calc_Rate',parseFloat(req.body.Pay_Calc_Rate));
             request.input('Cutoff_Amount',parseFloat(req.body.Cutoff_Amount));
             request.input('Round_Off',req.body.Round_Off);
-            request.input('formula',req.body.formula);
+            request.input('Formula_Name',req.body.Formula_Name);
+            request.input('Formula_Value',req.body.Formula_Value);
 
-
-            request.input('Payhead_Map_Id', parseInt(req.body.id));//PAYHEADMAP ID
+            request.input('Payhead_Map_Id',parseInt(req.body.id));//PAYHEADMAP ID
             
             request.execute('Proc_PayHead_Map_Mst', function (err, rec) {
                if (err) {
