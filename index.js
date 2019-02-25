@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 var config = {
    user: 'sa',
-   password: '12345',
+   password: 'Hapi@12',
    server: 'localhost',
    database: 'VYPAK'
 }
