@@ -1,0 +1,74 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Employee_Family_Details]    Script Date: 23/02/2019 2:24:48 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Proc_Employee_Family_Details]
+ (
+	
+@EmployeeId int= NULL,
+@Employeecode	varchar(50)=NULL,
+@Employee_fam_Id	varchar(50)=NULL,
+@Relative_Name	Varchar(100)=NULL,
+@Relation	varchar(50)=null,
+@Date_Of_Birth	varchar(60)=null,
+@Gender	Varchar(1)=Null,
+@Remarks	Varchar(Max)=null,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Auto VARCHAR(20) 
+	
+	
+	SET @Employee_fam_Id=(SELECT ISNULL(MAX(Employee_fam_Id),0)+1 FROM Employee_Family_Details)
+	SET @Date_Of_Birth=(SELECT Convert(datetime,@Date_Of_Birth, 103) AS Date_Of_Birth)
+	
+	INSERT INTO Employee_Family_Details (Employee_fam_Id,EmployeeId,Employee_Code,Relative_Name,Relation,Date_Of_Birth,Gender,Remarks)
+    VALUES
+     (@Employee_fam_Id,@EmployeeId,@Employeecode,@Relative_Name,@Relation,@Date_Of_Birth,@Gender,@Remarks)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Employee_Family_Details SET 
+   Relative_Name=@Relative_Name,
+   Relation=@Relation,
+   Date_Of_Birth=@Date_Of_Birth,
+   Gender=@Gender,
+   Remarks=@Remarks
+   
+   WHERE EmployeeId=@EmployeeId
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT * FROM Employee_Family_Details WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT * FROM Employee_Family_Details WHERE Is_Deleted=0
+   AND EmployeeId=@EmployeeId
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Employee_Family_Details where Is_Deleted = 0 and EmployeeId between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Employee_Family_Details SET Is_Deleted = 1 WHERE EmployeeId=@EmployeeId
+   END

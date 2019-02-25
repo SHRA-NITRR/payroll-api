@@ -1,0 +1,68 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_SALARYSTRUCTURE_MST]    Script Date: 23/02/2019 11:56:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_SALARYSTRUCTURE_MST]
+ (
+  
+ @Salary_Str_Id INT=null, 
+ @Salary_Str_Name VARCHAR (50)=NULL,
+ @Salary_Str_Reamrk VARCHAR (200)=NULL,
+ @Is_On_Gross BIT = NULL,
+ @Created_By int=NULL,
+ 
+@Modified_By int=NULL,
+@Modified_On datetime=NULL,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Salary_Str_Code VARCHAR(20)
+	SET @Salary_Str_Id=(SELECT ISNULL(MAX(Salary_Str_Id),0)+1 FROM Salary_Struct_Mst)
+	SET @Salary_Str_Code=(SELECT 'SALSTR'+ CAST(ISNULL(MAX(Salary_Str_Id),0)+1 AS VARCHAR(20)) FROM Salary_Struct_Mst)
+	
+	INSERT INTO Salary_Struct_Mst (Salary_Str_Id,Salary_Str_Code,Salary_Str_Name,Salary_Str_Reamrk,Is_On_Gross,Created_By)
+    VALUES
+     (@Salary_Str_Id,@Salary_Str_Code,@Salary_Str_Name,@Salary_Str_Reamrk,@Is_On_Gross,@Created_By)
+    END
+   
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Salary_Struct_Mst SET Salary_Str_Name=@Salary_Str_Name,Salary_Str_Reamrk=@Salary_Str_Reamrk,Is_On_Gross=@Is_On_Gross,Created_By=@Created_By,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE Salary_Str_Id=@Salary_Str_Id
+   END
+  
+  
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT Salary_Str_Id,Salary_Str_Code,Salary_Str_Name,Salary_Str_Reamrk,Is_On_Gross,Created_By,Created_On FROM Salary_Struct_Mst WHERE Is_Deleted=0
+   END
+   
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT Salary_Str_Id,Salary_Str_Code,Salary_Str_Name,Salary_Str_Reamrk,Is_On_Gross,Created_By,Created_On FROM Salary_Struct_Mst WHERE Is_Deleted=0 AND Salary_Str_Id=@Salary_Str_Id
+   END
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Salary_Struct_Mst where Is_Deleted = 0 AND Salary_Str_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Salary_Struct_Mst SET Is_Deleted = 1 WHERE Salary_Str_Id=@Salary_Str_Id
+   END

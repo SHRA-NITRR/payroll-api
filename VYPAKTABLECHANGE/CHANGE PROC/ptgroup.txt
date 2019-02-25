@@ -1,0 +1,74 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_PTGROUP_MST]    Script Date: 23/02/2019 10:48:00 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ 
+ALTER PROCEDURE [dbo].[Proc_PTGROUP_MST]
+ (
+ 
+ @PTGroup_Id INT=null, 
+ @State_Id INT=null, 
+ @Certificate_No VARCHAR(50)=NULL,
+ @PTO_No VARCHAR(50)=NULL,
+ @PT_Address VARCHAR(200)=NULL,
+ @Return_Period  VARCHAR(1)=NULL,
+@PTGroup_Name varchar(50)=null,
+ @Created_By INT=NULL,
+ @Operation VARCHAR(20)=NULL,
+  @OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  BEGIN
+ 
+  IF @Operation='INSERT'
+   BEGIN
+     DECLARE @PTGroup_Code VARCHAR(20)
+	SET @PTGroup_Id=(SELECT ISNULL(MAX(PTGroup_Id),0)+1 FROM PTGroup_Mst)
+	SET @PTGroup_Code=(SELECT 'PT'+CAST( ISNULL(MAX(PTGroup_Id),0)+1 AS VARCHAR(20))FROM PTGroup_Mst)
+	
+	INSERT INTO PTGroup_Mst(PTGroup_Id,PTGroup_Code,PTGroup_Name,State_Id,Certificate_No,PTO_No,PT_Address,Return_Period,Created_By)
+    VALUES
+     (@PTGroup_Id,@PTGroup_Code,@PTGroup_Name,@State_Id,@Certificate_No,@PTO_No,@PT_Address,@Return_Period,@Created_By)
+    END
+   
+   
+IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE PTGroup_Mst SET State_Id=@State_Id,PTGroup_Name=@PTGroup_Name,Certificate_No=@Certificate_No,PTO_No=@PTO_No,
+   PT_Address=@PT_Address,Return_Period=@Return_Period,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE PTGroup_Id=@PTGroup_Id
+   END
+   
+   IF @Operation='SELECT'
+   BEGIN
+   SELECT  PTGroup_Id,PTGroup_Code,State_Id,Certificate_No,PTO_No,PT_Address,Return_Period,PTGroup_Name FROM PTGroup_Mst where Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT  PTGroup_Id,PTGroup_Code,State_Id,Certificate_No,PTO_No,PT_Address,Return_Period,PTGroup_Name FROM PTGroup_Mst where PTGroup_Id=@PTGroup_Id AND Is_Deleted=0
+   END
+   
+  IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE PTGroup_Mst SET Is_Deleted = 1 WHERE PTGroup_Id=@PTGroup_Id
+   END
+   
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from PTGroup_Mst where Is_Deleted=0 and PTGroup_Id between @OUT_CODE and @OUT_CODE+15 
+   
+   END
+    
+   END
+ 

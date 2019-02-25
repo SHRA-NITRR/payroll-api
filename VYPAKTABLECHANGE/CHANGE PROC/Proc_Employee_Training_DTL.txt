@@ -1,0 +1,77 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Employee_Training_DTL]    Script Date: 23/02/2019 2:27:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Proc_Employee_Training_DTL]
+ (
+@EmployeeId int= NULL,
+@Employeecode	varchar(50)=NULL,
+@Emp_Training_Id varchar (50)=null,
+@Training_Name	Varchar (150)=NULL,
+@From_Date	varchar(50)=null,
+@To_Date	varchar(50)=null,
+@Comments	varchar(100)=null,
+@Remarks Varchar(Max)=null,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Auto VARCHAR(20) 
+	
+	
+	SET @Emp_Training_Id=(SELECT ISNULL(MAX(Employee_Tra_Id),0)+1 FROM Employee_Training_DTL)
+	SET @From_Date=(SELECT Convert(datetime,@From_Date, 105) AS From_Date)
+	SET @To_Date=(SELECT Convert(datetime,@To_Date, 105) AS To_Date)
+	
+	INSERT INTO Employee_Training_DTL (Employee_Tra_Id,EmployeeId,Employee_Code,Training_Name,From_Date,To_Date,Comments,Remarks)
+    VALUES
+     (@Emp_Training_Id,@EmployeeId,@Employeecode,@Training_Name,@From_Date,@To_Date,@Comments,@Remarks)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Employee_Training_DTL SET 
+   Training_Name=@Training_Name,
+   From_Date=@From_Date,
+   To_Date=@To_Date,
+   Comments=@Comments,
+   Remarks=@Remarks
+  
+   WHERE EmployeeId=@EmployeeId
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT * FROM Employee_Training_DTL WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT * FROM Employee_Training_DTL WHERE Is_Deleted=0
+   AND EmployeeId=@EmployeeId
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Employee_Training_DTL where Is_Deleted = 0 and EmployeeId between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Employee_Training_DTL SET Is_Deleted = 1 WHERE EmployeeId=@EmployeeId
+   END
+   
+   
+  

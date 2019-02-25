@@ -26,7 +26,7 @@ module.exports = {
 
         //API FOR UPDATE SITE DETAILS
         app.post('/updatesitedetails', function (req, res) {
-          
+            var request = new sql.Request(connection);
                 request.input('Operation', 'UPDATE');
                 request.input('Site_Name', req.body.Site_Name);
                 request.input('Site_Id', parseInt(req.body.id));//SITE ID
@@ -100,7 +100,7 @@ module.exports = {
         //API FOR DELETE SINGLE SITE DETAILS
 
         app.post('/deletesinglesitedetails', function (req, res) {
-           
+            var request = new sql.Request(connection);
                 request.input('Operation', 'DELETE');
                 request.input('Site_Id', parseInt(req.body.id));//SITE ID
                 request.execute('Proc_SITE_MST', function (err, rec) {

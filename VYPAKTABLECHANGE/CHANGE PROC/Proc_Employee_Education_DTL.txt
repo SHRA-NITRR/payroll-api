@@ -1,0 +1,73 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_Employee_Education_DTL]    Script Date: 23/02/2019 2:17:58 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Proc_Employee_Education_DTL]
+ (
+	
+@EmployeeId int= NULL,
+@Employeecode	varchar(50)=NULL,
+@Employee_Edu_Id varchar(50)=NULL,
+@Qualfication Varchar (150)=NULL,
+@University	varchar(150)=null,
+@Year_Passed varchar(5)=null,
+@Percentage	Decimal(10,2) =null,
+@Remarks Varchar(Max)=null,
+@Is_Deleted bit=NULL,
+@Operation VARCHAR(20)=NULL,
+@OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+    DECLARE @Auto VARCHAR(20) 
+	
+	
+	SET @Employee_Edu_Id=(SELECT ISNULL(MAX(Employee_Edu_Id),0)+1 FROM Employee_Education_DTL)
+	
+	
+	INSERT INTO Employee_Education_DTL (Employee_Edu_Id,EmployeeId,Employee_Code,Qualfication,University,Year_Passed,Percentage,Remarks)
+    VALUES
+     (@Employee_Edu_Id,@EmployeeId,@Employeecode,@Qualfication,@University,@Year_Passed,@Percentage,@Remarks)
+    END
+  
+  IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE Employee_Education_DTL SET 
+   Qualfication=@Qualfication,
+   University=@University,
+   Year_Passed=@Year_Passed,
+   Remarks=@Remarks
+   
+   WHERE EmployeeId=@EmployeeId
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT * FROM Employee_Education_DTL WHERE Is_Deleted=0
+   END
+   
+   IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT * FROM Employee_Education_DTL WHERE Is_Deleted=0
+   AND EmployeeId=@EmployeeId
+   END 
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from Employee_Education_DTL where Is_Deleted = 0 and EmployeeId between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE Employee_Education_DTL SET Is_Deleted = 1 WHERE EmployeeId=@EmployeeId
+   END

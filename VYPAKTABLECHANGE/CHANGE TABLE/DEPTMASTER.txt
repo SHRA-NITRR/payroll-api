@@ -1,0 +1,28 @@
+
+CREATE TABLE [dbo].[Department_Mst](
+	 
+	[Department_Id] [int] NOT NULL,
+	[Department_Code] varchar(20) NOT NULL,
+	[Department_Name] [varchar](50) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Department_Mst] PRIMARY KEY CLUSTERED 
+(
+	[Department_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Department_Mst] ADD  CONSTRAINT [DF_Department_Mst_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].[Department_Mst] ADD  CONSTRAINT [DF_Department_Mst_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+

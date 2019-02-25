@@ -1,0 +1,91 @@
+USE [VYPAK]
+GO
+/****** Object:  StoredProcedure [dbo].[Proc_PF_ESI_Rate_Sett]    Script Date: 23/02/2019 12:26:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ ALTER PROCEDURE [dbo].[Proc_PF_ESI_Rate_Sett]
+
+ (
+ 
+ @PF_ESI_Rate_Id INT=null, 
+ @Effective_From VARCHAR(50)=NULL,
+ @PF_Rate DECIMAL(18,2)=NULL,
+ @PF_Cut_Off DECIMAL(18,2)=NULL,
+ @Is_Aply_Spec_CutOff bit=NULL,
+ @PF_Spec_Cut_Off decimal(18,2)=NULL,
+ @PF_Employer_Pension decimal(18, 2)=NULL,
+ @EMPR_PF_Rate decimal(18, 2) = NULL,
+ @PF_Round_Off varchar(2) = NULL,
+ @PF_Is_Rest_EMPR_Share bit= NULL,
+ @PF_Is_Rest_EMPL_TO_EMPR bit= NULL,
+ @ESI_EMPL_Rate decimal(18, 2)= NULL,
+ @ESI_EMPR_Rate decimal(18, 2)= NULL,
+ @ESI_Cut_Off decimal(18, 2)=NULL,
+ @ESI_Min_Wage decimal(18, 2)= NULL,
+ @ESI_Round_Off varchar(2) =NULL,
+ @Acc_02 decimal(18, 2)= NULL,
+ @Acc_21 decimal(18, 2)=NULL,
+ @Acc_22 decimal(18, 2)=NULL,
+ @Created_By int=NULL,
+ @Created_On datetime=NULL,
+ @Modified_By int=NULL,
+ @Modified_On datetime=NULL,
+ @Is_Deleted bit=NULL,
+ @Operation VARCHAR(20)=NULL,
+ @OUT_CODE	VARCHAR(30)=null 
+ 
+)
+ AS
+ SET NOCOUNT ON 
+ 
+  IF @Operation='INSERT'
+   BEGIN
+   DECLARE @PFRATE_Code VARCHAR(20)
+    SET @Effective_From=(SELECT Convert(date,@Effective_From, 103) AS Effective_From)
+	SET @PF_ESI_Rate_Id=(SELECT ISNULL(MAX(PF_ESI_Rate_Id),0)+1 FROM PF_ESI_Rate_Setting)
+	SET @PFRATE_Code=(SELECT 'PER'+CAST( ISNULL(MAX(PF_ESI_Rate_Id),0)+1 AS VARCHAR(20)) FROM PF_ESI_Rate_Setting)
+	INSERT INTO PF_ESI_Rate_Setting (PF_ESI_Rate_Id,PF_ESI_Rate_Code,Effective_From,PF_Rate,PF_Cut_Off,Is_Aply_Spec_CutOff,PF_Spec_Cut_Off,PF_Employer_Pension,EMPR_PF_Rate,PF_Round_Off,PF_Is_Rest_EMPR_Share,PF_Is_Rest_EMPL_TO_EMPR,ESI_EMPL_Rate,ESI_EMPR_Rate,ESI_Cut_Off,ESI_Min_Wage,ESI_Round_Off,Acc_02,Acc_21,Acc_22,Created_By)
+    VALUES
+     (@PF_ESI_Rate_Id,@PFRATE_Code,@Effective_From,@PF_Rate,@PF_Cut_Off,@Is_Aply_Spec_CutOff,@PF_Spec_Cut_Off,@PF_Employer_Pension,@EMPR_PF_Rate,@PF_Round_Off,@PF_Is_Rest_EMPR_Share,@PF_Is_Rest_EMPL_TO_EMPR,@ESI_EMPL_Rate,@ESI_EMPR_Rate,@ESI_Cut_Off,@ESI_Min_Wage,@ESI_Round_Off,@Acc_02,@Acc_21,@Acc_22,@Created_By)
+    END
+   
+   IF @Operation='UPDATE'
+
+   BEGIN
+   
+   UPDATE PF_ESI_Rate_Setting SET Effective_From=@Effective_From,PF_Rate=@PF_Rate,PF_Cut_Off=@PF_Cut_Off,Is_Aply_Spec_CutOff=@Is_Aply_Spec_CutOff,PF_Spec_Cut_Off=@PF_Spec_Cut_Off,PF_Employer_Pension=@PF_Employer_Pension,EMPR_PF_Rate=@EMPR_PF_Rate,PF_Round_Off=@PF_Round_Off,PF_Is_Rest_EMPR_Share=@PF_Is_Rest_EMPR_Share,PF_Is_Rest_EMPL_TO_EMPR=@PF_Is_Rest_EMPL_TO_EMPR,ESI_EMPL_Rate=@ESI_EMPL_Rate,ESI_EMPR_Rate=@ESI_EMPR_Rate,ESI_Cut_Off=@ESI_Cut_Off,ESI_Min_Wage=@ESI_Min_Wage,ESI_Round_Off=@ESI_Round_Off,Acc_02=@Acc_02,Acc_21=@Acc_21,Acc_22=@Acc_22,
+   Modified_By= @Created_By, Modified_On = GETDATE()
+   WHERE PF_ESI_Rate_Id=@PF_ESI_Rate_Id
+   END
+   
+IF @Operation='SELECT'
+   BEGIN
+   SELECT PF_ESI_Rate_Id,PF_ESI_Rate_Code,Effective_From,PF_Rate,PF_Cut_Off,Is_Aply_Spec_CutOff,PF_Spec_Cut_Off,PF_Employer_Pension,EMPR_PF_Rate,PF_Round_Off,PF_Is_Rest_EMPR_Share,PF_Is_Rest_EMPL_TO_EMPR,ESI_EMPL_Rate,ESI_EMPR_Rate,ESI_Cut_Off,ESI_Min_Wage,ESI_Round_Off,Acc_02,Acc_21,Acc_22,Created_By,Created_On FROM PF_ESI_Rate_Setting WHERE Is_Deleted=0
+   END
+  
+  
+  IF @Operation='SELECTBYID'
+   BEGIN
+   SELECT PF_ESI_Rate_Id,PF_ESI_Rate_Code,Effective_From,PF_Rate,PF_Cut_Off,Is_Aply_Spec_CutOff,PF_Spec_Cut_Off,PF_Employer_Pension,EMPR_PF_Rate,PF_Round_Off,PF_Is_Rest_EMPR_Share,PF_Is_Rest_EMPL_TO_EMPR,ESI_EMPL_Rate,ESI_EMPR_Rate,ESI_Cut_Off,ESI_Min_Wage,ESI_Round_Off,Acc_02,Acc_21,Acc_22,Created_By,Created_On  FROM PF_ESI_Rate_Setting where PF_ESI_Rate_Id=@PF_ESI_Rate_Id AND Is_Deleted=0
+   END
+  
+  
+   
+   IF @Operation='SEARCH'
+   BEGIN
+  select * from PF_ESI_Rate_Setting where  Is_Deleted = 0 AND PF_ESI_Rate_Id between @OUT_CODE and @OUT_CODE+15
+   END
+   
+   IF @Operation = 'DELETE'
+   BEGIN
+   UPDATE PF_ESI_Rate_Setting SET Is_Deleted = 1 WHERE PF_ESI_Rate_Id=@PF_ESI_Rate_Id
+   END
+   
+   
+   
+   
+   
+   
+   

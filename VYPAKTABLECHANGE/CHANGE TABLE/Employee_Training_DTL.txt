@@ -1,0 +1,25 @@
+
+CREATE TABLE [dbo].[Employee_Training_DTL](
+	[EmployeeId] int NOT NULL,
+	[Employee_Code] [varchar](50) NOT NULL,
+	[Employee_Tra_Id] [varchar](50) NOT NULL,
+	[Training_Name] [varchar](150) NULL,
+	[From_Date] [datetime] NULL,
+	[To_Date] [datetime] NULL,
+	[Comments] [varchar](100) NULL,
+	[Remarks] [varchar](max) NULL,
+	 
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Employee_Tra_Id] PRIMARY KEY CLUSTERED 
+(
+	[EmployeeId],[Employee_Code],
+	[Employee_Tra_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].Employee_Training_DTL ADD  CONSTRAINT [DF_Employee_Training_DTL_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+

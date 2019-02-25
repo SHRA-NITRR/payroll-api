@@ -1,0 +1,25 @@
+
+CREATE TABLE [dbo].[PFSetting_Mst](
+	 
+	[PFSett_Id] [int] NOT NULL,
+	[PFSett_Code] varchar(20) NOT NULL,
+	[Effective_From] [date] NULL,
+	[PFSett_Age] [int] NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_PFSetting_Mst] PRIMARY KEY CLUSTERED 
+(
+	[PFSett_Id],PFSett_Code ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].PFSetting_Mst ADD  CONSTRAINT [DF_PFSetting_Mst_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].PFSetting_Mst ADD  CONSTRAINT [DF_PFSetting_Mst_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO

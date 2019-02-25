@@ -1,27 +1,29 @@
- 
+drop table [PayHead_Mst]
 
 CREATE TABLE [dbo].[PayHead_Mst](
-	[RowId] [int] IDENTITY(1,1) NOT NULL,
-	[PayHead_Id] [varchar] (50) NOT NULL,
+	 
+	[PayHead_Id] [int] NOT NULL,
+	[PayHead_Code] varchar(20) NOT NULL,
 	[PayHead_Name] [varchar](50) NOT NULL,
+	PayHead_Inslip [varchar](20) NOT NULL,
 	[PayHead_Type] [varchar](1) NOT NULL,
 	[PayHead_Category] [varchar](1) NOT NULL,
 	[Use_For_Gratuity] [varchar](1) NOT NULL,
 	[Use_For_NetPay] [varchar](1) NOT NULL,
 	[Contribute_by] [varchar](1) NOT NULL,
-        [payhead_inslip] [varchar](50) NOT NULL,
 	[Created_By] [int] NULL,
 	[Created_On] [datetime] NULL,
 	[Modified_By] [int] NULL,
 	[Modified_On] [datetime] NULL,
 	[Is_Deleted] [bit] NULL,
-	 
+ 
+ 
+ 
  CONSTRAINT [PK_payhead_Mst] PRIMARY KEY CLUSTERED 
 (
-	[PayHead_Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+	[PayHead_Id],[PayHead_Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+)
 GO
 
 SET ANSI_PADDING OFF

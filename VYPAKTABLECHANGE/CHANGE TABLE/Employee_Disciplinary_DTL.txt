@@ -1,0 +1,23 @@
+CREATE TABLE [dbo].[Employee_Disciplinary_DTL](
+ 
+	[EmployeeId] int NOT NULL,
+	[Employee_Code] [varchar](50) NOT NULL,
+
+	[Employee_Dis_Id] [varchar](50) NOT NULL,
+	[Memo] [varchar](150) NULL,
+	[Issue_By] [varchar](150) NULL,
+	[Issue_Date] [datetime] NULL,
+	[Comments] [varchar](100) NULL,
+	[Remarks] [varchar](max) NULL,
+	
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Employee_Dis_Id] PRIMARY KEY CLUSTERED 
+(
+	[EmployeeId],[Employee_Code],
+	[Employee_Dis_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+
+
+ALTER TABLE [dbo].[Employee_Disciplinary_DTL] ADD  CONSTRAINT [DF_Employee_Disciplinary_DTL_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]

@@ -36,7 +36,7 @@ module.exports = {
             request.input('Comments', req.body.Comments);
             request.input('Remarks', req.body.Remarks);
             request.input('Created_By', parseInt(req.body.Created_By));
-            request.input('EmployeeId', parseInt(req.body.EmployeeId));
+            request.input('EmployeeId', parseInt(req.body.id));
 
             request.execute('Proc_Employee_Disciplinary_DTL', function (err, rec) {
                 if (err) {

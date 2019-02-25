@@ -1,0 +1,36 @@
+
+CREATE TABLE [dbo].[Bank_Master](
+	 
+	[Bank_Id] [int] NOT NULL,
+	Bank_Code Varchar(20) not null,
+	[Bank_Name] [varchar](50) NULL,
+	[Bank_Sht_Name] [varchar](20) NULL,
+	[BankAccNo] [varchar](20) NULL,
+	[Address] [varchar](max) NULL,
+	[Branch_Name] [varchar](50) NULL,
+	[IFSC_Code] [varchar](50) NULL,
+	[Pin_No] [int] NULL,
+	[Phone_No] [varchar](50) NULL,
+	[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+	[Is_Deleted] [bit] NULL,
+ CONSTRAINT [PK_Bank_Master] PRIMARY KEY CLUSTERED 
+(
+	[Bank_Id],Bank_Code ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Bank_Master] ADD  CONSTRAINT [DF_Bank_Master_Created_On]  DEFAULT (getdate()) FOR [Created_On]
+GO
+
+ALTER TABLE [dbo].[Bank_Master] ADD  CONSTRAINT [DF_Bank_Master_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+GO
+
+

@@ -9,7 +9,7 @@ module.exports = {
         app.post('/add_attendance_details', function (req, res) {
             var request = new sql.Request(connection);
                 request.input('Operation', 'INSERT');
-                request.input('Attendance_Name', req.body.Attendance_Salary_Type);
+                request.input('Attendance_Name', req.body.Attendance_Name);
                 request.input('Attendance_Salary_Type', req.body.Attendance_Salary_Type);
                 request.input('Attendance_OT_Type', req.body.Attendance_OT_Type);
                 request.input('Salary_Calendar_Type', req.body.Salary_Calendar_Type);
