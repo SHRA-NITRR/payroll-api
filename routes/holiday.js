@@ -29,8 +29,8 @@ module.exports = {
 
  //API FOR UPDATE HOLIDAY DETAILS
  app.post('/updateholidaydetails', function (req, res) {
-    sql.connect(config, function () {
-        var request = new sql.Request();
+    var request = new sql.Request(connection);
+       
         request.input('Operation', 'UPDATE');
         request.input('Name', req.body.Name);
         request.input('Description', req.body.Description);
@@ -50,7 +50,7 @@ module.exports = {
             }
         });
     });
-});
+
 
         //API FOR VIEW ALL HOLIDAY DETAILS
         app.post('/viewholidaydetails', function (req, res) {

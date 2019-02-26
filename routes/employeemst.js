@@ -384,7 +384,6 @@ console.log(err);              res.json({ status: false });
                request.input('Department_Id', parseInt(req.body.Department_Id));
                request.input('Desig_Id', parseInt(req.body.Desig_Id));
                request.input('Emp_Cate_Id', parseInt(req.body.Emp_Cate_Id));
-
               // request.input('Employee_Image', req.file.originalname);////////////
                request.input('Date_of_Join',new Date(req.body.Date_of_Join));
                request.input('Salary_Calc_From', new Date(req.body.Salary_Calc_From));

@@ -8,7 +8,6 @@ module.exports = {
       app.post('/addpayheadmapslab', function (req, res) {
          var request = new sql.Request(connection);
          request.input('Operation', 'INSERT');
-
          request.input('Salary_Str_Id', parseInt(req.body.Salary_Str_Id));
          request.input('Payhead_Id', parseInt(req.body.Payhead_Id));
          request.input('Paymap_Min_Amount', parseFloat(req.body.Paymap_Min_Amount));
