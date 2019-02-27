@@ -1,3 +1,4 @@
+DROP TABLE Employee_Family_Details
 
 CREATE TABLE [dbo].[Employee_Family_Details](
 	[EmployeeId] int NOT NULL,

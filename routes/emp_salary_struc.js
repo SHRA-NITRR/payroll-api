@@ -12,12 +12,9 @@ module.exports = {
          request.input('Effective_From', new Date(req.body.Effective_From));
          request.input('Payhead_Id', parseInt(req.body.Payhead_Id));
          request.input('Amount', parseFloat(req.body.Amount));
-         request.input('Employee_Id', req.body.Employee_Id);
-        
+         request.input('Employee_Id', req.body.Employee_Id);  
          request.input('Created_By', parseInt(req.body.Created_By));
         
-
-
          request.execute('Proc_Employee_Salary_Structure', function (err, rec) {
             if (err) {
                console.log(err);

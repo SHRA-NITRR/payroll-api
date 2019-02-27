@@ -379,7 +379,7 @@ module.exports = {
          });
       });
 
-      //API FOR VIEW ALL COMPANY & BRANCH DETAILS
+      //API FOR VIEW SINGLE COMPANY & BRANCH DETAILS
 
       app.post('/view_single_companybranch_details', function (req, res) {
          var data = [];
