@@ -167,7 +167,40 @@ app.post('/viewallcity', function (req, res) {
    });
 
 
+//API FOR VIEW ALL DEPARTMENT FOR EMPLOYEE
 
+app.post('/viewdepartment', function (req, res) {
+   var request = new sql.Request(connection);
+      request.input('Operation', 'SELECTBYID2');
+      request.input('ID', req.body.id);//STATE ID
+      request.execute('Proc_DepartmentMaster', function (err, rec) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false });
+         }
+         else {
+            res.json({ status: true, result: rec.recordsets[0] });
+         }
+      });
+   });
+
+
+   //API FOR VIEW ALL EMPLOYEE FOR DEPARTMENT
+
+app.post('/viewdepartmentemployee', function (req, res) {
+   var request = new sql.Request(connection);
+      request.input('Operation', 'SELECTBYID2');
+      request.input('id', req.body.id);//DEPARTMENT ID
+      request.execute('Proc_Employee_Details', function (err, rec) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false });
+         }
+         else {
+            res.json({ status: true, result: rec.recordsets[0] });
+         }
+      });
+   });
 
 
 

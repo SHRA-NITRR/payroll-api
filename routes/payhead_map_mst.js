@@ -65,7 +65,6 @@ if(req.body.map==''){
             }
             else {
                //res.json({ status: true });
-
             }
          });
          });
@@ -78,7 +77,6 @@ if(req.body.map==''){
          // request2.input('Paymap_Type', req.body.Paymap_Type);
          // request2.input('Created_By', parseInt(req.body.Created_By));
          // request2.input('Paymap_Amount', parseFloat(req.body.Paymap_Amount));
-
          // request2.execute('Proc_Payhead_Map_Slab', function (err, rec) {
          //    if (err) {
          //       console.log(err);
@@ -94,11 +92,9 @@ if(req.body.map==''){
       }
          else{
             res.json({status:true});
-         }
-      
+         }    
    });
 });
-
 
  //API FOR VIEW ALL  DETAILS
 

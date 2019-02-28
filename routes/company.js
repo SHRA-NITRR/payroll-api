@@ -125,52 +125,57 @@ module.exports = {
                               console.log(data_added);
                            }
                            else {
-                              if (count == branch2.length) {
-                                 request = new sql.Request(transaction);
-                                 request.input('Operation', 'INSERT');
-                                 request.input('Company_Id', parseInt(req.body.Company_Id));
-                                 request.input('Company_File_Name',image);
-                                 //request.input('File_Data',req.body.File_Data);
-                                 request.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
-                                    if (err2) {
-                                       console.log(err2);
-                                       data_added = false;
-                                       console.log(data_added);
-                                    }
-                                    else {
-                                       // res.json({ status: true, result: rec.recordsets[0] });
-                                       if (data_added) {
-                                          transaction.commit((err) => {
-                                             console.log(err);
-                                             if (err) {
-                                                transaction.rollback((err) => {
-                                                   if (err) {
-                                                      res.json({ status: false });
-                                                   } else {
-                                                      res.json({ status: false });
-                                                   }
-                                                });
-                                             } else {
-                                                res.json({ status: true });
-                                             }
-                                          });
-                                       } else {
-                                          transaction.rollback((err) => {
-                                             if (err) {
-                                                res.json({ status: false });
-                                             } else {
-                                                res.json({ status: false });
-                                             }
-                                          });
-                                       }
-                                       image = [];
-                                    }
-                                 });
-                              }
+                              setTimeout(function(){
+                                 console.log("hello");
+                              }, 500);
                            }
                         });
                         
                      })
+                     // END OF BRANCH INSERTION
+                     if (count == branch2.length) {
+                        request = new sql.Request(transaction);
+                        request.input('Operation', 'INSERT');
+                        request.input('Company_Id', parseInt(req.body.Company_Id));
+                        request.input('Company_File_Name',image);
+                        //request.input('File_Data',req.body.File_Data);
+                        request.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
+                           if (err2) {
+                              console.log(err2);
+                              data_added = false;
+                              console.log(data_added);
+                           }
+                           else {
+                              // res.json({ status: true, result: rec.recordsets[0] });
+                              if (data_added) {
+                                 transaction.commit((err) => {
+                                    console.log(err);
+                                    if (err) {
+                                       transaction.rollback((err) => {
+                                          if (err) {
+                                             res.json({ status: false });
+                                          } else {
+                                             res.json({ status: false });
+                                          }
+                                       });
+                                    } else {
+                                       res.json({ status: true });
+                                    }
+                                 });
+                              } else {
+                                 transaction.rollback((err) => {
+                                    if (err) {
+                                       res.json({ status: false });
+                                    } else {
+                                       res.json({ status: false });
+                                    }
+                                 });
+                              }
+                              image = [];
+                           }
+                        });
+
+                     }
                   }
                });
 
