@@ -94,7 +94,7 @@ module.exports = {
       app.post('/view_single_payheadmapslab', function (req, res) {
          var request = new sql.Request(connection);
          request.input('Operation', 'SELECTBYID');
-         request.input('Payhead_Map_Slab_Id', parseInt(req.body.id));//PAYHEADMAP SLAB ID
+         request.input('Payhead_Id', parseInt(req.body.id));//PAYHEAD ID
 
          request.execute('Proc_Payhead_Map_Slab', function (err, rec) {
             if (err) {

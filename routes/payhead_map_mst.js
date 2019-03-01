@@ -220,7 +220,6 @@ app.post('/delete_single_payheadmapslab', function (req, res) {
 
 
 
-
       //API FOR ADD PAYHEAD DETAILS
       app.post('/addpayheadmapdetails', function (req, res) {
             var request = new sql.Request(connection);
@@ -308,7 +307,23 @@ app.post('/delete_single_payheadmapslab', function (req, res) {
                   res.json({ status: false });  
                }
                else {
-                  res.json({ status: true, result: rec.recordsets[0] });  
+                  //res.json({ status: true, result: rec.recordsets[0] }); 
+var idd=rec.recordsets[0].Payhead_Map_Id;
+console.log(idd);
+                  request.input('Operation', 'SEARCH2');
+                  //request.input('ID', req.body.id);
+                  request.input('Payhead_Map_Id',idd);
+                  request.execute('Proc_Payhead_Map_Slab', function (err, rec2) {
+                     if (err) {
+                        console.log(err);
+                        res.json({ status: false });  
+                     }
+                     else {
+                        res.json({ status: true,payheadmapdetails: rec.recordsets[0], payheadmapslap: rec2.recordsets[0] });  
+                     }
+                  });
+                  
+
                }
             });
          });

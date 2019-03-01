@@ -172,7 +172,7 @@ app.post('/viewallcity', function (req, res) {
 app.post('/viewdepartment', function (req, res) {
    var request = new sql.Request(connection);
       request.input('Operation', 'SELECTBYID2');
-      request.input('ID', req.body.id);//STATE ID
+      //request.input('ID', req.body.id);//STATE ID
       request.execute('Proc_DepartmentMaster', function (err, rec) {
          if (err) {
             console.log(err);
@@ -189,9 +189,27 @@ app.post('/viewdepartment', function (req, res) {
 
 app.post('/viewdepartmentemployee', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECTBYID2');
+      request.input('Operation', 'SELECTBYID22');
       request.input('id', req.body.id);//DEPARTMENT ID
       request.execute('Proc_Employee_Details', function (err, rec) {
+         if (err) {
+            console.log(err);
+            res.json({ status: false });
+         }
+         else {
+            res.json({ status: true, result: rec.recordsets[0] });
+         }
+      });
+   });
+
+
+   //API FOR VIEW ALL PAYHEAD TYPE
+
+app.post('/viewallpayheadtype', function (req, res) {
+   var request = new sql.Request(connection);
+      request.input('Operation', 'SELECTBYID2');
+      request.input('PayHead_Type', req.body.id);//PayHead_Type 
+      request.execute('Proc_PayHead_Mst', function (err, rec) {
          if (err) {
             console.log(err);
             res.json({ status: false });

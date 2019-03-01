@@ -79,8 +79,7 @@ module.exports = {
             });
         });
 
-        //API FOR SEARCH DESIGNATION DETAILS BY ID
-
+//API FOR SEARCH DESIGNATION DETAILS BY ID
         app.post('/search_designationdetails', function (req, res) {
             var request = new sql.Request(connection);
             var data_added = true;

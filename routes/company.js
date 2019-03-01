@@ -451,7 +451,7 @@ module.exports = {
             else {
                var request = new sql.Request(connection);
                request.input('Operation', 'DELETEBYID');
-               request.input('Branch_Id', req.body.id);//BRANCH ID
+               request.input('Company_Id', req.body.id);//BRANCH ID
                console.log(req.body.id);
                request.execute('PROC_COMPANY_BRANCH', function (err, rec) {
                   if (err) {
