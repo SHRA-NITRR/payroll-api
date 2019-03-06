@@ -61,7 +61,7 @@ var empsalarystruroute = require('./routes/emp_salary_struc.js');
 
 
 var connection = sql.connect(config, function (err) {
-   if(err){
+   if (err) {
       throw err
    }
 });
@@ -119,106 +119,162 @@ app.listen(app.get('port'), function () {
 
 app.post('/viewallcountry', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECT');
+   request.input('Operation', 'SELECT');
 
-      request.execute('Proc_COUNTRY', function (err, recordsets, returnValue, affected) {
-         if (err) {
-            console.log(err);
-            res.json({ status: false });
-         }
-         else {
-            res.send(recordsets);
-         }
-      });
+   request.execute('Proc_COUNTRY', function (err, recordsets, returnValue, affected) {
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+         res.send(recordsets);
+      }
    });
+});
 
 //API FOR VIEW ALL STATE
 
 app.get('/viewallstate', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECTBYID');
-      //request.input('ID', req.body.id);//COUNTRY ID
-      request.input('ID',101);//COUNTRY ID
-      request.execute('Proc_State', function (err, rec) {
-         if (err) {
-            res.json({ status: false });
-         }
-         else {
-            res.json({ status: true, result: rec.recordsets[0] });
-         }
-      });
+   request.input('Operation', 'SELECTBYID');
+   //request.input('ID', req.body.id);//COUNTRY ID
+   request.input('ID', 101);//COUNTRY ID
+   request.execute('Proc_State', function (err, rec) {
+      if (err) {
+         res.json({ status: false });
+      }
+      else {
+         res.json({ status: true, result: rec.recordsets[0] });
+      }
    });
+});
 
 //API FOR VIEW ALL CITY
 
 app.post('/viewallcity', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECTBYID');
-      request.input('ID', req.body.id);//STATE ID
-      request.execute('Proc_City', function (err, rec) {
-         if (err) {
-            console.log(err);
-            res.json({ status: false });
-         }
-         else {
-            res.json({ status: true, result: rec.recordsets[0] });
-         }
-      });
+   request.input('Operation', 'SELECTBYID');
+   request.input('ID', req.body.id);//STATE ID
+   request.execute('Proc_City', function (err, rec) {
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+         res.json({ status: true, result: rec.recordsets[0] });
+      }
    });
+});
 
 
 //API FOR VIEW ALL DEPARTMENT FOR EMPLOYEE
 
 app.post('/viewdepartment', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECTBYID2');
-      //request.input('ID', req.body.id);//STATE ID
-      request.execute('Proc_DepartmentMaster', function (err, rec) {
-         if (err) {
-            console.log(err);
-            res.json({ status: false });
-         }
-         else {
-            res.json({ status: true, result: rec.recordsets[0] });
-         }
-      });
+   request.input('Operation', 'SELECTBYID2');
+   //request.input('ID', req.body.id);//STATE ID
+   request.execute('Proc_DepartmentMaster', function (err, rec) {
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+         res.json({ status: true, result: rec.recordsets[0] });
+      }
    });
+});
 
 
-   //API FOR VIEW ALL EMPLOYEE FOR DEPARTMENT
+//API FOR VIEW ALL EMPLOYEE FOR DEPARTMENT
 
 app.post('/viewdepartmentemployee', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECTBYID22');
-      request.input('id', req.body.id);//DEPARTMENT ID
-      request.execute('Proc_Employee_Details', function (err, rec) {
-         if (err) {
-            console.log(err);
-            res.json({ status: false });
-         }
-         else {
-            res.json({ status: true, result: rec.recordsets[0] });
-         }
-      });
+   request.input('Operation', 'SELECTBYID22');
+   request.input('id', req.body.id);//DEPARTMENT ID
+   request.execute('Proc_Employee_Details', function (err, rec) {
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+         res.json({ status: true, result: rec.recordsets[0] });
+      }
    });
+});
 
 
-   //API FOR VIEW ALL PAYHEAD TYPE
+//API FOR VIEW ALL PAYHEAD TYPE
 
 app.post('/viewallpayheadtype', function (req, res) {
    var request = new sql.Request(connection);
-      request.input('Operation', 'SELECTBYID2');
-      request.input('PayHead_Type', req.body.id);//PayHead_Type 
-      request.execute('Proc_PayHead_Mst', function (err, rec) {
-         if (err) {
-            console.log(err);
-            res.json({ status: false });
-         }
-         else {
-            res.json({ status: true, result: rec.recordsets[0] });
-         }
-      });
+   request.input('Operation', 'SELECTBYID2');
+   request.input('PayHead_Type', req.body.id);//PayHead_Type 
+   request.execute('Proc_PayHead_Mst', function (err, rec) {
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+         res.json({ status: true, result: rec.recordsets[0] });
+      }
    });
+});
+
+
+
+//API  TYPE
+
+app.post('/view2', function (req, res) {
+   var resultArry = [];
+   var request = new sql.Request(connection);
+   request.input('Operation', 'SELECTBYID2');
+   request.input('PayHead_Type', req.body.id);//PayHead_Type 
+   request.execute('Proc_PayHead_Mst', function (err, rec) {
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+         var paylength = rec.recordsets[0].length;
+         //res.json({ status: true, result: paylength });
+
+         //var ok=JSON.parse(rec.recordsets[0]);
+         // rec.recordsets[0].forEach(function (doc, err) {
+
+         //       resultArry.push(doc.PayHead_Name);
+
+
+
+
+         // })
+
+         var request = new sql.Request(connection);
+         request.input('Operation', 'SELECTBYID22');
+         request.input('id', req.body.idd);//DEPARTMENT ID
+         request.execute('Proc_Employee_Details', function (err, rec2) {
+            if (err) {
+               console.log(err);
+               res.json({ status: false });
+            }
+            else {
+               rec2.recordsets[0].forEach(function (doc2, err) {
+                  rec.recordsets[0].forEach(function (doc, err) {
+                     resultArry.push({ emp_id: doc2.EmployeeId, pay_id: doc.PayHead_Name, });
+
+                  })
+
+               })
+               res.json({ status: true, result: resultArry });
+            }
+         });
+         console.log(rec.recordsets[0]);
+         //res.json({ status: true, result:resultArry});
+
+
+
+      }
+   });
+});
 
 
 
@@ -228,6 +284,59 @@ app.post('/viewallpayheadtype', function (req, res) {
 
 
 
+//API  TYPE
 
+app.post('/view', function (req, res) {
+   var resultArry = [];
+   var request = new sql.Request(connection);
+   request.input('Operation', 'SELECTBYID28');
+   request.input('EmployeeId', req.body.EmployeeId);//PayHead_Type 
+   request.execute('Proc_PayHead_Mst', function (err, rec) {
 
+      if (err) {
+         console.log(err);
+         res.json({ status: false });
+      }
+      else {
+
+         //res.json({ status: true, result:rec.recordsets[0]});
+         request.input('Operation', 'SELECTBYID29');
+         request.input('EmployeeId', req.body.EmployeeId);//employee id
+         request.execute('Proc_PayHead_Mst', function (err, rec2) {
+
+            if (err) {
+               console.log(err);
+               res.json({ status: false });
+            }
+            else {
+
+               rec2.recordsets[0].forEach(function (doc2, err) {
+
+                  if (rec.length == 0) {
+                     resultArry.push({ emp_id: doc2.EmployeeId, emp_name: doc2.Employee_Name, payhead_name: doc2.PayHead_Name, pay_code: doc2.PayHead_Code, Amount: 0 });
+                  } else {
+                     var exists = false;
+                     rec.recordsets[0].forEach(function (doc, err) {
+                        if (doc.PayHead_Id == doc2.PayHead_Id) {
+                           resultArry.push({ emp_id: doc.EmployeeId, emp_name: doc.Employee_Name, payhead_name: doc.PayHead_Name, pay_code: doc.PayHead_Code, Amount: doc.Amount });
+                           exists = true;
+                        }
+                     });
+                     if (exists == false) {
+                        resultArry.push({ emp_id: doc2.EmployeeId, emp_name: doc2.Employee_Name, payhead_name: doc2.PayHead_Name, pay_code: doc2.PayHead_Code, Amount: 0 });
+
+                     }
+                  }
+
+               })
+               res.json({ status: true, result: resultArry });
+            }
+         });
+
+      }
+   });
+   //console.log(rec.recordsets[0]);
+   //res.json({ status: true, result:resultArry});
+
+});
 
