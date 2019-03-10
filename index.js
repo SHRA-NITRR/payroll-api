@@ -269,24 +269,15 @@ app.post('/view2', function (req, res) {
          });
          console.log(rec.recordsets[0]);
          //res.json({ status: true, result:resultArry});
-
-
-
       }
    });
 });
 
 
 
-
-
-
-
-
-
 //API  TYPE
 
-app.post('/view', function (req, res) {
+app.post('/viewalldetails', function (req, res) {
    var resultArry = [];
    var request = new sql.Request(connection);
    request.input('Operation', 'SELECTBYID28');
