@@ -91,11 +91,11 @@ module.exports = {
 
       //API FOR VIEW SINGLE PAYHEAD MAP SLAB  DETAILS
 
-      app.post('/view_single_payheadmapslab', function (req, res) {
+      app.post('/view_single_payheadmapslab2', function (req, res) {
          var request = new sql.Request(connection);
-         request.input('Operation', 'SELECTBYID');
-         request.input('Payhead_Id', parseInt(req.body.id));//PAYHEAD ID
-
+         request.input('Operation', 'SELECT');
+         request.input('Payhead_Id', parseInt(req.body.Payhead_Id));//PAYHEAD ID
+         console.log(req.body.Payhead_Id);
          request.execute('Proc_Payhead_Map_Slab', function (err, rec) {
             if (err) {
                console.log(err);

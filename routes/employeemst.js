@@ -516,6 +516,37 @@ console.log(err);              res.json({ status: false });
                                                    result = false;
                                                 }
                                                 else {
+                                                   
+
+
+
+                                                   var salary = JSON.parse(req.body.salary);
+                     
+                                                   console.log(req.body);
+                              
+                                                   var count = 0;
+                                                   salary.forEach(function (doc, err) {
+                                                      //assert.equal(null, err);
+                                                      request = new sql.Request(transaction);
+                                                      request.input('Operation', 'INSERT');
+                                                      request.input('Effective_From', new Date(doc.Effective_From));
+                                                      request.input('Payhead_Id', parseInt(doc.Payhead_Id));
+                                                      request.input('Amount', parseFloat(doc.Amount));
+                                                      //request.input('Employee_Id',doc.Employee_Id);
+                                                      request.input('Created_By', parseInt(doc.Created_By));
+                                             
+                                                      request.execute('Proc_Employee_Salary_Structure', function (err, rec) {
+                                                         if (err) {
+                                                            console.log(err);
+                                                            //res.json({ status: false });
+                                                            result = false;
+                                                         }
+                                                         else {
+                                                            //res.json({ status: true });
+                                                         }
+                                                      });
+                                                   })
+                           
                                                    //res.json({ status: true, result: rec.recordsets[0] });
                                                 }
                                              });
@@ -680,73 +711,73 @@ console.log(req.body.Date_of_Join);
                         }
                         else {
                            //UPDATE EDUCATION DETAILS
-                           var request3 = new sql.Request(transaction);
-                           request3.input('Operation', 'UPDATE');
-                           request3.input('Qualfication', req.body.Qualfication2);
-                           request3.input('University', req.body.University2);
-                           request3.input('Year_Passed', req.body.Year_Passed2);
-                           request3.input('Percentage', parseFloat(req.body.Percentage));
-                           request3.input('Remarks', req.body.Remarks2);
-                           request3.input('Created_By', parseInt(req.body.Created_By));
-                           request3.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
+                            request = new sql.Request(transaction);
+                           request.input('Operation', 'UPDATE');
+                           request.input('Qualfication', req.body.Qualfication2);
+                           request.input('University', req.body.University2);
+                           request.input('Year_Passed', req.body.Year_Passed2);
+                           request.input('Percentage', parseFloat(req.body.Percentage));
+                           request.input('Remarks', req.body.Remarks2);
+                           request.input('Created_By', parseInt(req.body.Created_By));
+                           request.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
 
-                           request3.execute('Proc_Employee_Education_DTL', function (err3, rec) {
+                           request.execute('Proc_Employee_Education_DTL', function (err3, rec) {
                               if (err3) {
                                  console.log(err3);
                                  result = false;
                               }
                               else {
-                                 var request4 = new sql.Request(transaction);
+                                  request = new sql.Request(transaction);
 
-                                 request4.input('Operation', 'UPDATE');
-                                 request4.input('Training_Name', req.body.Training_Name3);
-                                 request4.input('From_Date', req.body.From_Date3);
-                                 request4.input('To_Date', req.body.To_Date3);
-                                 request4.input('Comments', req.body.Comments3);
-                                 request4.input('Remarks', req.body.Remarks3);
-                                 request4.input('Created_By', parseInt(req.body.Created_By));
-                                 request4.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
+                                 request.input('Operation', 'UPDATE');
+                                 request.input('Training_Name', req.body.Training_Name3);
+                                 request.input('From_Date', req.body.From_Date3);
+                                 request.input('To_Date', req.body.To_Date3);
+                                 request.input('Comments', req.body.Comments3);
+                                 request.input('Remarks', req.body.Remarks3);
+                                 request.input('Created_By', parseInt(req.body.Created_By));
+                                 request.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
 
-                                 request4.execute('Proc_Employee_Training_DTL', function (err4, rec) {
+                                 request.execute('Proc_Employee_Training_DTL', function (err4, rec) {
                                     if (err4) {
                                        console.log(err4);
                                        result = false;
                                     }
                                     else {
                                        //UPDATE EMPLOYEE DISCIPLINARY
-                                       var request5 = new sql.Request(transaction);
+                                        request = new sql.Request(transaction);
 
-                                       request5.input('Operation', 'UPDATE');
-                                       request5.input('Memo', req.body.Memo);
-                                       request5.input('Issue_By', req.body.Issue_By);
-                                       request5.input('Issue_Date', req.body.Issue_Date2);//M-D-Y
+                                       request.input('Operation', 'UPDATE');
+                                       request.input('Memo', req.body.Memo);
+                                       request.input('Issue_By', req.body.Issue_By);
+                                       request.input('Issue_Date', req.body.Issue_Date2);//M-D-Y
                                        //console.log(req.body.Issue_Date2)
-                                       request5.input('Comments', req.body.Comments4);
-                                       request5.input('Remarks', req.body.Remarks4);
-                                       request5.input('Created_By', parseInt(req.body.Created_By));
-                                       request5.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
+                                       request.input('Comments', req.body.Comments4);
+                                       request.input('Remarks', req.body.Remarks4);
+                                       request.input('Created_By', parseInt(req.body.Created_By));
+                                       request.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
 
-                                       request5.execute('Proc_Employee_Disciplinary_DTL', function (err5, rec) {
+                                       request.execute('Proc_Employee_Disciplinary_DTL', function (err5, rec) {
                                           if (err5) {
                                              console.log(err5);
                                              result = false;
                                           }
                                           else {
                                              //UPDATE EXTRA CURRICULAR DETAILS
-                                             var request6 = new sql.Request(transaction);
+                                              request = new sql.Request(transaction);
 
-                                             request6.input('Operation', 'UPDATE');
-                                             request6.input('Activity_Name', req.body.Activity_Name);
-                                             request6.input('Event_Name', req.body.Event_Name);
-                                             request6.input('From_Date', req.body.From_Date5);//M-D-Y
-                                             request6.input('To_Date', req.body.To_Date5);
+                                             request.input('Operation', 'UPDATE');
+                                             request.input('Activity_Name', req.body.Activity_Name);
+                                             request.input('Event_Name', req.body.Event_Name);
+                                             request.input('From_Date', req.body.From_Date5);//M-D-Y
+                                             request.input('To_Date', req.body.To_Date5);
                                              //console.log(req.body.From_Date5);
-                                             request6.input('Award', req.body.Award);
-                                             request6.input('Remarks', req.body.Remarks5);
-                                             request6.input('Created_By', parseInt(req.body.Created_By));
-                                             request6.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
+                                             request.input('Award', req.body.Award);
+                                             request.input('Remarks', req.body.Remarks5);
+                                             request.input('Created_By', parseInt(req.body.Created_By));
+                                             request.input('EmployeeId', parseInt(req.body.EmployeeId));//EMPLOYEE ID
 
-                                             request6.execute('Proc_Employee_EXTRA_CURRICULAR_DTL', function (err6, rec) {
+                                             request.execute('Proc_Employee_EXTRA_CURRICULAR_DTL', function (err6, rec) {
                                                 if (err6) {
                                                    console.log(err6);
                                                    result = false;
@@ -798,7 +829,6 @@ console.log(req.body.Date_of_Join);
       });
 
       /////////////////////////VIEW ALL EMPLOYEE & HR
-
       app.post('/viewallemployeehr', function (req, res) {
          var data = [];
          var request = new sql.Request(connection);
