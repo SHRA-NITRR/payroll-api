@@ -1,3 +1,4 @@
+DROP TABLE Employee_Family_Details
 
 CREATE TABLE [dbo].[Employee_Family_Details](
 	[EmployeeId] int NOT NULL,
@@ -9,6 +10,11 @@ CREATE TABLE [dbo].[Employee_Family_Details](
 	[Gender] [varchar](1) NULL,
 	[Remarks] [varchar](max) NULL,
 	[Is_Deleted] [bit] NULL,
+[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+
  CONSTRAINT [PK_Employee_fam_Id] PRIMARY KEY CLUSTERED 
 (
 	[EmployeeId],[Employee_Code],

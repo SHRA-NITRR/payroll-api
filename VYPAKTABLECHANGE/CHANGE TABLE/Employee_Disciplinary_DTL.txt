@@ -1,3 +1,5 @@
+DROP TABLE Employee_Disciplinary_DTL
+
 CREATE TABLE [dbo].[Employee_Disciplinary_DTL](
  
 	[EmployeeId] int NOT NULL,

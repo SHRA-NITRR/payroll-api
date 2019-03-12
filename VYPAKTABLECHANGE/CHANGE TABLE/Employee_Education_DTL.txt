@@ -1,3 +1,4 @@
+DROP TABLE Employee_Education_DTL
 
 CREATE TABLE [dbo].[Employee_Education_DTL](
 	[EmployeeId] int NOT NULL,

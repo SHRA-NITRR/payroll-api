@@ -125,52 +125,57 @@ module.exports = {
                               console.log(data_added);
                            }
                            else {
-                              if (count == branch2.length) {
-                                 request = new sql.Request(transaction);
-                                 request.input('Operation', 'INSERT');
-                                 request.input('Company_Id', parseInt(req.body.Company_Id));
-                                 request.input('Company_File_Name',image);
-                                 //request.input('File_Data',req.body.File_Data);
-                                 request.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
-                                    if (err2) {
-                                       console.log(err2);
-                                       data_added = false;
-                                       console.log(data_added);
-                                    }
-                                    else {
-                                       // res.json({ status: true, result: rec.recordsets[0] });
-                                       if (data_added) {
-                                          transaction.commit((err) => {
-                                             console.log(err);
-                                             if (err) {
-                                                transaction.rollback((err) => {
-                                                   if (err) {
-                                                      res.json({ status: false });
-                                                   } else {
-                                                      res.json({ status: false });
-                                                   }
-                                                });
-                                             } else {
-                                                res.json({ status: true });
-                                             }
-                                          });
-                                       } else {
-                                          transaction.rollback((err) => {
-                                             if (err) {
-                                                res.json({ status: false });
-                                             } else {
-                                                res.json({ status: false });
-                                             }
-                                          });
-                                       }
-                                       image = [];
-                                    }
-                                 });
-                              }
+                              setTimeout(function(){
+                                 console.log("hello");
+                              }, 500);
                            }
                         });
                         
                      })
+                     // END OF BRANCH INSERTION
+                     if (count == branch2.length) {
+                        request = new sql.Request(transaction);
+                        request.input('Operation', 'INSERT');
+                        request.input('Company_Id', parseInt(req.body.Company_Id));
+                        request.input('Company_File_Name',image);
+                        //request.input('File_Data',req.body.File_Data);
+                        request.execute('PROC_COMPANY_DOCUMENT', function (err2, rec) {
+                           if (err2) {
+                              console.log(err2);
+                              data_added = false;
+                              console.log(data_added);
+                           }
+                           else {
+                              // res.json({ status: true, result: rec.recordsets[0] });
+                              if (data_added) {
+                                 transaction.commit((err) => {
+                                    console.log(err);
+                                    if (err) {
+                                       transaction.rollback((err) => {
+                                          if (err) {
+                                             res.json({ status: false });
+                                          } else {
+                                             res.json({ status: false });
+                                          }
+                                       });
+                                    } else {
+                                       res.json({ status: true });
+                                    }
+                                 });
+                              } else {
+                                 transaction.rollback((err) => {
+                                    if (err) {
+                                       res.json({ status: false });
+                                    } else {
+                                       res.json({ status: false });
+                                    }
+                                 });
+                              }
+                              image = [];
+                           }
+                        });
+
+                     }
                   }
                });
 
@@ -379,7 +384,7 @@ module.exports = {
          });
       });
 
-      //API FOR VIEW ALL COMPANY & BRANCH DETAILS
+      //API FOR VIEW SINGLE COMPANY & BRANCH DETAILS
 
       app.post('/view_single_companybranch_details', function (req, res) {
          var data = [];
@@ -446,7 +451,7 @@ module.exports = {
             else {
                var request = new sql.Request(connection);
                request.input('Operation', 'DELETEBYID');
-               request.input('Branch_Id', req.body.id);//BRANCH ID
+               request.input('Company_Id', req.body.id);//BRANCH ID
                console.log(req.body.id);
                request.execute('PROC_COMPANY_BRANCH', function (err, rec) {
                   if (err) {
