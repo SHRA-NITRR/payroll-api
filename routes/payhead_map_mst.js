@@ -33,16 +33,13 @@ app.post('/addpayheadmapslab', function (req, res) {
          //res.json({ status: true }); 
       
          var request2 = new sql.Request(connection);
-
-if(req.body.map==''){
-   request2.input('Salary_Str_Id',parseInt(req.body.Salary_Str_Id));
-   request2.input('Payhead_Id',parseInt(req.body.Payhead_Id));
-   request2.input('Paymap_Min_Amount', parseFloat(doc.Paymap_Min_Amount));
-   request2.input('Paymap_Max_Amount', doc.Paymap_Max_Amount);
-   request2.input('Paymap_Type', doc.Paymap_Type);
-   request2.input('Created_By', parseInt(req.body.Created_By));
-   request2.input('Paymap_Amount', parseInt(doc.Paymap_Amount));
+var ok=[];
+ok.push(req.body.map)
+console.log(ok);
+if(ok.length==0){
+  
 }
+else {
          var map2 = JSON.parse(req.body.map);
          console.log(map2);
         
@@ -68,6 +65,7 @@ if(req.body.map==''){
             }
          });
          });
+      }
          // var request2 = new sql.Request(connection);
          // request2.input('Operation', 'INSERT');
          // request2.input('Salary_Str_Id', parseInt(req.body.Salary_Str_Id));
@@ -105,7 +103,7 @@ if(req.body.map==''){
    request.execute('Proc_PayHead_Map_Mst', function (err, rec) {
       if (err) {
          console.log(err);
-         res.json({ status: false });
+         res.json({ status: false});
       }
       else {
          request.input('Operation', 'SELECT');
@@ -121,10 +119,6 @@ if(req.body.map==''){
             }
          });
 });
-
-
-
-
 
 
 
@@ -184,40 +178,6 @@ app.post('/delete_single_payheadmapslab', function (req, res) {
             }
          });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
       //API FOR ADD PAYHEAD DETAILS
