@@ -19,7 +19,7 @@ module.exports = {
          }
       });
       var upload = multer({ storage: Storage });
-
+/////////////////ADD COMPANY,BRANCH,DOCUMENT DETAILS
       app.post('/add_companybranchdetails', upload.array('Company_File_Name',20), function (req, res) {
          
          console.log(req.body.branch);
@@ -96,7 +96,7 @@ module.exports = {
                      var count = 0;
                      branch2.forEach(function (doc, err) {
                         //assert.equal(null, err);
-                        request = new sql.Request(transaction);
+                        
                         request.input('Operation', 'INSERT');
 
                         request.input('Branch_Name', doc.Branch_Name);
@@ -134,7 +134,7 @@ module.exports = {
                      })
                      // END OF BRANCH INSERTION
                      if (count == branch2.length) {
-                        request = new sql.Request(transaction);
+                        //request = new sql.Request(transaction);
                         request.input('Operation', 'INSERT');
                         request.input('Company_Id', parseInt(req.body.Company_Id));
                         request.input('Company_File_Name',image);
@@ -178,7 +178,6 @@ module.exports = {
                      }
                   }
                });
-
             }
          });
       });

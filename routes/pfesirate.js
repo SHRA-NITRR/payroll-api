@@ -85,7 +85,7 @@ module.exports = {
             //request.input('ID', req.body.id);
             request.execute('Proc_PF_ESI_Rate_Sett', function (err, rec) {
                if (err) {
-                console.log();
+                console.log(err);
                   res.json({ status: false });
                }
                else {
