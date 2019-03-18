@@ -8,7 +8,7 @@ var Connection = require('express').Connection;
 var Request = require('express').Request;
 var sql = require('mssql');
 var multer = require('multer');
-
+var async = require("async");
 
 app.set('port', (process.env.PORT || 8008));
 app.use(cors());
@@ -108,6 +108,96 @@ module.exports = connection;
 //WELCOME API
 app.get('/', function (req, res) {
    res.send("WELCOME TO PAYROLL APP API'S");
+});
+
+
+app.get('/array', function (req, res) {
+   var a = [{
+      "Branch_Name": "BbbsrPATIA",
+      "Branch_Address": "Patia",
+      "Branch_Address2": "Infocity",
+      "Branch_PhoneNo": "123",
+      "Branch_Person_Name": "Soumya",
+      "Branch_Email": "soumya@gmail.com",
+      "Branch_PF_Group": 1,
+      "Branch_PT_Group": 22,
+      "Branch_ESI_Group": 7676,
+      "Branch_Id": 1
+   }, {
+      "Branch_Name": "BbbsrPATIA",
+      "Branch_Address": "Patia",
+      "Branch_Address2": "Infocity",
+      "Branch_PhoneNo": "123",
+      "Branch_Person_Name": "Soumya",
+      "Branch_Email": "soumya@gmail.com",
+      "Branch_PF_Group": 1,
+      "Branch_PT_Group": 22,
+      "Branch_ESI_Group": 7676,
+      "Branch_Id": 1
+   }];
+   // var b = [];
+   // for(var i=0;i<a.length;i++){
+   //    var c = [];
+   //    c.push(a[i].branch, a[i].name);
+   //    b.push(c);
+   // }
+   // var d = [];
+   // d.push(b);
+   // console.log(d);
+   const transaction = new sql.Transaction();
+   var data_added = true;
+   var i=0, length = a.length;
+   transaction.begin((err) => {
+      async.forEachSeries(a, function iteratee(doc, callback) {
+         console.log(doc);
+
+
+         request = new sql.Request(transaction);
+
+         request.input('Operation', 'INSERT');
+
+         request.input('Branch_Name', doc.Branch_Name);
+
+         request.input('Branch_Address', doc.Branch_Address);
+
+         request.input('Branch_Address2', doc.Branch_Address2);
+
+         request.input('Branch_PhoneNo', parseInt(doc.Branch_PhoneNo));
+
+         request.input('Branch_Person_Name', doc.Branch_Person_Name);
+
+         request.input('Branch_Email', doc.Branch_Email);
+
+         request.input('Branch_PF_Group', parseInt(doc.Branch_PF_Group));
+
+         request.input('Branch_PT_Group', parseInt(doc.Branch_PT_Group));
+
+         request.input('Branch_ESI_Group', parseInt(doc.Branch_ESI_Group));
+
+         request.execute('PROC_COMPANY_BRANCH', function (errr, rec) {
+
+            if (errr) {
+               // console.log(errr);
+               data_added = false;
+               console.log(data_added);
+            }
+            else {
+               // setTimeout(function () {
+               console.log("hello");
+               // }, 500);
+            }
+            i = i +1;
+            if(i==length){
+               console.log("end");
+               res.send("WELCOME TO PAYROLL APP API'S");
+            }
+         });
+
+
+      });
+
+   });
+   
 });
 
 app.listen(app.get('port'), function () {

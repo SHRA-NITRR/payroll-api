@@ -61,9 +61,10 @@ module.exports = {
 
       app.post('/search_qualification', function (req, res) {
          var request = new sql.Request(connection);
-            request.input('Operation', 'SEARCH');
+            request.input('Operation', 'SEARCH1');
             //request.input('ID', req.body.id);
             request.input('OUT_CODE', parseInt(req.body.id));
+            console.log(req.body.id);
             request.execute('Proc_Qualfication_Master', function (err, rec) {
                if (err) {
                   console.log(err);

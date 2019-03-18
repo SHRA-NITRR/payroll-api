@@ -5,8 +5,8 @@ module.exports = {
    configure: function (app, assert, config, connection) {
       //API FOR ADD COMPANY $ BRANCH DETAILS
       app.post('/add_branchdetails', function (req, res) {
-
-         req.body.branch.forEach(function (doc, err) {
+var branch2=JSON.parse(req.body.branch);
+         branch2.forEach(function (doc, err) {
             
             var request2 = new sql.Request(connection);
             request2.input('Operation', 'INSERT');
@@ -34,7 +34,7 @@ module.exports = {
                   res.json({ status: false });
                }
                else {
-                  res.json({ status: true, result: rec.recordsets[0] });
+                  // res.json({ status: true, result: rec.recordsets[0] });
                }
             })
          });
