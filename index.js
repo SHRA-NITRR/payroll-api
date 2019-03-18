@@ -21,7 +21,7 @@ var config = {
    user: 'sa',
    password: '12345',
    server: 'localhost',
-   database: 'VYPACK'
+   database: 'VYPAK'
 }
 
 var companyroute = require('./routes/company.js');
@@ -134,7 +134,7 @@ app.get('/array', function (req, res) {
       "Branch_PT_Group": 22,
       "Branch_ESI_Group": 7676,
       "Branch_Id": 1
-   }]
+   }];
    // var b = [];
    // for(var i=0;i<a.length;i++){
    //    var c = [];
@@ -146,9 +146,10 @@ app.get('/array', function (req, res) {
    // console.log(d);
    const transaction = new sql.Transaction();
    var data_added = true;
+   var i=0, length = a.length;
    transaction.begin((err) => {
-      async.eachSeries(a, function iteratee(doc, callback) {
-         // console.log(filePath);
+      async.forEachSeries(a, function iteratee(doc, callback) {
+         console.log(doc);
 
 
          request = new sql.Request(transaction);
@@ -176,7 +177,7 @@ app.get('/array', function (req, res) {
          request.execute('PROC_COMPANY_BRANCH', function (errr, rec) {
 
             if (errr) {
-               console.log(errr);
+               // console.log(errr);
                data_added = false;
                console.log(data_added);
             }
@@ -185,17 +186,18 @@ app.get('/array', function (req, res) {
                console.log("hello");
                // }, 500);
             }
+            i = i +1;
+            if(i==length){
+               console.log("end");
+               res.send("WELCOME TO PAYROLL APP API'S");
+            }
          });
 
 
       });
 
-
-
-
    });
-   console.log(data_added);
-   res.send("WELCOME TO PAYROLL APP API'S");
+   
 });
 
 app.listen(app.get('port'), function () {
