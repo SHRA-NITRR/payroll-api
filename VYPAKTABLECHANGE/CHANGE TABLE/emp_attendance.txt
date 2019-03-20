@@ -1,0 +1,32 @@
+DROP TABLE Employee_Attendance_Mst
+
+CREATE TABLE [dbo].Employee_Attendance_Mst(
+	ATTENDANCE_ID	VARCHAR(20) NOTNULL
+EMPLOYEE_ID	VARCHAR(20) NOT NULL
+ATTENDANCE_DATE	DATETIME NULL,
+ATTENDANCE_INTIME	VARCHAR(20) NULL,
+ATTENDANCE_OUTTIME	VARCHAR(20) NULL,
+ATTENDANCE_TYPE	VARCHAR(5),
+REMARKS	VARCHAR(MAX),
+STATUS	VARCHAR(5),
+
+	[Remarks] [varchar](max) NULL,
+	[Is_Deleted] [bit] NULL,
+[Created_By] [int] NULL,
+	[Created_On] [datetime] NULL,
+	[Modified_By] [int] NULL,
+	[Modified_On] [datetime] NULL,
+
+ CONSTRAINT [PK_Employee_fam_Id] PRIMARY KEY CLUSTERED 
+(
+	[EmployeeId],[Employee_Code],
+	[Employee_fam_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[Employee_Family_Details] ADD  CONSTRAINT [DF_Employee_Family_Details_Is_Deleted]  DEFAULT ((0)) FOR [Is_Deleted]
+

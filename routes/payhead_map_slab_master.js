@@ -5,7 +5,7 @@ module.exports = {
    configure: function (app, assert, config, connection) {
 
       //API FOR ADD PAYHEAD MAP SLAB DETAILS
-      app.post('/addpayheadmapslab', function (req, res) {
+      app.post('/addpayheadmapslab22', function (req, res) {
          var request = new sql.Request(connection);
          request.input('Operation', 'INSERT');
          request.input('Salary_Str_Id', parseInt(req.body.Salary_Str_Id));
