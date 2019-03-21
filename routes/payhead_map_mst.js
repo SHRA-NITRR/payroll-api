@@ -4,7 +4,6 @@ var sql = require('mssql');
 module.exports = {
    configure: function (app, assert, config, connection) {
 
-
       //API FOR ADD PAYHEAD DETAILS
       app.post('/addpayheadmapslab', function (req, res) {
          var result = true;
@@ -42,7 +41,6 @@ module.exports = {
                else {
                   var map2 = JSON.parse(req.body.map);
                   console.log(map2);
-
                   map2.forEach(function (doc, err) {
                      request2.input('Operation', 'INSERT');
                      // request2.input('Branch_Id', parseInt(doc.Branch_Id));
@@ -94,7 +92,7 @@ module.exports = {
          });
       });
 
-      //API FOR VIEW ALL  DETAILS
+      //API FOR VIEW ALL  DETAILS///////////////////////////////////////////////////////////////////////////////////
 
       app.post('/view_payheadmapslab', function (req, res) {
          var data = [];
@@ -182,8 +180,6 @@ module.exports = {
             }
          });
       });
-
-
 
       //API FOR VIEW ALL  DETAILS
 
