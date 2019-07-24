@@ -1,6 +1,7 @@
 var Connection = require('express').Connection;
 var Request = require('express').Request;
 var sql = require('mssql');
+var Promise = require('promise');
 
 module.exports = {
     configure: function (app, assert, config, connection) {
@@ -18,7 +19,7 @@ module.exports = {
         // Apr 30 2000
         //console.log(date1);
 
-
+       
         //API FOR ADD ATTENDANCE DETAILS
         app.post('/add_emp_attendance_details', function (req, res) {
 
@@ -27,42 +28,50 @@ module.exports = {
             var timeDiff = Math.abs(date2.getTime() - date1.getTime());
             var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
             //console.log(diffDays);
-
-
             var diff = diffDays + 1;
-            console.log(diffDays);
+            var index = 0;
+            var emp_ids = JSON.parse(req.body.Employee_Id);
+
             // var detail=JSON.parse(req.body.details)
+            console.log(emp_ids[index]);
+            var insertAttendance = function (date, eid) {
+                console.log(date);
+                if (date <= date2) {
+                    var request = new sql.Request(connection);
+                    request.input('Operation', 'INSERT');
+                    request.input('Employee_Id', eid);
+                    request.input('Attendance_Date', date1);
+                    request.input('Attendance_Intime', req.body.Attendance_Intime);
+                    request.input('Attendance_Outtime', req.body.Attendance_Outtime);
+                    request.input('Attendance_Type', req.body.Attendance_Type);
+                    request.input('Status', req.body.Status);
+                    request.input('Remarks',req.body.remarks);
+                    request.input('Created_By', parseInt(req.body.Created_By));
+                    request.execute('Proc_Employee_Attendance_Mst', function (err, rec) {
+                        if (err) {
+                            console.log(err);
+                            //res.json({ status: false });   
+                        }
+                        else {
+                            index++;
+                            if(index<emp_ids.length){
+                                insertAttendance(date1, emp_ids[index]);
+                            }else{
+                                date1.setDate(date1.getDate() + 1);
+                                index = 0;
+                                insertAttendance(date1, emp_ids[index]);
+                            } 
+                        }
 
-            for (i = 0; i < diff;) {
-                var request = new sql.Request(connection);
-                console.log(i);
-                request.input('Operation', 'INSERT');
-                request.input('Employee_Id', req.body.Employee_Id);
-                request.input('Attendance_Date', date1);
-                request.input('Attendance_Intime', req.body.Attendance_Intime);
-                request.input('Attendance_Outtime', req.body.Attendance_Outtime);
-                request.input('Attendance_Type', req.body.Attendance_Type);
-                request.input('Status', req.body.Status);
-                request.input('Remarks', i);
-                request.input('Created_By', parseInt(req.body.Created_By));
+                    });
 
-                request.execute('Proc_Employee_Attendance_Mst', function (err, rec) {
-                    if (err) {
-                        console.log(err);
-                        //res.json({ status: false });   
-                    }
-                    else {
-                        //res.json({ status: true, result: rec.recordsets[0] });   
-
-                    }
-                    date1.setDate(date1.getDate() + 1);
-                });
-                i++;
+                } else {
+                    res.json({ status: true });
+                }
             }
+            insertAttendance(date1, emp_ids[index]);
 
-            res.json({ status: true });
         });
-
         //document.write(day+'<br>');
 
         // var nextDay = new Date(day);
@@ -110,6 +119,86 @@ module.exports = {
                 }
             });
         });
+
+
+
+
+        //API FOR VIEW  ATTENDANCE DETAILS FROM DATE TODATE WITH NAME
+
+        app.post('/search_emp_attendance_details2', function (req, res) {
+
+
+            if (req.body.Employee_Id == "" && req.body.fdate !== "" && req.body.tdate !== "") {
+                console.log(req.body.fdate);
+                console.log(req.body.tdate);
+                var date1 = new Date(req.body.fdate);
+                var date2 = new Date(req.body.tdate);
+
+                var request = new sql.Request(connection);
+                request.input('Operation', 'SELECT1');
+
+                request.input('fromdate', date1);
+                request.input('todate', date2);
+
+
+                request.execute('Proc_Employee_Attendance_Mst', function (err, rec) {
+                    if (err) {
+                        console.log(err);
+                        res.json({ status: false });
+                    }
+                    else {
+                        res.json({ status: true, result: rec.recordsets[0] });
+                    }
+                });
+            }
+            else if (req.body.Employee_Id !== "" && req.body.fdate !== "" && req.body.tdate !== "") {
+
+                var date1 = new Date(req.body.fdate);
+                var date2 = new Date(req.body.tdate);
+
+                var request = new sql.Request(connection);
+                request.input('Operation', 'SELECT2');
+
+                request.input('fromdate', date1);
+                request.input('todate', date2);
+                request.input('Employee_Id', req.body.Employee_Id);
+
+                request.execute('Proc_Employee_Attendance_Mst', function (err, rec) {
+                    if (err) {
+                        console.log(err);
+                        res.json({ status: "false" });
+                    }
+                    else {
+                        res.json({ status: true, result: rec.recordsets[0] });
+                    }
+                });
+
+            }
+            else {
+
+                var request = new sql.Request(connection);
+                request.input('Operation', 'SELECT');
+
+                request.execute('Proc_Employee_Attendance_Mst', function (err, rec) {
+                    if (err) {
+                        console.log(err);
+                        res.json({ status: false });
+                    }
+                    else {
+                        res.json({ status: true, result: rec.recordsets[0] });
+                    }
+                });
+
+
+            }
+
+
+
+
+        });
+
+
+
 
         //API FOR VIEW SINGLE ATTENDANCE DETAILS
         app.post('/view_single_emp_attendance_details', function (req, res) {

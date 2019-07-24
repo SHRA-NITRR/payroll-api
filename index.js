@@ -15,7 +15,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//DATABASE CONNECTION SET UP
+//DATABASE CONNECTION FOR PRODUCTION
+// var config = {
+// user:'DB_A46A8E_testdivykak_admin',
+//    password:'1205@Arun',
+//    server:'SQL7002.site4now.net',
+//    database:'DB_A46A8E_testdivykak'
+
+// }
+
+//DATABASE CONNECTION FOR DEVELOPMENT
 
 var config = {
    user: 'sa',
@@ -59,15 +68,13 @@ var payheadmaproute = require('./routes/payhead_map_mst.js');
 var payheadmapslabproute = require('./routes/payhead_map_slab_master.js');
 var empsalarystruroute = require('./routes/emp_salary_struc.js');
 var empattendanceroute = require('./routes/emp_attendance_mst.js');
-
+var empleaveroute = require('./routes/emp_leave.js');
 
 var connection = sql.connect(config, function (err) {
    if (err) {
       throw err
    }
 });
-
-
 
 companyroute.configure(app, assert, config, connection);
 branchroute.configure(app, assert, config, connection);
@@ -104,6 +111,7 @@ payheadmaproute.configure(app, assert, config, connection);
 payheadmapslabproute.configure(app, assert, config, connection);
 empsalarystruroute.configure(app, assert, config, connection);
 empattendanceroute.configure(app, assert, config, connection);
+empleaveroute.configure(app, assert, config, connection);
 
 module.exports = connection;
 
